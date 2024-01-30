@@ -51,10 +51,10 @@ public final class Constants {
     public static final double kWheelBase = Units.inchesToMeters(24.75);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-        new Translation2d(kWheelBase / 2, kTrackWidth / 2),
         new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
-        new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
-        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+        new Translation2d(kWheelBase / 2, kTrackWidth / 2),
+        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2),
+        new Translation2d(-kWheelBase / 2, kTrackWidth / 2));
 
     // Angular offsets of the modules relative to the chassis in radians
     public static final double kFrontRightChassisAngularOffset = Math.PI / 2
@@ -85,20 +85,20 @@ public final class Constants {
     public static final double kPThetaController = 0.77777;
 
     public static final boolean kFrontLeftDriveEncoderReversed = false;
-    public static final boolean kFrontLeftTurningEncoderReversed = true;
-    public static final boolean kFrontLeftAbsoluteEncoderReversed = true;
+    public static final boolean kFrontLeftTurningEncoderReversed = false;
+    public static final boolean kFrontLeftAbsoluteEncoderReversed = false;
 
     public static final boolean kFrontRightDriveEncoderReversed = false;
-    public static final boolean kFrontRightTurningEncoderReversed = true;
-    public static final boolean kFrontRightAbsoluteEncoderReversed = true;
+    public static final boolean kFrontRightTurningEncoderReversed = false;
+    public static final boolean kFrontRightAbsoluteEncoderReversed = false;
 
     public static final boolean kBackLeftDriveEncoderReversed = false;
-    public static final boolean kBackLeftTurningEncoderReversed = true;
-    public static final boolean kBackLeftAbsoluteEncoderReversed = true;
+    public static final boolean kBackLeftTurningEncoderReversed = false;
+    public static final boolean kBackLeftAbsoluteEncoderReversed = false;
 
     public static final boolean kBackRightDriveEncoderReversed = false;
-    public static final boolean kBackRightTurningEncoderReversed = true;
-    public static final boolean kBackRightAbsoluteEncoderReversed = true;
+    public static final boolean kBackRightTurningEncoderReversed = false;
+    public static final boolean kBackRightAbsoluteEncoderReversed = false;
 
     public static final long kBootupDelay = 1000; //milliseconds of delay to allow the navx to start up
 
