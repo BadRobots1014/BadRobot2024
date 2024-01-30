@@ -27,6 +27,9 @@ import frc.robot.commands.TestMotorCommand;
 import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.subsystems.SwerveSubsystem;
 
+// Shooter
+import frc.robot.subsystems.ShooterSubsystem;
+
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -42,6 +45,9 @@ public class RobotContainer {
   Joystick m_leftJoystick = new Joystick(1);
 
   private final SwerveSubsystem m_robotDrive = new SwerveSubsystem(m_driverController);
+  
+  // Shooter Subsystem
+  private final ShooterSubsystem m_shooterarm = new ShooterSubsystem(0.5);
 
   //Paths
   private PathPlannerTrajectory m_autoTraj;
