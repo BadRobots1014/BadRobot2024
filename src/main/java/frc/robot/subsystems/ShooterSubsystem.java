@@ -5,12 +5,13 @@ import java.util.Map;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-public class ShooterSubsystem {
+public class ShooterSubsystem extends SubsystemBase{
     //private double m_motorpower = 0.0; <-- not sure we even need this var...
 
     private final ShuffleboardTab m_shuffleboardtab = Shuffleboard.getTab("Shooter");
@@ -19,12 +20,22 @@ public class ShooterSubsystem {
 
     // power of moter is in the range from 0.0 to 0.1
     public ShooterSubsystem(double defaultpower) {
-        m_speedentry = m_shuffleboardtab.add("Motor Speed",defaultpower).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",1)).getEntry();
+        m_speedentry = m_shuffleboardtab.add("Motor Speed",defaultpower).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-1.0,"max",1.0)).getEntry();
+
+    }
+
+    @Override
+    public void periodic() {
+
+    }
+
+    @Override
+    public void simulationPeriodic() {
 
     }
 
     public double GetPower() {
-        return m_speedentry.getDouble(-1);
+        return m_speedentry.getDouble(0.0);
     }
 
     public void SetPower(double fracpower) {
