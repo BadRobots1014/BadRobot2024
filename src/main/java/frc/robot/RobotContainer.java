@@ -4,28 +4,21 @@
 
 package frc.robot;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.shuffleboard.SuppliedValueWidget;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.TestConstants;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -75,7 +68,7 @@ public class RobotContainer {
       m_entryToSupplier(m_testX),
       m_entryToSupplier(m_testY),
       m_entryToSupplier(m_testZ),
-      m_supplyBool(false)
+      () -> DriveConstants.kFieldOriented
     ));
 
     // Configure the button bindings
