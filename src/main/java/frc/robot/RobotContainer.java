@@ -44,6 +44,8 @@ public class RobotContainer {
   private PathPlannerAuto m_auto;
 
   //TEST
+  private double m_testMotorId = 0;
+  private double m_testMotorSpeed = 0;
   private ShuffleboardTab m_tab = Shuffleboard.getTab("Test");
   private GenericEntry m_testX = m_tab.add("X", 0).getEntry();
   private GenericEntry m_testY = m_tab.add("Y", 0).getEntry();
@@ -56,9 +58,9 @@ public class RobotContainer {
 
     // m_robotDrive.setDefaultCommand(new SwerveDriveCommand(
     //   m_robotDrive,
-    //   () -> -m_driverController.getLeftX(),
-    //   () -> -m_driverController.getLeftY(),
-    //   () -> -m_driverController.getRightX(),
+    //   () -> m_driverController.getLeftX(),
+    //   () -> m_driverController.getLeftY(),
+    //   () -> m_driverController.getRightX(),
     //   () -> DriveConstants.kFieldOriented
     // ));
     m_robotDrive.setDefaultCommand(new SwerveDriveCommand(
