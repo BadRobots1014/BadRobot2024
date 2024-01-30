@@ -4,13 +4,16 @@
 
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -22,8 +25,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.TestConstants;
 import frc.robot.commands.SwerveDriveCommand;
-import frc.robot.commands.TestMotorCommand;
 import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -35,13 +38,12 @@ import frc.robot.subsystems.SwerveSubsystem;
  */
 public class RobotContainer {
   // The robot's subsystems
+  private final SwerveSubsystem m_robotDrive = new SwerveSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   Joystick m_rightJoystick = new Joystick(0);
   Joystick m_leftJoystick = new Joystick(1);
-
-  private final SwerveSubsystem m_robotDrive = new SwerveSubsystem(m_driverController);
 
   //Paths
   private PathPlannerTrajectory m_autoTraj;
@@ -51,21 +53,30 @@ public class RobotContainer {
   //TEST
   private double m_testMotorId = 0;
   private double m_testMotorSpeed = 0;
+  private ShuffleboardTab m_tab = Shuffleboard.getTab("Test");
+  private GenericEntry m_testX = m_tab.add("X", 0).getEntry();
+  private GenericEntry m_testY = m_tab.add("Y", 0).getEntry();
+  private GenericEntry m_testZ = m_tab.add("Z", 0).getEntry();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
 
-     m_robotDrive.setDefaultCommand(new SwerveDriveCommand(
+    // m_robotDrive.setDefaultCommand(new SwerveDriveCommand(
+    //   m_robotDrive,
+    //   () -> m_driverController.getLeftX(),
+    //   () -> m_driverController.getLeftY(),
+    //   () -> m_driverController.getRightX(),
+    //   () -> DriveConstants.kFieldOriented
+    // ));
+    m_robotDrive.setDefaultCommand(new SwerveDriveCommand(
       m_robotDrive,
-      this::getLeftX,
-      this::getLeftY,
-      this::getRightX,
-      () -> DriveConstants.kFieldOriented
+      m_entryToSupplier(m_testX),
+      m_entryToSupplier(m_testY),
+      m_entryToSupplier(m_testZ),
+      m_supplyBool(false)
     ));
-
-    //m_robotDrive.setDefaultCommand();
 
     // Configure the button bindings
     configureButtonBindings();
@@ -73,6 +84,33 @@ public class RobotContainer {
     //Setup paths
     m_autoPath = PathPlannerPath.fromPathFile("New Path");
     // m_autoTraj = new PathPlannerTrajectory(m_autoPath, m_robotDrive.getModuleStates(), m_robotDrive.getRotation2d());
+  }
+
+  private Supplier<Double> m_supplyDouble(double num) {
+    return new Supplier<Double>() {
+      @Override
+      public Double get() {
+          return num;
+      }
+    };
+  }
+
+  private Supplier<Double> m_entryToSupplier(GenericEntry entry) {
+    return new Supplier<Double>() {
+      @Override
+      public Double get() {
+        return entry.getDouble(0);
+      }
+    };
+  }
+
+  private Supplier<Boolean> m_supplyBool(boolean bool) {
+    return new Supplier<Boolean>() {
+      @Override
+      public Boolean get() {
+          return bool;
+      }
+    };
   }
 
   /**
@@ -86,7 +124,6 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(m_driverController, XboxController.Button.kStart.value).whileTrue(new ZeroHeadingCommand(m_robotDrive));
-    new JoystickButton(m_driverController, DriveConstants.kTestMotorButton.value).whileTrue(new TestMotorCommand(m_robotDrive));
   }
 
   /**
@@ -98,26 +135,5 @@ public class RobotContainer {
     m_auto = new PathPlannerAuto("New Auto");
     return m_auto;
     // return m_robotDrive.followTrajectoryCommand(m_autoTraj, m_autoPath, true);
-  }
-
-  double getRightX()
-  {
-    if (Math.abs(m_driverController.getRightX()) < Constants.DriveConstants.kJoystickDeadzone)
-      return 0;
-    return m_driverController.getRightX();
-  }
-
-  double getLeftX()
-  {
-    if (Math.abs(m_driverController.getLeftX()) < Constants.DriveConstants.kJoystickDeadzone)
-      return 0;
-    return m_driverController.getLeftX();
-  }
-
-  double getLeftY()
-  {
-    if (Math.abs(m_driverController.getLeftY()) < Constants.DriveConstants.kJoystickDeadzone)
-      return 0;
-    return m_driverController.getLeftY();
   }
 }
