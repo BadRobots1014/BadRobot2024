@@ -3,22 +3,28 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
+import java.util.function.DoubleSupplier;
 
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import frc.robot.Constants.ShooterConstants;
 /** An example command that uses an example subsystem. */
 public class ShootCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ShooterSubsystem m_subsystem;
 
+  private final double m_power;
+  private final DoubleSupplier m_powerSupplier;
   /**
    * Creates a new ShootCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ShootCommand(ShooterSubsystem subsystem) {
+  public ShootCommand(ShooterSubsystem subsystem, double power) {
     m_subsystem = subsystem;
+    m_power = power;
+    m_powerSupplier = new DoubleSupplier() {public double getAsDouble() {return m_power;}};
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }

@@ -9,7 +9,7 @@ import edu.wpi.first.math.MathUtil;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import frc.robot.Constants.ShooterConstants;;
+import frc.robot.Constants.ShooterConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
     private CANSparkMax m_leftMotor;
@@ -36,7 +36,9 @@ public class ShooterSubsystem extends SubsystemBase {
     m_leftMotor.set(clampPower(power));
     m_rightMotor.set(clampPower(power));
   }
-
+  public void stopMotor(CANSparkMax motor) {
+    motor.stopMotor();
+  }
   private static double clampPower(double power) {
     return MathUtil.clamp(power, -1.0, 1.0);
   }
