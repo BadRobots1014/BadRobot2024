@@ -85,8 +85,8 @@ public final class Constants {
     public static final double kPThetaController = 0.77777;
 
     public static final boolean kFrontLeftDriveEncoderReversed = false;
-    public static final boolean kFrontLeftTurningEncoderReversed = true;
-    public static final boolean kFrontLeftAbsoluteEncoderReversed = true;
+    public static final boolean kFrontLeftTurningEncoderReversed = false;
+    public static final boolean kFrontLeftAbsoluteEncoderReversed = false;
 
     public static final boolean kFrontRightDriveEncoderReversed = false;
     public static final boolean kFrontRightTurningEncoderReversed = false;
