@@ -58,7 +58,7 @@ public final class Constants {
 
     // Angular offsets of the modules relative to the chassis in radians
     public static final double kFrontRightChassisAngularOffset = Math.PI / 2
-    /*Additional correction because stupid module*/ + Math.PI / 4 + Math.PI / 8;
+    /*Additional correction because stupid module*/ + Math.PI / 4 + Math.PI / 9;
     public static final double kBackRightChassisAngularOffset = 0;
     public static final double kBackLeftChassisAngularOffset = Math.PI / 2;
     public static final double kFrontLeftChassisAngularOffset = Math.PI;
