@@ -30,6 +30,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 // Shooter
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ShooterCommand;
 
 /*
@@ -46,33 +47,33 @@ public class RobotContainer {
   Joystick m_rightJoystick = new Joystick(0);
   Joystick m_leftJoystick = new Joystick(1);
 
-  private final SwerveSubsystem m_robotDrive = new SwerveSubsystem(m_driverController);
+  // final SwerveSubsystem m_robotDrive = new SwerveSubsystem(m_driverController);
   
   // Shooter Subsystem
   private final ShooterSubsystem m_shooterarmsystem = new ShooterSubsystem(0.5);
   //private final ShooterCommand m_shooterarmcommand = new ShooterCommand(m_shooterarmsystem);
 
   //Paths
-  private PathPlannerTrajectory m_autoTraj;
+  /*private PathPlannerTrajectory m_autoTraj;
   private PathPlannerPath m_autoPath;
   private PathPlannerAuto m_auto;
 
   //TEST
   private double m_testMotorId = 0;
-  private double m_testMotorSpeed = 0;
+  private double m_testMotorSpeed = 0;*/
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
 
-     m_robotDrive.setDefaultCommand(new SwerveDriveCommand(
+    /* m_robotDrive.setDefaultCommand(new SwerveDriveCommand(
       m_robotDrive,
       this::getLeftX,
       this::getLeftY,
       this::getRightX,
       () -> DriveConstants.kFieldOriented
-    ));
+    ));*/
 
     //m_shooterarmsystem.setDefaultCommand(m_shooterarmcommand);
 
@@ -82,8 +83,8 @@ public class RobotContainer {
     configureButtonBindings();
 
     //Setup paths
-    m_autoPath = PathPlannerPath.fromPathFile("New Path");
-    // m_autoTraj = new PathPlannerTrajectory(m_autoPath, m_robotDrive.getModuleStates(), m_robotDrive.getRotation2d());
+    //m_autoPath = PathPlannerPath.fromPathFile("New Path");
+    //m_autoTraj = new PathPlannerTrajectory(m_autoPath, m_robotDrive.getModuleStates(), m_robotDrive.getRotation2d());
   }
 
   /**
@@ -96,8 +97,8 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, XboxController.Button.kStart.value).whileTrue(new ZeroHeadingCommand(m_robotDrive));
-    new JoystickButton(m_driverController, DriveConstants.kTestMotorButton.value).whileTrue(new TestMotorCommand(m_robotDrive));
+    new JoystickButton(m_driverController, XboxController.Button.kStart.value).whileTrue(/*new ZeroHeadingCommand(m_robotDrive)*/new ExampleCommand());
+    new JoystickButton(m_driverController, DriveConstants.kTestMotorButton.value).whileTrue(/*new TestMotorCommand(m_robotDrive)*/new ExampleCommand());
 
     /*Trigger StartShooterButton = */new JoystickButton(m_driverController, XboxController.Button.kA.value).onTrue(new ShooterCommand(m_shooterarmsystem, ShooterCommand.CommandType.StartMotor));
     /*Trigger ShootButton = */new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value).onTrue(new ShooterCommand(m_shooterarmsystem, ShooterCommand.CommandType.Shoot));
@@ -108,11 +109,11 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+  /*public Command getAutonomousCommand() {
     m_auto = new PathPlannerAuto("New Auto");
     return m_auto;
     // return m_robotDrive.followTrajectoryCommand(m_autoTraj, m_autoPath, true);
-  }
+  }*/
 
   double getRightX()
   {
