@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.XboxController.Button;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -108,6 +109,10 @@ public final class Constants {
 
     public static final double kTeleMaxRadiansPerSec = Math.PI; //TODO adjust max teleop speeds
     public static final double kTeleMaxMetersPerSec = 2.8;
+
+    public static final double kJoystickDeadzone = 0;
+
+    public static final Button kTestMotorButton = Button.kLeftBumper;
   }
 
   public static final class ModuleConstants {
@@ -120,10 +125,10 @@ public final class Constants {
     public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
     public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60;
     public static final double kModuleDeadband = 0.01;
-    public static final double kTurningP = 0.05;
+    public static final double kTurningP = .01;
     public static final double kTurningI = 0.0;
-    public static final double kTurningD = 0.001;
-    public static final double kTurningFF = 0.005;
+    public static final double kTurningD = 0.0;
+    public static final double kTurningFF = .05;
 
   }
 
