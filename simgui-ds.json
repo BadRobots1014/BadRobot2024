@@ -1,9 +1,13 @@
 {
+  "Keyboard 0 Settings": {
+    "window": {
+      "visible": true
+    }
+  },
   "keyboardJoysticks": [
     {
       "axisConfig": [
         {
-          "decKey": 65,
           "incKey": 68
         },
         {
@@ -18,12 +22,16 @@
         }
       ],
       "axisCount": 3,
-      "buttonCount": 4,
+      "buttonCount": 8,
       "buttonKeys": [
-        90,
-        88,
+        65,
+        -1,
         67,
-        86
+        86,
+        -1,
+        54,
+        -1,
+        74
       ],
       "povConfig": [
         {
@@ -42,7 +50,6 @@
     {
       "axisConfig": [
         {
-          "decKey": 74,
           "incKey": 76
         },
         {
@@ -91,8 +98,7 @@
   ],
   "robotJoysticks": [
     {
-      "guid": "78696e70757401000000000000000000",
-      "useGamepad": true
+      "guid": "Keyboard0"
     }
   ]
 }

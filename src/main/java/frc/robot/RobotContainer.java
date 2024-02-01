@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.SwerveDriveCommand;
@@ -27,6 +28,13 @@ import frc.robot.commands.TestMotorCommand;
 import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.subsystems.SwerveSubsystem;
 
+<<<<<<< Updated upstream
+=======
+// Shooter
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.commands.ShooterCommand;
+
+>>>>>>> Stashed changes
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -42,6 +50,13 @@ public class RobotContainer {
   Joystick m_leftJoystick = new Joystick(1);
 
   private final SwerveSubsystem m_robotDrive = new SwerveSubsystem(m_driverController);
+<<<<<<< Updated upstream
+=======
+  
+  // Shooter Subsystem
+  private final ShooterSubsystem m_shooterarmsystem = new ShooterSubsystem(0.5);
+  //private final ShooterCommand m_shooterarmcommand = new ShooterCommand(m_shooterarmsystem);
+>>>>>>> Stashed changes
 
   //Paths
   private PathPlannerTrajectory m_autoTraj;
@@ -65,6 +80,8 @@ public class RobotContainer {
       () -> DriveConstants.kFieldOriented
     ));
 
+    //m_shooterarmsystem.setDefaultCommand(m_shooterarmcommand);
+
     //m_robotDrive.setDefaultCommand();
 
     // Configure the button bindings
@@ -87,6 +104,9 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(m_driverController, XboxController.Button.kStart.value).whileTrue(new ZeroHeadingCommand(m_robotDrive));
     new JoystickButton(m_driverController, DriveConstants.kTestMotorButton.value).whileTrue(new TestMotorCommand(m_robotDrive));
+
+    /*Trigger StartShooterButton = */new JoystickButton(m_driverController, XboxController.Button.kA.value).onTrue(new ShooterCommand(m_shooterarmsystem, ShooterCommand.CommandType.StartMotor));
+    /*Trigger ShootButton = */new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value).onTrue(new ShooterCommand(m_shooterarmsystem, ShooterCommand.CommandType.Shoot));
   }
 
   /**
