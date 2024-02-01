@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.DriveConstants;
@@ -26,12 +27,13 @@ public class SwerveModule {
     private final RelativeEncoder driveEncoder;
     private final RelativeEncoder turningEncoder;
 
-    private final PIDController turningPidController;
+    public PIDController turningPidController;
 
     private final CANcoder absoluteEncoder;
     private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetRad;
     private final double absoluteEncoderOffsetRot;
+
 
     private ShuffleboardTab m_tab;
     private SwerveModuleState m_lastState = new SwerveModuleState();
@@ -75,6 +77,8 @@ public class SwerveModule {
         m_tab.addDouble("Last angle", this::getLastStateAngle);
         m_tab.addDouble("Last speed", this::getLastStateSpeed);
         m_tab.addDouble("Encoder angle", this::getAbsoluteEncoderRad);
+        
+        
 
         //Reset the encoders on start
         resetEncoders();
@@ -82,6 +86,7 @@ public class SwerveModule {
     }
 
     public void resetEncoders() {
+        
         driveEncoder.setPosition(0);
         turningEncoder.setPosition(getAbsoluteEncoderRad()); //This one gets reset to the actual position of the module
     }
@@ -104,6 +109,11 @@ public class SwerveModule {
     public void stop() {
         driveMotor.set(0);
         turningMotor.set(0);
+    }
+
+    public double getP()
+    {
+        return 2;
     }
 
     public double getDrivePosition() {return driveEncoder.getPosition();} //Returns position of drive encoder in meters traveled

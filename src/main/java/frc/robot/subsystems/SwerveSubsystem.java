@@ -5,26 +5,36 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ModuleConstants;
 import frc.robot.util.SwerveModule;
 
 public class SwerveSubsystem extends SubsystemBase{
 
     XboxController Controller;
 
+    public GenericEntry p;
+    public GenericEntry i;
+    public GenericEntry d;
+
     public SwerveSubsystem(XboxController controller)
     {
         m_tab = Shuffleboard.getTab("swerve");
         Controller = controller;    
+
+        p = m_tab.add("p", ModuleConstants.kTurningP).getEntry();
+        i = m_tab.add("i", ModuleConstants.kTurningI).getEntry();
+        d = m_tab.add("d", ModuleConstants.kTurningD).getEntry();
     }
 
     //Modules
-    private final SwerveModule frontLeft = new SwerveModule(
+    public SwerveModule frontLeft = new SwerveModule(
         DriveConstants.kFrontLeftDrivingCanId,
         DriveConstants.kFrontLeftTurningCanId,
         DriveConstants.kFrontLeftDriveEncoderReversed,
@@ -34,7 +44,7 @@ public class SwerveSubsystem extends SubsystemBase{
         DriveConstants.kFrontLeftAbsoluteEncoderReversed
     );
 
-    private final SwerveModule frontRight = new SwerveModule(
+    public SwerveModule frontRight = new SwerveModule(
         DriveConstants.kFrontRightDrivingCanId,
         DriveConstants.kFrontRightTurningCanId,
         DriveConstants.kFrontRightDriveEncoderReversed,
@@ -44,7 +54,7 @@ public class SwerveSubsystem extends SubsystemBase{
         DriveConstants.kFrontRightAbsoluteEncoderReversed
     );
 
-    private final SwerveModule backLeft = new SwerveModule(
+    public SwerveModule backLeft = new SwerveModule(
         DriveConstants.kRearLeftDrivingCanId,
         DriveConstants.kRearLeftTurningCanId,
         DriveConstants.kBackLeftDriveEncoderReversed,
@@ -54,7 +64,7 @@ public class SwerveSubsystem extends SubsystemBase{
         DriveConstants.kBackLeftAbsoluteEncoderReversed
     );
 
-    private final SwerveModule backRight = new SwerveModule(
+    public SwerveModule backRight = new SwerveModule(
         DriveConstants.kRearRightDrivingCanId,
         DriveConstants.kRearRightTurningCanId,
         DriveConstants.kBackRightDriveEncoderReversed,

@@ -24,6 +24,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.TestMotorCommand;
+import frc.robot.commands.UpdatePIDCommand;
 import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -87,6 +88,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(m_driverController, XboxController.Button.kStart.value).whileTrue(new ZeroHeadingCommand(m_robotDrive));
     new JoystickButton(m_driverController, DriveConstants.kTestMotorButton.value).whileTrue(new TestMotorCommand(m_robotDrive));
+    new JoystickButton(m_driverController, XboxController.Button.kY.value).whileTrue(new UpdatePIDCommand(m_robotDrive));
   }
 
   /**
