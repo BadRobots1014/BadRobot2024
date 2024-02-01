@@ -39,12 +39,8 @@ public final class Constants {
 
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 0.3;
+    public static final double kMaxSpeedMetersPerSecond = 2;
     public static final double kMaxAngularSpeed = 1 * Math.PI; // radians per second
-
-    public static final double kDirectionSlewRate = 1.2; // radians per second
-    public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
-    public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
 
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(24.75);
@@ -58,11 +54,11 @@ public final class Constants {
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
     // Angular offsets of the modules relative to the chassis in radians
-    public static final double kFrontRightChassisAngularOffset = Math.PI / 2
-    /*Additional correction because stupid module*/ + Math.PI / 4 + Math.PI / 9;
-    public static final double kBackRightChassisAngularOffset = 0;
-    public static final double kBackLeftChassisAngularOffset = Math.PI / 2;
-    public static final double kFrontLeftChassisAngularOffset = Math.PI;
+    public static final double kFrontRightChassisAngularOffset = 0
+    /*Additional correction because stupid module*/ + 2;
+    public static final double kBackRightChassisAngularOffset = - Math.PI / 2;
+    public static final double kBackLeftChassisAngularOffset = Math.PI;
+    public static final double kFrontLeftChassisAngularOffset = Math.PI / 2;
 
     // SPARK MAX CAN IDs
     public static final int kFrontRightDrivingCanId = 11;
@@ -82,30 +78,43 @@ public final class Constants {
 
     public static final boolean kGyroReversed = false;
 
-    public static final double kPXYController = 0.077777;//need to change for comp bot
-    public static final double kPThetaController = 0.77777;
+    // public static final boolean kFrontLeftDriveEncoderReversed = false;
+    // public static final boolean kFrontLeftTurningEncoderReversed = true;
+    // public static final boolean kFrontLeftAbsoluteEncoderReversed = true;
+
+    // public static final boolean kFrontRightDriveEncoderReversed = false;
+    // public static final boolean kFrontRightTurningEncoderReversed = true;
+    // public static final boolean kFrontRightAbsoluteEncoderReversed = true;
+
+    // public static final boolean kBackLeftDriveEncoderReversed = false;
+    // public static final boolean kBackLeftTurningEncoderReversed = true;
+    // public static final boolean kBackLeftAbsoluteEncoderReversed = true;
+
+    // public static final boolean kBackRightDriveEncoderReversed = false;
+    // public static final boolean kBackRightTurningEncoderReversed = true;
+    // public static final boolean kBackRightAbsoluteEncoderReversed = true;
 
     public static final boolean kFrontLeftDriveEncoderReversed = false;
-    public static final boolean kFrontLeftTurningEncoderReversed = true;
-    public static final boolean kFrontLeftAbsoluteEncoderReversed = true;
+    public static final boolean kFrontLeftTurningEncoderReversed = false;
+    public static final boolean kFrontLeftAbsoluteEncoderReversed = false;
 
     public static final boolean kFrontRightDriveEncoderReversed = false;
-    public static final boolean kFrontRightTurningEncoderReversed = true;
-    public static final boolean kFrontRightAbsoluteEncoderReversed = true;
+    public static final boolean kFrontRightTurningEncoderReversed = false;
+    public static final boolean kFrontRightAbsoluteEncoderReversed = false;
 
     public static final boolean kBackLeftDriveEncoderReversed = false;
-    public static final boolean kBackLeftTurningEncoderReversed = true;
-    public static final boolean kBackLeftAbsoluteEncoderReversed = true;
+    public static final boolean kBackLeftTurningEncoderReversed = false;
+    public static final boolean kBackLeftAbsoluteEncoderReversed = false;
 
     public static final boolean kBackRightDriveEncoderReversed = false;
-    public static final boolean kBackRightTurningEncoderReversed = true;
-    public static final boolean kBackRightAbsoluteEncoderReversed = true;
+    public static final boolean kBackRightTurningEncoderReversed = false;
+    public static final boolean kBackRightAbsoluteEncoderReversed = false;
 
     public static final long kBootupDelay = 1000; //milliseconds of delay to allow the navx to start up
 
     public static final double kXSlewRateLimit = 2; //TODO adjust slew limits
     public static final double kYSlewRateLimit = 2;
-    public static final double kTurnSlewRateLimit = 100;
+    public static final double kTurnSlewRateLimit = 10;
 
     public static final double kTeleMaxRadiansPerSec = Math.PI; //TODO adjust max teleop speeds
     public static final double kTeleMaxMetersPerSec = 2.8;
@@ -118,8 +127,8 @@ public final class Constants {
   public static final class ModuleConstants {
 
     public static final double kWheelDiameterMeters = 0.0762;
-    public static final double kDriveMotorGearRatio = 8.14; //TODO Check gear ratio
-    public static final double kTurningMotorGearRatio = 12.8; //TODO Check gear ratio
+    public static final double kDriveMotorGearRatio = 8.14;
+    public static final double kTurningMotorGearRatio = 12.8;
     public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
     public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
     public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
