@@ -69,7 +69,7 @@ public class SwerveModule {
         turningEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerSec);
 
         //Setup PID controllers
-        turningPidController = new PIDController(ModuleConstants.kTurningP, ModuleConstants.kTurningI, ModuleConstants.kTurningD, ModuleConstants.kTurningFF);
+        turningPidController = new PIDController(ModuleConstants.kTurningP, ModuleConstants.kTurningI, ModuleConstants.kTurningD, ModuleConstants.kTurningPeriod);
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
 
         //Setup Shuffleboard

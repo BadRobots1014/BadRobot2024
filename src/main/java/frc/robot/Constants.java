@@ -137,7 +137,7 @@ public final class Constants {
     public static final double kTurningP = .01;
     public static final double kTurningI = 0.0;
     public static final double kTurningD = 0.0;
-    public static final double kTurningFF = .05;
+    public static final double kTurningPeriod = .005;
 
   }
 
