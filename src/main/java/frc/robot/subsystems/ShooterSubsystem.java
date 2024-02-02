@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.revrobotics.CANSparkMax;
 //import com.revrobotics.RelativeEncoder;
-
+import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -29,6 +29,7 @@ public class ShooterSubsystem extends SubsystemBase{
     //private double m_motorpower = 0.0; <-- not sure we even need this var...
 
     private final ShuffleboardTab m_shuffleboardtab = Shuffleboard.getTab("Shooter");
+
     private final GenericEntry m_speedentry;
     //private final NetworkTable m_tab = NetworkTableInstance.getDefault().getTable("Shooter");
     public final CANSparkMax m_leftMotor;
@@ -37,7 +38,12 @@ public class ShooterSubsystem extends SubsystemBase{
      static boolean ShooterRunning = false;
     
     public ShooterSubsystem(double defaultpower) {
-        m_speedentry = m_shuffleboardtab.add("Motor Power",defaultpower).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-1.0,"max",1.0)).getEntry();
+        m_speedentry = m_shuffleboardtab.add("Motor Power",defaultpower).withWidget(BuiltInWidgets.kNumberSlider)
+                                                                              .withProperties(Map.of("min",-1.0,"max",1.0))
+                                                                              .getEntry();
+
+        m_shuffleboardtab.addBoolean("Motor Spinning", () -> ShooterSubsystem.IsShooterRunning());
+
         m_leftMotor = new CANSparkMax(ShooterConstants.kRightDeviceId, MotorType.kBrushless); // Assuming brushless? 
         m_rightMotor = new CANSparkMax(ShooterConstants.kLeftDeviceId, MotorType.kBrushless);
     }

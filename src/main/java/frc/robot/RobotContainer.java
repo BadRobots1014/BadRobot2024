@@ -44,13 +44,13 @@ public class RobotContainer {
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  Joystick m_rightJoystick = new Joystick(0);
-  Joystick m_leftJoystick = new Joystick(1);
+  //Joystick m_rightJoystick = new Joystick(0);
+  //Joystick m_leftJoystick = new Joystick(1);
 
   // final SwerveSubsystem m_robotDrive = new SwerveSubsystem(m_driverController);
   
   // Shooter Subsystem
-  private final ShooterSubsystem m_shooterarmsystem = new ShooterSubsystem(0.5);
+  private final ShooterSubsystem m_shooterarmsystem = new ShooterSubsystem(0.0);
   //private final ShooterCommand m_shooterarmcommand = new ShooterCommand(m_shooterarmsystem);
 
   //Paths
