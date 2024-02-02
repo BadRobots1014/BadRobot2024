@@ -187,10 +187,6 @@ public final class Constants {
 
   public static final class ShooterConstants {
     //public static final double kMaxMotorPower = 10.0; // CHANGE IDK HOW THE MOTORS WORK :\
-<<<<<<< HEAD
-=======
-
->>>>>>> parent of 6054323 (Merge branch 'shooter' into Full-Shooter-Code)
     public static final int kLeftDeviceId = 1;
     public static final int kRightDeviceId = 2;
   }
