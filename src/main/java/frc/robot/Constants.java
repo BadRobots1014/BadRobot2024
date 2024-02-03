@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-// import com.revrobotics.CANSparkMax.IdleMode;
-
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -35,18 +33,18 @@ public final class Constants {
 
   public static final class DriveConstants {
 
+    //TODO get field oriented working
     public static final boolean kFieldOriented = false;
 
-    // Driving Parameters - Note that these are not the maximum capable speeds of
-    // the robot, rather the allowed maximum speeds
+    // Driving Parameters - Note that these are not the maximum capable speeds of the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 2;
     public static final double kMaxAngularSpeed = 3 * Math.PI; // radians per second
 
-    // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(24.75);
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(24.75);
+    public static final double kTrackWidth = Units.inchesToMeters(24.75);
     // Distance between front and back wheels on robot
+    public static final double kWheelBase = Units.inchesToMeters(24.75);
+    //Positions of modules relative to the center of mass
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
         new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
@@ -78,6 +76,7 @@ public final class Constants {
 
     public static final boolean kGyroReversed = false;
 
+    //Reverse encoders if needed; note that this will break everything if you don't go through and fix everything afterward
     public static final boolean kFrontLeftDriveEncoderReversed = false;
     public static final boolean kFrontLeftTurningEncoderReversed = false;
     public static final boolean kFrontLeftAbsoluteEncoderReversed = false;
@@ -130,6 +129,8 @@ public final class Constants {
     public static final double kDriveDeadband = 0.05;
   }
 
+  //TODO These are old and should be removed
+  @Deprecated
   public static final class AutoConstants {
     public static final double kMaxSpeedMetersPerSecond = 3;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;

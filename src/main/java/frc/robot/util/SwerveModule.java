@@ -104,13 +104,10 @@ public class SwerveModule {
             return;
         }
         m_lastState = state;
-        // TODO Fix optimization
-        // state = SwerveModuleState.optimize(state, getState().angle);
+        state = SwerveModuleState.optimize(state, getState().angle);
         m_lastStateOptimized = state;
         // driveMotor.set(state.speedMetersPerSecond * DriveConstants.kMaxSpeedMetersPerSecond);
         turningMotor.set(m_lastPIDOutput = turningPidController.calculate(getAbsoluteEncoderRad(), state.angle.getRadians()));
-        // Math.max(-1, Math.min(1, -state.angle.getRadians() + getAbsoluteEncoderRad()))
-        // calcJustP(getAbsoluteEncoderRad(), state.angle.getRadians(), -Math.PI, Math.PI)
     }
 
     public SwerveModuleState getLastState() {return m_lastState;}
@@ -133,11 +130,5 @@ public class SwerveModule {
     public double getAbsoluteEncoderRot() {return absoluteEncoder.getAbsolutePosition().getValue();} //Returns position of absolute encoder in degrees
     public double getAbsoluteEncoderRad() {return getAbsoluteEncoderRot() * 2*Math.PI;} //Returns position of absolute encoder in radians
     public double getAbsoluteEncoderDeg() {return getAbsoluteEncoderRot() * 360;} //Returns position of absolute encoder in degrees
-    public SwerveModuleState getState() {return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));} //Returns the above info in the form of a SwerveModuleState
-
-    public double calcJustP(double measurement, double setpoint, double maxInput, double minInput) {
-        double errorBound = (maxInput - minInput) / 2.0;
-        double positionError = MathUtil.inputModulus(setpoint - measurement, -errorBound, errorBound);
-        return ModuleConstants.kTurningP * positionError;
-    }
+    public SwerveModuleState getState() {return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAbsoluteEncoderRad()));} //Returns the above info in the form of a SwerveModuleState
 }
