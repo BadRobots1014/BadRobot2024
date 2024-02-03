@@ -78,22 +78,6 @@ public final class Constants {
 
     public static final boolean kGyroReversed = false;
 
-    // public static final boolean kFrontLeftDriveEncoderReversed = false;
-    // public static final boolean kFrontLeftTurningEncoderReversed = true;
-    // public static final boolean kFrontLeftAbsoluteEncoderReversed = true;
-
-    // public static final boolean kFrontRightDriveEncoderReversed = false;
-    // public static final boolean kFrontRightTurningEncoderReversed = true;
-    // public static final boolean kFrontRightAbsoluteEncoderReversed = true;
-
-    // public static final boolean kBackLeftDriveEncoderReversed = false;
-    // public static final boolean kBackLeftTurningEncoderReversed = true;
-    // public static final boolean kBackLeftAbsoluteEncoderReversed = true;
-
-    // public static final boolean kBackRightDriveEncoderReversed = false;
-    // public static final boolean kBackRightTurningEncoderReversed = true;
-    // public static final boolean kBackRightAbsoluteEncoderReversed = true;
-
     public static final boolean kFrontLeftDriveEncoderReversed = false;
     public static final boolean kFrontLeftTurningEncoderReversed = false;
     public static final boolean kFrontLeftAbsoluteEncoderReversed = false;
