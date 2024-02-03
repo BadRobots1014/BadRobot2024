@@ -186,7 +186,8 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
-    public static final int kFrontMotorCanId = 61;
-    public static final int kRearMotorCanId = 62;
+    /* Make sure to change these to whatever can IDs you guys want */
+    public static final int kFrontMotorCanId = 4;
+    public static final int kBackMotorCanId = 3;
   }
 }

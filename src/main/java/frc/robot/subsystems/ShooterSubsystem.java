@@ -28,57 +28,76 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private final ShuffleboardTab m_shuffleboardtab = Shuffleboard.getTab("Shooter");
 
-  private final GenericEntry m_speedentry;
+  private final GenericEntry m_frontMotorPower;
+  private final GenericEntry m_backMotorPower;
+  // private final NetworkTable m_tab =
+  // NetworkTableInstance.getDefault().getTable("Shooter");
   public final CANSparkMax m_frontMotor;
-  public final CANSparkMax m_rearMotor;
-  private static boolean shooterRunning = false;
+  public final CANSparkMax m_backMotor;
+  private static boolean ShooterRunning = false;
 
   public ShooterSubsystem(double defaultpower) {
-    // Slider to control power from shuffleboard
-    m_speedentry = m_shuffleboardtab.add("Motor Power", defaultpower).withWidget(BuiltInWidgets.kNumberSlider)
+    m_frontMotorPower = m_shuffleboardtab.add("Front Motor Power", defaultpower)
+        .withWidget(BuiltInWidgets.kNumberSlider)
         .withProperties(Map.of("min", -1.0, "max", 1.0))
         .getEntry();
 
-    m_shuffleboardtab.addBoolean("Motor Spinning", () -> ShooterSubsystem.isShooterRunning());
+    m_backMotorPower = m_shuffleboardtab.add("Back Motor Power", defaultpower).withWidget(BuiltInWidgets.kNumberSlider)
+        .withProperties(Map.of("min", -1.0, "max", 1.0))
+        .getEntry();
 
-    m_frontMotor = new CANSparkMax(ShooterConstants.kFrontMotorCanId, MotorType.kBrushed); // Will probably be changed to brushless later
-    m_rearMotor = new CANSparkMax(ShooterConstants.kRearMotorCanId, MotorType.kBrushed);
+    m_shuffleboardtab.addBoolean("Motor Spinning", () -> ShooterSubsystem.IsShooterRunning());
+
+    m_frontMotor = new CANSparkMax(ShooterConstants.kFrontMotorCanId, MotorType.kBrushed); // Assuming brushless?
+    m_backMotor = new CANSparkMax(ShooterConstants.kBackMotorCanId, MotorType.kBrushed);
   }
 
   private static double clampPower(double power) {
     return MathUtil.clamp(power, -1.0, 1.0);
   }
+  // power of moter is in the range from -1.0 to 1.0
 
-  public double getPower() {
-    return m_speedentry.getDouble(0.0);
+  public double[] GetPower() {
+    return new double[] { m_frontMotorPower.getDouble(0.0), m_backMotorPower.getDouble(0.0) };
   }
 
-  public void setPower(double fracpower) {
-    m_speedentry.setDouble(fracpower);
+  public void SetFrontMotorPower(double fracpower) {
+    m_frontMotorPower.setDouble(fracpower);
+    // m_motorpower = fracpower;
+  }
+
+  public void SetBackMotorPower(double fracpower) {
+    m_backMotorPower.setDouble(fracpower);
   }
 
   public void runShooter() {
-    m_frontMotor.set(clampPower(getPower()));
-    m_rearMotor.set(clampPower(getPower()));
-    shooterRunning = true; // This was set to false, probably an accident
+    m_frontMotor.set(clampPower(m_frontMotorPower.getDouble(0.0)));
+    m_backMotor.set(clampPower(m_backMotorPower.getDouble(0.0)));
+
+    System.out.print("Run shooter function code invoked\n");
+
+    ShooterRunning = true;
   }
 
   public void stopShooter() {
     m_frontMotor.stopMotor();
-    m_rearMotor.stopMotor();
-    shooterRunning = false;
+    m_backMotor.stopMotor();
+
+    System.out.print("stop shooter function code invoked\n");
+
+    ShooterRunning = false;
   }
 
-  public void shootCycle() {
-    if (!shooterRunning) {
-      System.console().printf("WARNING: ShooterSubsystem tried a shoot cycle when the motors were not running!");
+  public void ShootCycle() {
+    if (!ShooterRunning) {
+      System.out.print("WARNING: ShooterSubsystem tried a shoot cycle when the motors were not running!");
       return;
     }
     /* code to shoot a single ring goes here */
   }
 
-  public static boolean isShooterRunning() {
-    return shooterRunning;
+  public static boolean IsShooterRunning() {
+    return ShooterRunning;
   }
 
   @Override
