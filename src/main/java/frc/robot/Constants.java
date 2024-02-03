@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 public final class Constants {
 
   public static final class TestConstants {
-    //These are for testing individual motors.
+    // These are for testing individual motors.
     public static final boolean kTestMode = false;
     public static final double kTestMotorID = 11;
     public static final double kTestMotorSpeed = 1;
@@ -33,10 +33,11 @@ public final class Constants {
 
   public static final class DriveConstants {
 
-    //TODO get field oriented working
+    // TODO get field oriented working
     public static final boolean kFieldOriented = true;
 
-    // Driving Parameters - Note that these are not the maximum capable speeds of the robot, rather the allowed maximum speeds
+    // Driving Parameters - Note that these are not the maximum capable speeds of
+    // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = .6;
     public static final double kMaxAngularSpeed = 3 * Math.PI; // radians per second
 
@@ -44,16 +45,16 @@ public final class Constants {
     public static final double kTrackWidth = Units.inchesToMeters(24.75);
     // Distance between front and back wheels on robot
     public static final double kWheelBase = Units.inchesToMeters(24.75);
-    //Positions of modules relative to the center of mass
+    // Positions of modules relative to the center of mass
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2), //Front left
-        new Translation2d(kWheelBase / 2, -kTrackWidth / 2), //Front right
-        new Translation2d(-kWheelBase / 2, kTrackWidth / 2), //Back left
-        new Translation2d(kWheelBase / 2, kTrackWidth / 2)); //Back right
+        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2), // Front left
+        new Translation2d(kWheelBase / 2, -kTrackWidth / 2), // Front right
+        new Translation2d(-kWheelBase / 2, kTrackWidth / 2), // Back left
+        new Translation2d(kWheelBase / 2, kTrackWidth / 2)); // Back right
 
     // Angular offsets of the modules relative to the chassis in radians
     public static final double kFrontRightChassisAngularOffset = Math.PI - Math.PI / 2
-    /*Additional correction because stupid module*/ - 2;
+    /* Additional correction because stupid module */ - 2;
     public static final double kBackRightChassisAngularOffset = -Math.PI / 2 - Math.PI / 2;
     public static final double kBackLeftChassisAngularOffset = 0 - Math.PI / 2;
     public static final double kFrontLeftChassisAngularOffset = Math.PI / 2 - Math.PI / 2;
@@ -76,7 +77,8 @@ public final class Constants {
 
     public static final boolean kGyroReversed = false;
 
-    //Reverse encoders if needed; note that this will break everything if you don't go through and fix everything afterward
+    // Reverse encoders if needed; note that this will break everything if you don't
+    // go through and fix everything afterward
     public static final boolean kFrontLeftDriveEncoderReversed = false;
     public static final boolean kFrontLeftTurningEncoderReversed = false;
     public static final boolean kFrontLeftAbsoluteEncoderReversed = true;
@@ -93,13 +95,13 @@ public final class Constants {
     public static final boolean kBackRightTurningEncoderReversed = false;
     public static final boolean kBackRightAbsoluteEncoderReversed = true;
 
-    public static final long kBootupDelay = 1000; //milliseconds of delay to allow the navx to start up
+    public static final long kBootupDelay = 1000; // milliseconds of delay to allow the navx to start up
 
-    public static final double kXSlewRateLimit = 2; //TODO adjust slew limits
+    public static final double kXSlewRateLimit = 2; // TODO adjust slew limits
     public static final double kYSlewRateLimit = 2;
     public static final double kTurnSlewRateLimit = 10;
 
-    public static final double kTeleMaxRadiansPerSec = Math.PI; //TODO adjust max teleop speeds
+    public static final double kTeleMaxRadiansPerSec = Math.PI; // TODO adjust max teleop speeds
     public static final double kTeleMaxMetersPerSec = 2.8;
 
     public static final double kJoystickDeadzone = 0;
@@ -129,7 +131,7 @@ public final class Constants {
     public static final double kDriveDeadband = 0.05;
   }
 
-  //TODO These are old and should be removed
+  // TODO These are old and should be removed
   @Deprecated
   public static final class AutoConstants {
     public static final double kMaxSpeedMetersPerSecond = 3;
@@ -148,7 +150,7 @@ public final class Constants {
 
   public static final class ShooterConstants {
     /* Make sure to change these to whatever can IDs you guys want */
-    public static final int kFrontMotorCanId = 4;
+    public static final int kFrontMotorCanId = 4; // I assume theses will be 61 and 62
     public static final int kBackMotorCanId = 3;
   }
 }

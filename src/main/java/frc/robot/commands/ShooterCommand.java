@@ -8,10 +8,6 @@ public class ShooterCommand extends Command {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
     private final ShooterSubsystem m_subsystem;
-    /*
-     * private enum ShooterStatus {MotorRunning, MotorStopped};
-     * private static ShooterStatus m_status;
-     */
 
     public static enum CommandType {
         StartMotor, Shoot
@@ -34,14 +30,14 @@ public class ShooterCommand extends Command {
     public void initialize() {
         if (m_command == CommandType.StartMotor) {
             // if start button, run
-            if (!ShooterSubsystem.IsShooterRunning()) {
+            if (!ShooterSubsystem.isShooterRunning()) {
                 m_subsystem.runShooter();
             } else {
                 m_subsystem.stopShooter();
             }
             // if end button stop
         } else if (m_command == CommandType.Shoot) {
-            // shoot thing
+            /* Code to shoot goes here. */
         }
         m_Finished = true;
     }

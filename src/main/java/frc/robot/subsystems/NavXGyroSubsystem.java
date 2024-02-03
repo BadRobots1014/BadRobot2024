@@ -1,4 +1,5 @@
 package frc.robot.subsystems;
+
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -7,7 +8,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class NavXGyroSubsystem extends SubsystemBase {
-  
+
   private final AHRS navx;
 
   private final ShuffleboardTab m_tab = Shuffleboard.getTab("Navx");
@@ -20,7 +21,8 @@ public class NavXGyroSubsystem extends SubsystemBase {
   }
 
   public void periodic() {
-    // System.out.print("Yaw: " + getYaw() + "\n" + "Roll: " + getRoll() + "\n" + "Pitch: " + getPitch() + "\n\n");
+    // System.out.print("Yaw: " + getYaw() + "\n" + "Roll: " + getRoll() + "\n" +
+    // "Pitch: " + getPitch() + "\n\n");
   }
 
   public double getYaw() {

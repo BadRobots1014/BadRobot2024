@@ -5,13 +5,12 @@
 package frc.robot.commands;
 
 import frc.robot.Constants.ModuleConstants;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
 public class UpdatePIDCommand extends Command {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final SwerveSubsystem m_subsystem;
 
   /**
@@ -27,12 +26,12 @@ public class UpdatePIDCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() 
-  {
+  public void execute() {
     double p = m_subsystem.p.getDouble(ModuleConstants.kTurningP);
     double i = m_subsystem.i.getDouble(ModuleConstants.kTurningI);
     double d = m_subsystem.d.getDouble(ModuleConstants.kTurningD);
@@ -45,7 +44,8 @@ public class UpdatePIDCommand extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

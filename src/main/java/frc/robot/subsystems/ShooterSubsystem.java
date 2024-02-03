@@ -3,8 +3,6 @@ package frc.robot.subsystems;
 import java.util.Map;
 
 import com.revrobotics.CANSparkMax;
-//import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -17,24 +15,15 @@ import frc.robot.Constants.ShooterConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 
-/* keeping these incase we need them
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
-*/
-
 public class ShooterSubsystem extends SubsystemBase {
-  // private double m_motorpower = 0.0; <-- not sure we even need this var...
-
   private final ShuffleboardTab m_shuffleboardtab = Shuffleboard.getTab("Shooter");
 
   private final GenericEntry m_frontMotorPower;
   private final GenericEntry m_backMotorPower;
-  // private final NetworkTable m_tab =
-  // NetworkTableInstance.getDefault().getTable("Shooter");
+
   public final CANSparkMax m_frontMotor;
   public final CANSparkMax m_backMotor;
-  private static boolean ShooterRunning = false;
+  private static boolean shooterRunning = false;
 
   public ShooterSubsystem(double defaultpower) {
     m_frontMotorPower = m_shuffleboardtab.add("Front Motor Power", defaultpower)
@@ -46,64 +35,65 @@ public class ShooterSubsystem extends SubsystemBase {
         .withProperties(Map.of("min", -1.0, "max", 1.0))
         .getEntry();
 
-    m_shuffleboardtab.addBoolean("Motor Spinning", () -> ShooterSubsystem.IsShooterRunning());
+    m_shuffleboardtab.addBoolean("Motor Spinning", () -> ShooterSubsystem.isShooterRunning());
 
-    m_frontMotor = new CANSparkMax(ShooterConstants.kFrontMotorCanId, MotorType.kBrushed); // Assuming brushless?
+    m_frontMotor = new CANSparkMax(ShooterConstants.kFrontMotorCanId, MotorType.kBrushed);
     m_backMotor = new CANSparkMax(ShooterConstants.kBackMotorCanId, MotorType.kBrushed);
   }
 
   private static double clampPower(double power) {
     return MathUtil.clamp(power, -1.0, 1.0);
   }
-  // power of moter is in the range from -1.0 to 1.0
 
-  public double[] GetPower() {
+  public double[] getPower() {
     return new double[] { m_frontMotorPower.getDouble(0.0), m_backMotorPower.getDouble(0.0) };
   }
 
-  public void SetFrontMotorPower(double fracpower) {
-    m_frontMotorPower.setDouble(fracpower);
-    // m_motorpower = fracpower;
-  }
+  /*
+   * It appears that these methods are not needed?
+   * If they are then feel free to uncomment.
+   */
 
-  public void SetBackMotorPower(double fracpower) {
-    m_backMotorPower.setDouble(fracpower);
-  }
+  /*
+   * public void setFrontMotorPower(double fracpower) {
+   * m_frontMotorPower.setDouble(fracpower);
+   * }
+   * 
+   * public void setBackMotorPower(double fracpower) {
+   * m_backMotorPower.setDouble(fracpower);
+   * }
+   */
 
   public void runShooter() {
-    m_frontMotor.set(clampPower(m_frontMotorPower.getDouble(0.0)));
-    m_backMotor.set(clampPower(m_backMotorPower.getDouble(0.0)));
-
-    System.out.print("Run shooter function code invoked\n");
-
-    ShooterRunning = true;
+    double[] powers = getPower();
+    m_frontMotor.set(clampPower(powers[0]));
+    m_backMotor.set(clampPower(powers[1]));
+    System.out.println("Run shooter function code invoked\n");
+    shooterRunning = true;
   }
 
   public void stopShooter() {
     m_frontMotor.stopMotor();
     m_backMotor.stopMotor();
-
     System.out.print("stop shooter function code invoked\n");
-
-    ShooterRunning = false;
+    shooterRunning = false;
   }
 
-  public void ShootCycle() {
-    if (!ShooterRunning) {
-      System.out.print("WARNING: ShooterSubsystem tried a shoot cycle when the motors were not running!");
+  public void shootCycle() {
+    if (!shooterRunning) {
+      System.out.print("WARNING: ShooterSubsystem tried a shoot cycle when the motors were not running!\n");
       return;
     }
     /* code to shoot a single ring goes here */
   }
 
-  public static boolean IsShooterRunning() {
-    return ShooterRunning;
+  public static boolean isShooterRunning() {
+    return shooterRunning;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
   }
 
   @Override
