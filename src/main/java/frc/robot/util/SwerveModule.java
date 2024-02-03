@@ -75,6 +75,7 @@ public class SwerveModule {
         //Setup PID controllers
         turningPidController = new PIDController(ModuleConstants.kTurningP, ModuleConstants.kTurningI, ModuleConstants.kTurningD, ModuleConstants.kTurningPeriod);
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
+        turningPidController.reset();
 
         //Setup Shuffleboard
         m_tab = Shuffleboard.getTab(driveMotorId + " Module");
