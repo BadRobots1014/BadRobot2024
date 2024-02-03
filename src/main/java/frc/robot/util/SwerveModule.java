@@ -38,6 +38,7 @@ public class SwerveModule {
 
     private ShuffleboardTab m_tab;
     private SwerveModuleState m_lastState = new SwerveModuleState();
+    private double m_lastPIDOutput = 0;
 
     public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed, int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
         
@@ -80,6 +81,7 @@ public class SwerveModule {
         m_tab.addDouble("Last angle", this::getLastStateAngle);
         m_tab.addDouble("Last speed", this::getLastStateSpeed);
         m_tab.addDouble("Encoder angle", this::getAbsoluteEncoderRad);
+        m_tab.addDouble("Last PID Output", this::getLastPIDOutput);
         
         //Reset the encoders on start
         resetEncoders();
@@ -99,13 +101,14 @@ public class SwerveModule {
         m_lastState = state;
         state = SwerveModuleState.optimize(state, getState().angle);
         // driveMotor.set(state.speedMetersPerSecond * DriveConstants.kMaxSpeedMetersPerSecond);
-        turningMotor.set(turningPidController.calculate(getAbsoluteEncoderRad(), state.angle.getRadians()));
+        turningMotor.set(m_lastPIDOutput = turningPidController.calculate(getAbsoluteEncoderRad(), state.angle.getRadians()));
         // Math.max(-1, Math.min(1, -state.angle.getRadians() + getAbsoluteEncoderRad()))
     }
 
     public SwerveModuleState getLastState() {return m_lastState;}
     public double getLastStateAngle() {return m_lastState.angle.getRadians();}
     public double getLastStateSpeed() {return m_lastState.speedMetersPerSecond;}
+    public double getLastPIDOutput() {return m_lastPIDOutput;}
 
     public void stop() {
         driveMotor.set(0);
