@@ -30,22 +30,27 @@ public class ShooterSubsystem extends SubsystemBase{
 
     private final ShuffleboardTab m_shuffleboardtab = Shuffleboard.getTab("Shooter");
 
-    private final GenericEntry m_speedentry;
+    private final GenericEntry m_frontMotorPower;
+    private final GenericEntry m_backMotorPower;
     //private final NetworkTable m_tab = NetworkTableInstance.getDefault().getTable("Shooter");
-    public final CANSparkMax m_leftMotor;
-    public final CANSparkMax m_rightMotor;
+    public final CANSparkMax m_frontMotor;
+    public final CANSparkMax m_backMotor;
     private
      static boolean ShooterRunning = false;
     
     public ShooterSubsystem(double defaultpower) {
-        m_speedentry = m_shuffleboardtab.add("Motor Power",defaultpower).withWidget(BuiltInWidgets.kNumberSlider)
+        m_frontMotorPower = m_shuffleboardtab.add("Front Motor Power",defaultpower).withWidget(BuiltInWidgets.kNumberSlider)
                                                                               .withProperties(Map.of("min",-1.0,"max",1.0))
                                                                               .getEntry();
 
+        m_backMotorPower = m_shuffleboardtab.add("Back Motor Power",defaultpower).withWidget(BuiltInWidgets.kNumberSlider)
+                                                                              .withProperties(Map.of("min",-1.0,"max",1.0))
+                                                                              .getEntry();
+                                                                              
         m_shuffleboardtab.addBoolean("Motor Spinning", () -> ShooterSubsystem.IsShooterRunning());
 
-        m_leftMotor = new CANSparkMax(ShooterConstants.kRightDeviceId, MotorType.kBrushed); // Assuming brushless? 
-        m_rightMotor = new CANSparkMax(ShooterConstants.kLeftDeviceId, MotorType.kBrushed);
+        m_frontMotor = new CANSparkMax(ShooterConstants.kFrontMotor, MotorType.kBrushed); // Assuming brushless? 
+        m_backMotor = new CANSparkMax(ShooterConstants.kBackMotor, MotorType.kBrushed);
     }
 
     private static double clampPower(double power) {
@@ -53,36 +58,40 @@ public class ShooterSubsystem extends SubsystemBase{
     }
     // power of moter is in the range from -1.0 to 1.0
 
-    public double GetPower() {
-        return m_speedentry.getDouble(0.0);
+    public double[] GetPower() {
+        return new double[] {m_frontMotorPower.getDouble(0.0), m_backMotorPower.getDouble(0.0)};
     }
 
-    public void SetPower(double fracpower) {
-        m_speedentry.setDouble(fracpower);
+    public void SetFrontMotorPower(double fracpower) {
+        m_frontMotorPower.setDouble(fracpower);
         //m_motorpower = fracpower;
     }
 
-    public void runShooter() {
-        m_leftMotor.set(clampPower(m_speedentry.getDouble(0.0)));
-        m_rightMotor.set(clampPower(m_speedentry.getDouble(0.0)));
+    public void SetBackMotorPower(double fracpower) {
+      m_backMotorPower.setDouble(fracpower);
+    }
 
-        System.console().printf("Run shooter function invoked");
+    public void  runShooter() {
+        m_frontMotor.set(clampPower(m_frontMotorPower.getDouble(0.0)));
+        m_backMotor.set(clampPower(m_backMotorPower.getDouble(0.0)));
+
+        System.out.print("Run shooter function code invoked\n");
 
         ShooterRunning = true;
     }
 
     public void stopShooter() {
-        m_leftMotor.stopMotor();
-        m_rightMotor.stopMotor();
+        m_frontMotor.stopMotor();
+        m_backMotor.stopMotor();
 
-        System.console().printf("Stop shooter function invoked");
+        System.out.print("stop shooter function code invoked\n");
 
         ShooterRunning = false;
     }
 
     public void ShootCycle() {
         if (!ShooterRunning) {
-            System.console().printf("WARNING: ShooterSubsystem tried a shoot cycle when the motors were not running!");
+            System.out.print("WARNING: ShooterSubsystem tried a shoot cycle when the motors were not running!");
             return;
         }
         /*code to shoot a single ring goes here*/

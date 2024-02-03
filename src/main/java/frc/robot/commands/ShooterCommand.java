@@ -14,6 +14,8 @@ public class ShooterCommand extends Command {
     public static enum CommandType {StartMotor, Shoot};
     private final CommandType m_command;
 
+    private boolean m_Finished = false;
+
     public ShooterCommand(ShooterSubsystem subsystem, CommandType command) {
         m_subsystem = subsystem;
         // Use addRequirements() here to declare subsystem dependencies.
@@ -24,11 +26,7 @@ public class ShooterCommand extends Command {
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {}
-
-     // Called every time the scheduler runs while the command is scheduled.
-    @Override
-    public void execute() {
+    public void initialize() {       
         if (m_command == CommandType.StartMotor) {
             // if start button, run
             if (!ShooterSubsystem.IsShooterRunning()) {
@@ -42,6 +40,12 @@ public class ShooterCommand extends Command {
         else if (m_command == CommandType.Shoot) {
             // shoot thing
         }
+        m_Finished = true;
+    }
+
+     // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
 
     }
 
@@ -52,7 +56,7 @@ public class ShooterCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_Finished;
   }
 
 }
