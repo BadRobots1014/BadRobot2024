@@ -104,7 +104,8 @@ public class SwerveModule {
             return;
         }
         m_lastState = state;
-        state = SwerveModuleState.optimize(state, getState().angle);
+        // TODO fix optimization
+        // state = SwerveModuleState.optimize(state, getState().angle);
         m_lastStateOptimized = state;
         // driveMotor.set(state.speedMetersPerSecond * DriveConstants.kMaxSpeedMetersPerSecond);
         turningMotor.set(m_lastPIDOutput = turningPidController.calculate(getAbsoluteEncoderRad(), state.angle.getRadians()));
