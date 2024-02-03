@@ -111,15 +111,38 @@ public class RobotContainer {
 
   double getLeftX()
   {
+    int pov = m_driverController.getPOV();
+
+    if (pov > -1)
+    {
+      if (pov == 90)
+        return 1;
+      if (pov == 270)
+        return -1;
+    }
+
     if (Math.abs(m_driverController.getLeftX()) < Constants.DriveConstants.kJoystickDeadzone)
       return 0;
     return m_driverController.getLeftX();
+
   }
 
   double getLeftY()
   {
+
+    int pov = m_driverController.getPOV();
+
+    if (pov > -1)
+    {
+      if (pov == 0)
+        return -1;
+      if (pov == 180)
+        return 1;
+    }
+
     if (Math.abs(m_driverController.getLeftY()) < Constants.DriveConstants.kJoystickDeadzone)
       return 0;
     return m_driverController.getLeftY();
+
   }
 }

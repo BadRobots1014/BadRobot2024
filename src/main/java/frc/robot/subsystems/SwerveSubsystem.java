@@ -129,12 +129,15 @@ public class SwerveSubsystem extends SubsystemBase{
         double lx = Controller.getLeftX();
         double ly = Controller.getLeftY();
 
-        if (Controller.getBackButton())
+        System.out.println(Controller.getPOV());
+
+        if (Controller.getPOV() > -1)
         {
-            frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(90)));
-            frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(90)));
-            backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(90)));
-            backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(90)));
+            int pov = Controller.getPOV();
+            frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(pov)));
+            frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(pov)));
+            backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(pov)));
+            backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(pov)));
         }
             
         double speedMultiplyer = !Controller.getRightBumper() ? 1 : .3;
@@ -149,6 +152,8 @@ public class SwerveSubsystem extends SubsystemBase{
             module = backRight;
         else if (Controller.getAButton())
             module = backLeft;
+
+        
         
         if (module == null)
         {
