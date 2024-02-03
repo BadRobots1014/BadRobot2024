@@ -72,12 +72,12 @@ public class ShooterSubsystem extends SubsystemBase{
     }
 
     public void  runShooter() {
-        m_frontMotor.set(clampPower(m_frontMotorPower.getDouble(0.0)));
-        m_backMotor.set(clampPower(m_backMotorPower.getDouble(0.0)));
+      m_frontMotor.set(clampPower(m_frontMotorPower.getDouble(0.0)));
+      m_backMotor.set(clampPower(m_backMotorPower.getDouble(0.0)));
 
-        System.out.print("Run shooter function code invoked\n");
+      System.out.print("Run shooter function code invoked\n");
 
-        ShooterRunning = true;
+      ShooterRunning = true;
     }
 
     public void stopShooter() {
