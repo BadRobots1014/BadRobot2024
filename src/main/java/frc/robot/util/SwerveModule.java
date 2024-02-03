@@ -10,6 +10,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -38,6 +39,7 @@ public class SwerveModule {
 
     private ShuffleboardTab m_tab;
     private SwerveModuleState m_lastState = new SwerveModuleState();
+    private SwerveModuleState m_lastStateOptimized = new SwerveModuleState();
     private double m_lastPIDOutput = 0;
 
     public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed, int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
@@ -101,14 +103,19 @@ public class SwerveModule {
         }
         m_lastState = state;
         state = SwerveModuleState.optimize(state, getState().angle);
+        m_lastStateOptimized = state;
         // driveMotor.set(state.speedMetersPerSecond * DriveConstants.kMaxSpeedMetersPerSecond);
-        turningMotor.set(m_lastPIDOutput = turningPidController.calculate(getAbsoluteEncoderRad(), state.angle.getRadians()));
+        turningMotor.set(m_lastPIDOutput = calcJustP(getAbsoluteEncoderRad(), state.angle.getRadians(), -Math.PI, Math.PI));
+        // turningPidController.calculate(getAbsoluteEncoderRad(), state.angle.getRadians())
         // Math.max(-1, Math.min(1, -state.angle.getRadians() + getAbsoluteEncoderRad()))
     }
 
     public SwerveModuleState getLastState() {return m_lastState;}
     public double getLastStateAngle() {return m_lastState.angle.getRadians();}
     public double getLastStateSpeed() {return m_lastState.speedMetersPerSecond;}
+    public SwerveModuleState getLastStateOptimized() {return m_lastStateOptimized;}
+    public double getLastStateAngleOptimized() {return m_lastStateOptimized.angle.getRadians();}
+    public double getLastStateSpeedOptimized() {return m_lastStateOptimized.speedMetersPerSecond;}
     public double getLastPIDOutput() {return m_lastPIDOutput;}
 
     public void stop() {
@@ -125,4 +132,11 @@ public class SwerveModule {
     public double getAbsoluteEncoderDeg() {return getAbsoluteEncoderRot() * 360;} //Returns position of absolute encoder in degrees
     public SwerveModuleState getState() {return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));} //Returns the above info in the form of a SwerveModuleState
 
+    public double calcJustP(double measurement, double setpoint, double maxInput, double minInput) {
+
+        double errorBound = (maxInput - minInput) / 2.0;
+        double positionError = MathUtil.inputModulus(setpoint - measurement, -errorBound, errorBound);
+
+        return ModuleConstants.kTurningP * positionError;
+    }
 }
