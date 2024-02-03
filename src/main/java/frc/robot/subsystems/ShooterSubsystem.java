@@ -29,8 +29,8 @@ public class ShooterSubsystem extends SubsystemBase {
   private final ShuffleboardTab m_shuffleboardtab = Shuffleboard.getTab("Shooter");
 
   private final GenericEntry m_speedentry;
-  public final CANSparkMax m_leftMotor;
-  public final CANSparkMax m_rightMotor;
+  public final CANSparkMax m_frontMotor;
+  public final CANSparkMax m_rearMotor;
   private static boolean shooterRunning = false;
 
   public ShooterSubsystem(double defaultpower) {
@@ -41,8 +41,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     m_shuffleboardtab.addBoolean("Motor Spinning", () -> ShooterSubsystem.isShooterRunning());
 
-    m_leftMotor = new CANSparkMax(ShooterConstants.kRightDeviceId, MotorType.kBrushed); // Will probably be changed to brushless later
-    m_rightMotor = new CANSparkMax(ShooterConstants.kLeftDeviceId, MotorType.kBrushed);
+    m_frontMotor = new CANSparkMax(ShooterConstants.kFrontMotorCanId, MotorType.kBrushed); // Will probably be changed to brushless later
+    m_rearMotor = new CANSparkMax(ShooterConstants.kRearMotorCanId, MotorType.kBrushed);
   }
 
   private static double clampPower(double power) {
@@ -58,14 +58,14 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void runShooter() {
-    m_leftMotor.set(clampPower(getPower()));
-    m_rightMotor.set(clampPower(getPower()));
+    m_frontMotor.set(clampPower(getPower()));
+    m_rearMotor.set(clampPower(getPower()));
     shooterRunning = true; // This was set to false, probably an accident
   }
 
   public void stopShooter() {
-    m_leftMotor.stopMotor();
-    m_rightMotor.stopMotor();
+    m_frontMotor.stopMotor();
+    m_rearMotor.stopMotor();
     shooterRunning = false;
   }
 
