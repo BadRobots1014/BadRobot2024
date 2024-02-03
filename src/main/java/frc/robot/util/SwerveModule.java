@@ -83,6 +83,8 @@ public class SwerveModule {
         m_tab = Shuffleboard.getTab(driveMotorId + " Module");
         m_tab.addDouble("Last angle", this::getLastStateAngle);
         m_tab.addDouble("Last speed", this::getLastStateSpeed);
+        m_tab.addDouble("Last angle optimized", this::getLastStateAngleOptimized);
+        m_tab.addDouble("Last speed optimized", this::getLastStateSpeedOptimized);
         m_tab.addDouble("Encoder angle", this::getAbsoluteEncoderRad);
         m_tab.addDouble("Last PID Output", this::getLastPIDOutput);
         

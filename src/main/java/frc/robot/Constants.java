@@ -118,7 +118,7 @@ public final class Constants {
     public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
     public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60;
     public static final double kModuleDeadband = 0.01;
-    public static final double kTurningP = .01;
+    public static final double kTurningP = .1;
     public static final double kTurningI = 0.0;
     public static final double kTurningD = 0.0;
     public static final double kTurningPeriod = .005;
