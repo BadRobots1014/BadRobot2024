@@ -79,19 +79,19 @@ public final class Constants {
     //Reverse encoders if needed; note that this will break everything if you don't go through and fix everything afterward
     public static final boolean kFrontLeftDriveEncoderReversed = false;
     public static final boolean kFrontLeftTurningEncoderReversed = false;
-    public static final boolean kFrontLeftAbsoluteEncoderReversed = false;
+    public static final boolean kFrontLeftAbsoluteEncoderReversed = true;
 
     public static final boolean kFrontRightDriveEncoderReversed = false;
     public static final boolean kFrontRightTurningEncoderReversed = false;
-    public static final boolean kFrontRightAbsoluteEncoderReversed = false;
+    public static final boolean kFrontRightAbsoluteEncoderReversed = true;
 
     public static final boolean kBackLeftDriveEncoderReversed = false;
     public static final boolean kBackLeftTurningEncoderReversed = false;
-    public static final boolean kBackLeftAbsoluteEncoderReversed = false;
+    public static final boolean kBackLeftAbsoluteEncoderReversed = true;
 
     public static final boolean kBackRightDriveEncoderReversed = false;
     public static final boolean kBackRightTurningEncoderReversed = false;
-    public static final boolean kBackRightAbsoluteEncoderReversed = false;
+    public static final boolean kBackRightAbsoluteEncoderReversed = true;
 
     public static final long kBootupDelay = 1000; //milliseconds of delay to allow the navx to start up
 

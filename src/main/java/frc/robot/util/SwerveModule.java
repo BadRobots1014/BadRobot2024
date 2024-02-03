@@ -87,6 +87,7 @@ public class SwerveModule {
         m_tab.addDouble("Last speed optimized", this::getLastStateSpeedOptimized);
         m_tab.addDouble("Encoder angle", this::getAbsoluteEncoderRad);
         m_tab.addDouble("Last PID Output", this::getLastPIDOutput);
+        m_tab.addDouble("Last error", this::getLastError);
         
         //Reset the encoders on start
         resetEncoders();
@@ -105,7 +106,7 @@ public class SwerveModule {
         }
         m_lastState = state;
         // TODO fix optimization
-        // state = optimize(state, getState().angle);
+        state = optimize(state, getState().angle);
         m_lastStateOptimized = state;
         // driveMotor.set(state.speedMetersPerSecond * DriveConstants.kMaxSpeedMetersPerSecond);
         turningMotor.set(m_lastPIDOutput = turningPidController.calculate(getAbsoluteEncoderRad(), state.angle.getRadians()));
@@ -118,6 +119,7 @@ public class SwerveModule {
     public double getLastStateAngleOptimized() {return m_lastStateOptimized.angle.getRadians();}
     public double getLastStateSpeedOptimized() {return m_lastStateOptimized.speedMetersPerSecond;}
     public double getLastPIDOutput() {return m_lastPIDOutput;}
+    public double getLastError() {return getLastStateAngle() - getState().angle.getRadians();}
 
     public void stop() {
         driveMotor.set(0);
