@@ -145,4 +145,10 @@ public final class Constants {
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
   }
+
+  public static final class ShooterConstants {
+    /* Make sure to change these to whatever can IDs you guys want */
+    public static final int kFrontMotorCanId = 4;
+    public static final int kBackMotorCanId = 3;
+  }
 }

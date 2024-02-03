@@ -20,6 +20,10 @@ import frc.robot.commands.UpdatePIDCommand;
 import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.subsystems.SwerveSubsystem;
 
+// Shooter
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.commands.ShooterCommand;
+
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -32,16 +36,19 @@ public class RobotContainer {
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   Joystick m_rightJoystick = new Joystick(0);
-  Joystick m_leftJoystick = new Joystick(1); 
+  Joystick m_leftJoystick = new Joystick(1);
 
   private final SwerveSubsystem m_robotDrive = new SwerveSubsystem(m_driverController);
 
-  //Paths
+  // Shooter Subsystem
+  private final ShooterSubsystem m_shooterarmsystem = new ShooterSubsystem(0.0);
+
+  // Paths
   private PathPlannerTrajectory m_autoTraj;
   private PathPlannerPath m_autoPath;
   private PathPlannerAuto m_auto;
 
-  //TEST
+  // TEST
   private double m_testMotorId = 0;
   private double m_testMotorSpeed = 0;
 
@@ -50,22 +57,22 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-     m_robotDrive.setDefaultCommand(new SwerveDriveCommand(
-      m_robotDrive,
-      () -> Math.pow(getLeftX(), 3),
-      () -> Math.pow(getLeftY(), 3),
-      () -> Math.pow(getRightX(), 3),
-      () -> DriveConstants.kFieldOriented
-    ));
+    m_robotDrive.setDefaultCommand(new SwerveDriveCommand(
+        m_robotDrive,
+        () -> Math.pow(getLeftX(), 3),
+        () -> Math.pow(getLeftY(), 3),
+        () -> Math.pow(getRightX(), 3),
+        () -> DriveConstants.kFieldOriented));
 
-    //m_robotDrive.setDefaultCommand();
+    // m_robotDrive.setDefaultCommand();
 
     // Configure the button bindings
     configureButtonBindings();
 
-    //Setup paths
+    // Setup paths
     m_autoPath = PathPlannerPath.fromPathFile("New Path");
-    // m_autoTraj = new PathPlannerTrajectory(m_autoPath, m_robotDrive.getModuleStates(), m_robotDrive.getRotation2d());
+    // m_autoTraj = new PathPlannerTrajectory(m_autoPath,
+    // m_robotDrive.getModuleStates(), m_robotDrive.getRotation2d());
   }
 
   /**
@@ -78,9 +85,16 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, XboxController.Button.kStart.value).whileTrue(new ZeroHeadingCommand(m_robotDrive));
-    new JoystickButton(m_driverController, DriveConstants.kTestMotorButton.value).whileTrue(new TestMotorCommand(m_robotDrive));
-    new JoystickButton(m_driverController, XboxController.Button.kY.value).whileTrue(new UpdatePIDCommand(m_robotDrive));
+    new JoystickButton(m_driverController, XboxController.Button.kStart.value)
+        .whileTrue(new ZeroHeadingCommand(m_robotDrive));
+    new JoystickButton(m_driverController, DriveConstants.kTestMotorButton.value)
+        .whileTrue(new TestMotorCommand(m_robotDrive));
+    new JoystickButton(m_driverController, XboxController.Button.kY.value)
+        .whileTrue(new UpdatePIDCommand(m_robotDrive));
+    new JoystickButton(m_driverController, XboxController.Button.kA.value)
+        .onTrue(new ShooterCommand(m_shooterarmsystem, ShooterCommand.CommandType.StartMotor));
+    new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
+        .onTrue(new ShooterCommand(m_shooterarmsystem, ShooterCommand.CommandType.Shoot));
   }
 
   /**
@@ -94,19 +108,16 @@ public class RobotContainer {
     // return m_robotDrive.followTrajectoryCommand(m_autoTraj, m_autoPath, true);
   }
 
-  double getRightX()
-  {
+  double getRightX() {
     if (Math.abs(m_driverController.getRightX()) < Constants.DriveConstants.kJoystickDeadzone)
       return 0;
     return -m_driverController.getRightX();
   }
 
-  double getLeftX()
-  {
+  double getLeftX() {
     int pov = m_driverController.getPOV();
 
-    if (pov > -1)
-    {
+    if (pov > -1) {
       if (pov == 90)
         return 1;
       if (pov == 270)
@@ -119,13 +130,11 @@ public class RobotContainer {
 
   }
 
-  double getLeftY()
-  {
+  double getLeftY() {
 
     int pov = m_driverController.getPOV();
 
-    if (pov > -1)
-    {
+    if (pov > -1) {
       if (pov == 0)
         return -1;
       if (pov == 180)
