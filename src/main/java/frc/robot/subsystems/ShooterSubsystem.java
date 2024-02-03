@@ -44,8 +44,8 @@ public class ShooterSubsystem extends SubsystemBase{
 
         m_shuffleboardtab.addBoolean("Motor Spinning", () -> ShooterSubsystem.IsShooterRunning());
 
-        m_leftMotor = new CANSparkMax(ShooterConstants.kRightDeviceId, MotorType.kBrushless); // Assuming brushless? 
-        m_rightMotor = new CANSparkMax(ShooterConstants.kLeftDeviceId, MotorType.kBrushless);
+        m_leftMotor = new CANSparkMax(ShooterConstants.kRightDeviceId, MotorType.kBrushed); // Assuming brushless? 
+        m_rightMotor = new CANSparkMax(ShooterConstants.kLeftDeviceId, MotorType.kBrushed);
     }
 
     private static double clampPower(double power) {
@@ -66,12 +66,16 @@ public class ShooterSubsystem extends SubsystemBase{
         m_leftMotor.set(clampPower(m_speedentry.getDouble(0.0)));
         m_rightMotor.set(clampPower(m_speedentry.getDouble(0.0)));
 
-        ShooterRunning = false;
+        System.console().printf("Run shooter function invoked");
+
+        ShooterRunning = true;
     }
 
     public void stopShooter() {
         m_leftMotor.stopMotor();
         m_rightMotor.stopMotor();
+
+        System.console().printf("Stop shooter function invoked");
 
         ShooterRunning = false;
     }
