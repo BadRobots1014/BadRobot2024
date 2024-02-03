@@ -34,10 +34,10 @@ public final class Constants {
   public static final class DriveConstants {
 
     //TODO get field oriented working
-    public static final boolean kFieldOriented = false;
+    public static final boolean kFieldOriented = true;
 
     // Driving Parameters - Note that these are not the maximum capable speeds of the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = .3;
+    public static final double kMaxSpeedMetersPerSecond = .6;
     public static final double kMaxAngularSpeed = 3 * Math.PI; // radians per second
 
     // Distance between centers of right and left wheels on robot
