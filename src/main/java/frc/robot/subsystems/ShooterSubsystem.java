@@ -38,12 +38,12 @@ public class ShooterSubsystem extends SubsystemBase{
     private
      static boolean ShooterRunning = false;
     
-    public ShooterSubsystem(double defaultpower) {
-        m_frontMotorPower = m_shuffleboardtab.add("Front Motor Power",defaultpower).withWidget(BuiltInWidgets.kNumberSlider)
+    public ShooterSubsystem(double defaultfront, double defaultback) {
+        m_frontMotorPower = m_shuffleboardtab.add("Front Motor Power",defaultfront).withWidget(BuiltInWidgets.kNumberSlider)
                                                                               .withProperties(Map.of("min",-1.0,"max",1.0))
                                                                               .getEntry();
 
-        m_backMotorPower = m_shuffleboardtab.add("Back Motor Power",defaultpower).withWidget(BuiltInWidgets.kNumberSlider)
+        m_backMotorPower = m_shuffleboardtab.add("Back Motor Power",defaultback).withWidget(BuiltInWidgets.kNumberSlider)
                                                                               .withProperties(Map.of("min",-1.0,"max",1.0))
                                                                               .getEntry();
                                                                               

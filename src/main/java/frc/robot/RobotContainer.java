@@ -50,7 +50,7 @@ public class RobotContainer {
   // final SwerveSubsystem m_robotDrive = new SwerveSubsystem(m_driverController);
   
   // Shooter Subsystem
-  private final ShooterSubsystem m_shooterarmsystem = new ShooterSubsystem(0.0);
+  private final ShooterSubsystem m_shooterarmsystem = new ShooterSubsystem(-0.75, 1.0);
   //private final ShooterCommand m_shooterarmcommand = new ShooterCommand(m_shooterarmsystem);
 
   //Paths
