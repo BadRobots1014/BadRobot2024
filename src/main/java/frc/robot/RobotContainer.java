@@ -4,21 +4,13 @@
 
 package frc.robot;
 
-import java.util.function.DoubleSupplier;
-
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.shuffleboard.SuppliedValueWidget;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -106,7 +98,7 @@ public class RobotContainer {
   {
     if (Math.abs(m_driverController.getRightX()) < Constants.DriveConstants.kJoystickDeadzone)
       return 0;
-    return m_driverController.getRightX();
+    return -m_driverController.getRightX();
   }
 
   double getLeftX()
@@ -123,7 +115,7 @@ public class RobotContainer {
 
     if (Math.abs(m_driverController.getLeftX()) < Constants.DriveConstants.kJoystickDeadzone)
       return 0;
-    return m_driverController.getLeftX();
+    return -m_driverController.getLeftX();
 
   }
 
@@ -142,7 +134,7 @@ public class RobotContainer {
 
     if (Math.abs(m_driverController.getLeftY()) < Constants.DriveConstants.kJoystickDeadzone)
       return 0;
-    return m_driverController.getLeftY();
+    return -m_driverController.getLeftY();
 
   }
 }
