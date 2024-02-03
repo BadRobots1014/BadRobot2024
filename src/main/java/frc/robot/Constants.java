@@ -40,7 +40,7 @@ public final class Constants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 2;
-    public static final double kMaxAngularSpeed = 1 * Math.PI; // radians per second
+    public static final double kMaxAngularSpeed = 3 * Math.PI; // radians per second
 
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(24.75);
@@ -143,9 +143,5 @@ public final class Constants {
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
-  }
-
-  public static final class NeoMotorConstants {
-    public static final double kFreeSpeedRpm = 5676;
   }
 }

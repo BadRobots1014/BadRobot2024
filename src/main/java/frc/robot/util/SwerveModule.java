@@ -7,6 +7,7 @@ import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -57,6 +58,8 @@ public class SwerveModule {
         turningMotor = new CANSparkMax(turningMotorId, MotorType.kBrushless);
         driveMotor.setInverted(driveMotorReversed);
         turningMotor.setInverted(turningMotorReversed);
+        driveMotor.setIdleMode(IdleMode.kCoast);
+        turningMotor.setIdleMode(IdleMode.kBrake);
 
         //Relative encoder setup
         driveEncoder = driveMotor.getEncoder();
@@ -78,15 +81,12 @@ public class SwerveModule {
         m_tab.addDouble("Last speed", this::getLastStateSpeed);
         m_tab.addDouble("Encoder angle", this::getAbsoluteEncoderRad);
         
-        
-
         //Reset the encoders on start
         resetEncoders();
         
     }
 
     public void resetEncoders() {
-        
         driveEncoder.setPosition(0);
         turningEncoder.setPosition(getAbsoluteEncoderRad()); //This one gets reset to the actual position of the module
     }
@@ -109,11 +109,6 @@ public class SwerveModule {
     public void stop() {
         driveMotor.set(0);
         turningMotor.set(0);
-    }
-
-    public double getP()
-    {
-        return 2;
     }
 
     public double getDrivePosition() {return driveEncoder.getPosition();} //Returns position of drive encoder in meters traveled
