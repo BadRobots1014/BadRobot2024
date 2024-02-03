@@ -60,9 +60,9 @@ public class RobotContainer {
 
      m_robotDrive.setDefaultCommand(new SwerveDriveCommand(
       m_robotDrive,
-      this::getLeftX,
-      this::getLeftY,
-      this::getRightX,
+      () -> Math.pow(getLeftX(), 2),
+      () -> Math.pow(getLeftY(), 2),
+      () -> Math.pow(getRightX(), 2),
       () -> DriveConstants.kFieldOriented
     ));
 
