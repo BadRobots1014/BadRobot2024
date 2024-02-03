@@ -37,7 +37,7 @@ public final class Constants {
     public static final boolean kFieldOriented = false;
 
     // Driving Parameters - Note that these are not the maximum capable speeds of the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 2;
+    public static final double kMaxSpeedMetersPerSecond = .3;
     public static final double kMaxAngularSpeed = 3 * Math.PI; // radians per second
 
     // Distance between centers of right and left wheels on robot
@@ -46,17 +46,17 @@ public final class Constants {
     public static final double kWheelBase = Units.inchesToMeters(24.75);
     //Positions of modules relative to the center of mass
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-        new Translation2d(kWheelBase / 2, kTrackWidth / 2),
-        new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
-        new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
-        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2), //Front left
+        new Translation2d(kWheelBase / 2, -kTrackWidth / 2), //Front right
+        new Translation2d(-kWheelBase / 2, kTrackWidth / 2), //Back left
+        new Translation2d(kWheelBase / 2, kTrackWidth / 2)); //Back right
 
     // Angular offsets of the modules relative to the chassis in radians
-    public static final double kFrontRightChassisAngularOffset = 0
-    /*Additional correction because stupid module*/ + 2;
-    public static final double kBackRightChassisAngularOffset = - Math.PI / 2;
-    public static final double kBackLeftChassisAngularOffset = Math.PI;
-    public static final double kFrontLeftChassisAngularOffset = Math.PI / 2;
+    public static final double kFrontRightChassisAngularOffset = Math.PI - Math.PI / 2
+    /*Additional correction because stupid module*/ - 2;
+    public static final double kBackRightChassisAngularOffset = -Math.PI / 2 - Math.PI / 2;
+    public static final double kBackLeftChassisAngularOffset = 0 - Math.PI / 2;
+    public static final double kFrontLeftChassisAngularOffset = Math.PI / 2 - Math.PI / 2;
 
     // SPARK MAX CAN IDs
     public static final int kFrontRightDrivingCanId = 11;
@@ -116,8 +116,8 @@ public final class Constants {
     public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
     public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
     public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60;
-    public static final double kModuleDeadband = 0.01;
-    public static final double kTurningP = .1;
+    public static final double kModuleDeadband = 0.005;
+    public static final double kTurningP = .9;
     public static final double kTurningI = 0.0;
     public static final double kTurningD = 0.0;
     public static final double kTurningPeriod = .005;
