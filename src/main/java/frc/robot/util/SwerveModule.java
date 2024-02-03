@@ -105,7 +105,7 @@ public class SwerveModule {
         }
         m_lastState = state;
         // TODO fix optimization
-        state = optimize(state, getState().angle);
+        // state = SwerveModuleState.optimize(state, getState().angle);
         m_lastStateOptimized = state;
         // driveMotor.set(state.speedMetersPerSecond * DriveConstants.kMaxSpeedMetersPerSecond);
         turningMotor.set(m_lastPIDOutput = turningPidController.calculate(getAbsoluteEncoderRad(), state.angle.getRadians()));
@@ -132,16 +132,4 @@ public class SwerveModule {
     public double getAbsoluteEncoderRad() {return getAbsoluteEncoderRot() * 2*Math.PI;} //Returns position of absolute encoder in radians
     public double getAbsoluteEncoderDeg() {return getAbsoluteEncoderRot() * 360;} //Returns position of absolute encoder in degrees
     public SwerveModuleState getState() {return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAbsoluteEncoderRad()));} //Returns the above info in the form of a SwerveModuleState
-
-    public static SwerveModuleState optimize(SwerveModuleState desiredState, Rotation2d currentAngle) {
-
-        var delta = desiredState.angle.minus(currentAngle);
-
-        if (Math.abs(delta.getDegrees()) > 90.0) {
-        return new SwerveModuleState(-desiredState.speedMetersPerSecond, desiredState.angle.plus(Rotation2d.fromDegrees(180.0)));
-        }
-        else {
-        return new SwerveModuleState(desiredState.speedMetersPerSecond, desiredState.angle);
-        }
-    }
 }
