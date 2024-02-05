@@ -24,13 +24,6 @@ import edu.wpi.first.wpilibj.XboxController.Button;
  */
 public final class Constants {
 
-  public static final class TestConstants {
-    // These are for testing individual motors.
-    public static final boolean kTestMode = false;
-    public static final double kTestMotorID = 11;
-    public static final double kTestMotorSpeed = 1;
-  }
-
   public static final class DriveConstants {
 
     // TODO get field oriented working
