@@ -33,7 +33,6 @@ public final class Constants {
 
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final boolean kFieldOriented = true;
     public static final double kXSlewRateLimit = 2.2;
     public static final double kYSlewRateLimit = 2.2;
     public static final double kTurnSlewRateLimit = 2.2;

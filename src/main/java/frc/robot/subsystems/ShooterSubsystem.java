@@ -33,8 +33,8 @@ public class ShooterSubsystem extends SubsystemBase {
   private final GenericEntry m_backMotorPower;
   // private final NetworkTable m_tab =
   // NetworkTableInstance.getDefault().getTable("Shooter");
-  public final CANSparkMax m_frontMotor;
-  public final CANSparkMax m_backMotor;
+  public final CANSparkFlex m_frontMotor;
+  public final CANSparkFlex m_backMotor;
   private static boolean ShooterRunning = false;
 
   public ShooterSubsystem(double defaultpower) {
