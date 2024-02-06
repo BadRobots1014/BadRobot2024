@@ -39,18 +39,24 @@ public final class Constants {
     // Distance between front and back wheels on robot
     public static final double kWheelBase = Units.inchesToMeters(24.75);
     // Positions of modules relative to the center of mass
-    public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+    public static final SwerveDriveKinematics kDriveKinematics =
+      new SwerveDriveKinematics(
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2), // Front left
         new Translation2d(kWheelBase / 2, -kTrackWidth / 2), // Front right
         new Translation2d(-kWheelBase / 2, kTrackWidth / 2), // Back left
-        new Translation2d(kWheelBase / 2, kTrackWidth / 2)); // Back right
+        new Translation2d(kWheelBase / 2, kTrackWidth / 2)
+      ); // Back right
 
     // Angular offsets of the modules relative to the chassis in radians
-    public static final double kFrontRightChassisAngularOffset = Math.PI - Math.PI / 2
-    /* Additional correction because stupid module */ - 2;
-    public static final double kBackRightChassisAngularOffset = -Math.PI / 2 - Math.PI / 2;
+    public static final double kFrontRightChassisAngularOffset =
+      Math.PI -
+      Math.PI / 2 -
+      /* Additional correction because stupid module */2;
+    public static final double kBackRightChassisAngularOffset =
+      -Math.PI / 2 - Math.PI / 2;
     public static final double kBackLeftChassisAngularOffset = 0 - Math.PI / 2;
-    public static final double kFrontLeftChassisAngularOffset = Math.PI / 2 - Math.PI / 2;
+    public static final double kFrontLeftChassisAngularOffset =
+      Math.PI / 2 - Math.PI / 2;
 
     // SPARK MAX CAN IDs
     public static final int kFrontRightDrivingCanId = 11;
@@ -107,19 +113,23 @@ public final class Constants {
     public static final double kWheelDiameterMeters = 0.0762;
     public static final double kDriveMotorGearRatio = 8.14;
     public static final double kTurningMotorGearRatio = 12.8;
-    public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
-    public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
-    public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
-    public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60;
+    public static final double kDriveEncoderRot2Meter =
+      kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
+    public static final double kTurningEncoderRot2Rad =
+      kTurningMotorGearRatio * 2 * Math.PI;
+    public static final double kDriveEncoderRPM2MeterPerSec =
+      kDriveEncoderRot2Meter / 60;
+    public static final double kTurningEncoderRPM2RadPerSec =
+      kTurningEncoderRot2Rad / 60;
     public static final double kModuleDeadband = 0.005;
     public static final double kTurningP = .9;
     public static final double kTurningI = 0.0;
     public static final double kTurningD = 0.0;
     public static final double kTurningPeriod = .005;
-
   }
 
   public static final class OIConstants {
+
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.05;
   }
@@ -127,21 +137,27 @@ public final class Constants {
   // TODO These are old and should be removed
   @Deprecated
   public static final class AutoConstants {
+
     public static final double kMaxSpeedMetersPerSecond = 3;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-    public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+    public static final double kMaxAngularSpeedRadiansPerSecondSquared =
+      Math.PI;
 
     public static final double kPXController = 1;
     public static final double kPYController = 1;
     public static final double kPThetaController = 1;
 
     // Constraint for the motion profiled robot angle controller
-    public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
-        kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+    public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
+      new TrapezoidProfile.Constraints(
+        kMaxAngularSpeedRadiansPerSecond,
+        kMaxAngularSpeedRadiansPerSecondSquared
+      );
   }
 
   public static final class ShooterConstants {
+
     /* Make sure to change these to whatever can IDs you guys want */
     public static final int kFrontMotorCanId = 4; // TODO Update these (probably 61 and 62)
     public static final int kBackMotorCanId = 3;
