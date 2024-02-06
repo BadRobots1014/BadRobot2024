@@ -48,8 +48,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     m_shuffleboardtab.addBoolean("Motor Spinning", () -> ShooterSubsystem.IsShooterRunning());
 
-    m_frontMotor = new CANSparkMax(ShooterConstants.kFrontMotorCanId, MotorType.kBrushed); // Assuming brushless?
-    m_backMotor = new CANSparkMax(ShooterConstants.kBackMotorCanId, MotorType.kBrushed);
+    m_frontMotor = new CANSparkMax(ShooterConstants.kFrontMotorCanId, MotorType.kBrushless); // Assuming brushless?
+    m_backMotor = new CANSparkMax(ShooterConstants.kBackMotorCanId, MotorType.kBrushless);
   }
 
   private static double clampPower(double power) {
