@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import java.util.Map;
 
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 //import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel;
@@ -48,8 +49,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     m_shuffleboardtab.addBoolean("Motor Spinning", () -> ShooterSubsystem.IsShooterRunning());
 
-    m_frontMotor = new CANSparkMax(ShooterConstants.kFrontMotorCanId, MotorType.kBrushless); // Assuming brushless?
-    m_backMotor = new CANSparkMax(ShooterConstants.kBackMotorCanId, MotorType.kBrushless);
+    m_frontMotor = new CANSparkFlex(ShooterConstants.kFrontMotorCanId, MotorType.kBrushless);
+    m_backMotor = new CANSparkFlex(ShooterConstants.kBackMotorCanId, MotorType.kBrushless);
   }
 
   private static double clampPower(double power) {
