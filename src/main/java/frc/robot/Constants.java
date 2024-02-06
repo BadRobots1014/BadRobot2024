@@ -27,6 +27,10 @@ import edu.wpi.first.wpilibj.XboxController.Button;
  */
 public final class Constants {
   public static final class DriveConstants {
+
+    // TODO turn field oriented on or off
+    public static final boolean kFieldOriented = true;
+
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
     public static final boolean kFieldOriented = true;
