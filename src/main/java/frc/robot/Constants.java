@@ -26,7 +26,7 @@ public final class Constants {
 
   public static final class DriveConstants {
 
-    // TODO get field oriented working
+    // TODO turn field oriented on or off
     public static final boolean kFieldOriented = true;
 
     // Driving Parameters - Note that these are not the maximum capable speeds of
