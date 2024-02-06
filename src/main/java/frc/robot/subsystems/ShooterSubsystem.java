@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import java.util.Map;
 
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -21,8 +22,8 @@ public class ShooterSubsystem extends SubsystemBase {
   private final GenericEntry m_frontMotorPower;
   private final GenericEntry m_backMotorPower;
 
-  public final CANSparkMax m_frontMotor;
-  public final CANSparkMax m_backMotor;
+  public final CANSparkFlex m_frontMotor;
+  public final CANSparkFlex m_backMotor;
   private static boolean shooterRunning = false;
 
   public ShooterSubsystem(double defaultpower) {
@@ -37,8 +38,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     m_shuffleboardtab.addBoolean("Motor Spinning", () -> ShooterSubsystem.isShooterRunning());
 
-    m_frontMotor = new CANSparkMax(ShooterConstants.kFrontMotorCanId, MotorType.kBrushless);
-    m_backMotor = new CANSparkMax(ShooterConstants.kBackMotorCanId, MotorType.kBrushless);
+    m_frontMotor = new CANSparkFlex(ShooterConstants.kFrontMotorCanId, MotorType.kBrushless);
+    m_backMotor = new CANSparkFlex(ShooterConstants.kBackMotorCanId, MotorType.kBrushless);
   }
 
   private static double clampPower(double power) {
