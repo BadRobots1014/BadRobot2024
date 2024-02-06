@@ -40,7 +40,8 @@ public class RobotContainer {
   private final SwerveSubsystem m_robotDrive = new SwerveSubsystem(m_driverController);
 
   // Shooter Subsystem
-  private final ShooterSubsystem m_shooterarmsystem = new ShooterSubsystem(0.0);
+  //private final ShooterSubsystem m_shooterarmsystem = new ShooterSubsystem(0.0);
+  // Temporarily commented out as there is no shooter on our robot yet  
 
   // Paths
   private PathPlannerTrajectory m_autoTraj;
@@ -88,10 +89,13 @@ public class RobotContainer {
         .whileTrue(new ZeroHeadingCommand(m_robotDrive));
     new JoystickButton(m_driverController, XboxController.Button.kY.value)
         .whileTrue(new UpdatePIDCommand(m_robotDrive));
+    // Temporarily comment out as there is no shooter on our robot yet
+    /*
     new JoystickButton(m_driverController, XboxController.Button.kA.value)
         .onTrue(new ShooterCommand(m_shooterarmsystem, ShooterCommand.CommandType.StartMotor));
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
         .onTrue(new ShooterCommand(m_shooterarmsystem, ShooterCommand.CommandType.Shoot));
+    */
   }
 
   /**
