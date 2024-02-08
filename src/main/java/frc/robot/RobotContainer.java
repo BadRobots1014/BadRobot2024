@@ -48,10 +48,6 @@ public class RobotContainer {
   private PathPlannerPath m_autoPath;
   private PathPlannerAuto m_auto;
 
-  // TEST
-  private double m_testMotorId = 0;
-  private double m_testMotorSpeed = 0;
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
