@@ -6,10 +6,6 @@ package frc.robot;
 
 import java.util.function.DoubleSupplier;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.PathPlannerTrajectory;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
