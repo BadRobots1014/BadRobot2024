@@ -98,17 +98,6 @@ public class RobotContainer {
     */
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    m_auto = new PathPlannerAuto("New Auto");
-    return m_auto;
-    // return m_robotDrive.followTrajectoryCommand(m_autoTraj, m_autoPath, true);
-  }
-
   double getRightX() {
     if (Math.abs(m_driverController.getRightX()) < Constants.DriveConstants.kJoystickDeadzone)
       return 0;
@@ -146,5 +135,16 @@ public class RobotContainer {
       return 0;
     return -m_driverController.getLeftY();
 
+  }
+
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  public Command getAutonomousCommand() {
+    m_auto = new PathPlannerAuto("Drive Short Auto");
+    return m_auto;
+    // return m_robotDrive.followTrajectoryCommand(m_autoTraj, m_autoPath, true);
   }
 }
