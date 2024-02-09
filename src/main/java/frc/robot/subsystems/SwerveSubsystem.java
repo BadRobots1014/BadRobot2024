@@ -2,7 +2,9 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
@@ -87,16 +89,22 @@ public class SwerveSubsystem extends SubsystemBase {
         m_tab.addNumber("Heading", this::getHeading);
     }
 
-    public void zeroHeading() {
-        gyro.reset();
-    }
+    // Gyro data shenanigans
+    public void zeroHeading() {gyro.reset();}
+    public void resetPose() {zeroHeading();}
 
-    public double getHeading() {
-        return Math.IEEEremainder(gyro.getAngle(), 360);
-    }
+    public double getHeading() {return Math.IEEEremainder(gyro.getAngle(), 360);}
+    public Rotation2d getRotation2d() {return Rotation2d.fromDegrees(getHeading());}
+    public double getX() {return gyro.getDisplacementX();}
+    public double getY() {return gyro.getDisplacementY();}
+    public double getXSpeed() {return gyro.getVelocityX();}
+    public double getYSpeed() {return gyro.getVelocityY();}
+    public double getTurnSpeed() {return gyro.getRate();}
 
-    public Rotation2d getRotation2d() {
-        return Rotation2d.fromDegrees(getHeading());
+    public Pose2d getPose() {return new Pose2d(getX(), getY(), getRotation2d());}
+    public ChassisSpeeds getCurrentSpeeds() {return new ChassisSpeeds(getXSpeed(), getYSpeed(), getTurnSpeed());}
+    public void drive(ChassisSpeeds speeds) {
+        setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds));
     }
 
     public void stopModules() {
@@ -166,5 +174,5 @@ public class SwerveSubsystem extends SubsystemBase {
 
         module.setDesiredState(new SwerveModuleState(Controller.getLeftY() * speedMultiplyer,
                 Rotation2d.fromRotations(.5 * Controller.getLeftX())));
-    }// state.angle.getDegrees() + Controller.getLeftX() * 10
+    }
 }

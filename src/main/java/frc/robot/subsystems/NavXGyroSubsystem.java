@@ -20,38 +20,21 @@ public class NavXGyroSubsystem extends SubsystemBase {
     m_tab.addNumber("Pitch", this::getPitch);
   }
 
-  public void periodic() {
-    // System.out.print("Yaw: " + getYaw() + "\n" + "Roll: " + getRoll() + "\n" +
-    // "Pitch: " + getPitch() + "\n\n");
-  }
+  public void periodic() {}
 
-  public double getYaw() {
-    return navx.getYaw();
-  }
+  public double getYaw() {return navx.getYaw();}
+  public double getPitch() {return navx.getPitch();}
+  public double getRoll() {return navx.getRoll();}
 
-  public double getPitch() {
-    return navx.getPitch();
-  }
+  public double getDisplacementX() {return navx.getDisplacementX();}
+  public double getDisplacementY() {return navx.getDisplacementY();}
+  public double getDisplacementZ() {return navx.getDisplacementZ();}
 
-  public double getRoll() {
-    return navx.getRoll();
-  }
+  public double getVelocityX() {return navx.getVelocityX();}
+  public double getVelocityY() {return navx.getVelocityY();}
+  public double getVelocityZ() {return navx.getVelocityZ();}
 
-  public double getRate() {
-    return navx.getRate();
-  }
-
-  public double getVelocityX() {
-    return navx.getVelocityX();
-  }
-
-  public double getVelocityY() {
-    return navx.getVelocityY();
-  }
-
-  public double getVelocityZ() {
-    return navx.getVelocityZ();
-  }
+  public double getRate() {return navx.getRate();}
 
   public void reset() {
     navx.reset();
