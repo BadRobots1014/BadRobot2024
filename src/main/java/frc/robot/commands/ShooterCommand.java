@@ -19,21 +19,17 @@ public class ShooterCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("Command invoked");
     m_subsystem.runShooter();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("Stop command invoked");
     m_subsystem.stopShooter();
   }
 

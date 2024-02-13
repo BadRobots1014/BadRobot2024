@@ -17,7 +17,6 @@ import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.UpdatePIDCommand;
 import frc.robot.commands.ZeroHeadingCommand;
-// Shooter
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -44,7 +43,6 @@ public class RobotContainer {
 
   // Shooter Subsystem
   private final ShooterSubsystem m_shooterarmsystem = new ShooterSubsystem(0.0);
-  // Temporarily commented out as there is no shooter on our robot yet
 
   // Paths
   private PathPlannerTrajectory m_autoTraj;
@@ -94,11 +92,8 @@ public class RobotContainer {
       .whileTrue(new ZeroHeadingCommand(m_robotDrive));
     new JoystickButton(m_driverController, XboxController.Button.kY.value)
       .whileTrue(new UpdatePIDCommand(m_robotDrive));
-    new JoystickButton(m_driverController, XboxController.Button.kA.value).toggleOnTrue(new ShooterCommand(m_shooterarmsystem));
-    //new JoystickButton(m_driverController, XboxController.Button.kA.value)
-      //  .onTrue(new ShooterCommand(m_shooterarmsystem));
-    //new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
-      //  .onTrue(new ShooterCommand(m_shooterarmsystem, ShooterCommand.CommandType.Shoot));
+    new JoystickButton(m_driverController, XboxController.Button.kA.value)
+      .toggleOnTrue(new ShooterCommand(m_shooterarmsystem));
   }
 
   /**
