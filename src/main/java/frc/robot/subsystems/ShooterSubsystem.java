@@ -13,19 +13,19 @@ import frc.robot.Constants.ShooterConstants;
 import java.util.Map;
 
 public class ShooterSubsystem extends SubsystemBase {
-
+/*
   private final ShuffleboardTab m_shuffleboardtab = Shuffleboard.getTab(
     "Shooter"
   );
 
   private final GenericEntry m_frontMotorPower;
   private final GenericEntry m_backMotorPower;
-
+*/
   public final CANSparkFlex m_frontMotor;
   public final CANSparkFlex m_backMotor;
-  private static boolean shooterRunning = false;
 
   public ShooterSubsystem(double defaultpower) {
+    /*
     m_frontMotorPower =
       m_shuffleboardtab
         .add("Front Motor Power", defaultpower)
@@ -44,22 +44,11 @@ public class ShooterSubsystem extends SubsystemBase {
       "Motor Spinning",
       () -> ShooterSubsystem.isShooterRunning()
     );
-
+*/
     m_frontMotor =
       new CANSparkFlex(ShooterConstants.kFrontMotorCanId, MotorType.kBrushless);
     m_backMotor =
       new CANSparkFlex(ShooterConstants.kBackMotorCanId, MotorType.kBrushless);
-  }
-
-  private static double clampPower(double power) {
-    return MathUtil.clamp(power, -1.0, 1.0);
-  }
-
-  public double[] getPower() {
-    return new double[] {
-      m_frontMotorPower.getDouble(0.0),
-      m_backMotorPower.getDouble(0.0),
-    };
   }
 
   /*
@@ -78,32 +67,9 @@ public class ShooterSubsystem extends SubsystemBase {
    */
 
   public void runShooter() {
-    double[] powers = getPower();
-    m_frontMotor.set(clampPower(powers[0]));
-    m_backMotor.set(clampPower(powers[1]));
+    m_frontMotor.set(0.5);
+    m_backMotor.set(0.5);
     System.out.println("Run shooter function code invoked\n");
-    shooterRunning = true;
-  }
-
-  public void stopShooter() {
-    m_frontMotor.stopMotor();
-    m_backMotor.stopMotor();
-    System.out.print("stop shooter function code invoked\n");
-    shooterRunning = false;
-  }
-
-  public void shootCycle() {
-    if (!shooterRunning) {
-      System.out.print(
-        "WARNING: ShooterSubsystem tried a shoot cycle when the motors were not running!\n"
-      );
-      return;
-    }
-    /* code to shoot a single ring goes here */
-  }
-
-  public static boolean isShooterRunning() {
-    return shooterRunning;
   }
 
   @Override
