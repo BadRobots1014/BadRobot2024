@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -25,6 +26,7 @@ public class NavXGyroSubsystem extends SubsystemBase {
   public double getYaw() {return navx.getYaw();}
   public double getPitch() {return navx.getPitch();}
   public double getRoll() {return navx.getRoll();}
+  public double getAngle() {return navx.getAngle();}
 
   public double getDisplacementX() {return navx.getDisplacementX();}
   public double getDisplacementY() {return navx.getDisplacementY();}
@@ -39,5 +41,9 @@ public class NavXGyroSubsystem extends SubsystemBase {
   public void reset() {
     navx.reset();
     navx.resetDisplacement();
+  }
+
+  public void setPose(Pose2d pose) {
+    reset();
   }
 }
