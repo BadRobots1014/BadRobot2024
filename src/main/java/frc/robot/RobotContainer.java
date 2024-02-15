@@ -42,7 +42,7 @@ public class RobotContainer {
   );
 
   // Shooter Subsystem
-  private final ShooterSubsystem m_shooterarmsystem = new ShooterSubsystem(0.0);
+  // private final ShooterSubsystem m_shooterarmsystem = new ShooterSubsystem(0.0);
 
   // Paths
   private PathPlannerTrajectory m_autoTraj;
@@ -92,8 +92,8 @@ public class RobotContainer {
       .whileTrue(new ZeroHeadingCommand(m_robotDrive));
     new JoystickButton(m_driverController, XboxController.Button.kY.value)
       .whileTrue(new UpdatePIDCommand(m_robotDrive));
-    new JoystickButton(m_driverController, XboxController.Button.kA.value)
-      .toggleOnTrue(new ShooterCommand(m_shooterarmsystem));
+    // new JoystickButton(m_driverController, XboxController.Button.kA.value)
+    //   .toggleOnTrue(new ShooterCommand(m_shooterarmsystem));
   }
 
   /**

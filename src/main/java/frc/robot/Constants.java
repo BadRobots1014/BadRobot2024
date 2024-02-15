@@ -27,7 +27,7 @@ public final class Constants {
   public static final class DriveConstants {
 
     // TODO turn field oriented on or off
-    public static final boolean kFieldOriented = true;
+    public static final boolean kFieldOriented = false;
 
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
@@ -44,19 +44,29 @@ public final class Constants {
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2), // Front left
         new Translation2d(kWheelBase / 2, -kTrackWidth / 2), // Front right
         new Translation2d(-kWheelBase / 2, kTrackWidth / 2), // Back left
-        new Translation2d(kWheelBase / 2, kTrackWidth / 2)
-      ); // Back right
+        new Translation2d(kWheelBase / 2, kTrackWidth / 2) // Back right
+      );
+
+    //Using tall bot?
+    public static final boolean tallBot = true;
+
+    //Short bot additional offsets
+    public static final double kFROffset = Math.PI / 2 - 2;
+    public static final double kBROffset = -Math.PI;
+    public static final double kBLOffset = -Math.PI / 2;
+    public static final double kFLOffset = 0;
+
+    //Tall bot additional offsets TODO fix these offsets
+    public static final double kTallFROffset = -.597; //This one's good
+    public static final double kTallBROffset = .071; //This one needs work
+    public static final double kTallBLOffset = .314; //This one's good
+    public static final double kTallFLOffset = .134; //This one needs work
 
     // Angular offsets of the modules relative to the chassis in radians
-    public static final double kFrontRightChassisAngularOffset =
-      Math.PI -
-      Math.PI / 2 -
-      /* Additional correction because stupid module */2;
-    public static final double kBackRightChassisAngularOffset =
-      -Math.PI / 2 - Math.PI / 2;
-    public static final double kBackLeftChassisAngularOffset = 0 - Math.PI / 2;
-    public static final double kFrontLeftChassisAngularOffset =
-      Math.PI / 2 - Math.PI / 2;
+    public static final double kFrontRightChassisAngularOffset = (tallBot ? kTallFROffset : kFROffset);
+    public static final double kBackRightChassisAngularOffset = (tallBot ? kTallBROffset : kBROffset);
+    public static final double kBackLeftChassisAngularOffset = (tallBot ? kTallBLOffset : kBLOffset);
+    public static final double kFrontLeftChassisAngularOffset = (tallBot ? kTallFLOffset : kFLOffset);
 
     // SPARK MAX CAN IDs
     public static final int kFrontRightDrivingCanId = 11;
@@ -158,7 +168,6 @@ public final class Constants {
 
   public static final class ShooterConstants {
 
-    /* Make sure to change these to whatever can IDs you guys want */
     public static final int kFrontMotorCanId = 61;
     public static final int kBackMotorCanId = 62;
   }
