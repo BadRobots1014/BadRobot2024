@@ -26,180 +26,185 @@ import frc.robot.util.SwerveModule;
 
 public class SwerveSubsystem extends SubsystemBase {
 
-    XboxController Controller;
+  XboxController Controller;
 
-    public GenericEntry p;
-    public GenericEntry i;
-    public GenericEntry d;
+  public GenericEntry p;
+  public GenericEntry i;
+  public GenericEntry d;
 
-    // Modules
-    public SwerveModule frontLeft = new SwerveModule(
-            DriveConstants.kFrontLeftDrivingCanId,
-            DriveConstants.kFrontLeftTurningCanId,
-            DriveConstants.kFrontLeftDriveEncoderReversed,
-            DriveConstants.kFrontLeftTurningEncoderReversed,
-            DriveConstants.kFrontLeftEncoderCanId,
-            DriveConstants.kFrontLeftChassisAngularOffset,
-            DriveConstants.kFrontLeftAbsoluteEncoderReversed);
+  public SwerveSubsystem(XboxController controller) {
+    m_tab = Shuffleboard.getTab("swerve");
+    Controller = controller;
 
-    public SwerveModule frontRight = new SwerveModule(
-            DriveConstants.kFrontRightDrivingCanId,
-            DriveConstants.kFrontRightTurningCanId,
-            DriveConstants.kFrontRightDriveEncoderReversed,
-            DriveConstants.kFrontRightTurningEncoderReversed,
-            DriveConstants.kFrontRightEncoderCanId,
-            DriveConstants.kFrontRightChassisAngularOffset,
-            DriveConstants.kFrontRightAbsoluteEncoderReversed);
+    p = m_tab.add("p", ModuleConstants.kTurningP).getEntry();
+    i = m_tab.add("i", ModuleConstants.kTurningI).getEntry();
+    d = m_tab.add("d", ModuleConstants.kTurningD).getEntry();
+  }
 
-    public SwerveModule backLeft = new SwerveModule(
-            DriveConstants.kRearLeftDrivingCanId,
-            DriveConstants.kRearLeftTurningCanId,
-            DriveConstants.kBackLeftDriveEncoderReversed,
-            DriveConstants.kBackLeftTurningEncoderReversed,
-            DriveConstants.kRearLeftEncoderCanId,
-            DriveConstants.kBackLeftChassisAngularOffset,
-            DriveConstants.kBackLeftAbsoluteEncoderReversed);
+  // Modules
+  public SwerveModule frontLeft = new SwerveModule(
+    DriveConstants.kFrontLeftDrivingCanId,
+    DriveConstants.kFrontLeftTurningCanId,
+    DriveConstants.kFrontLeftDriveEncoderReversed,
+    DriveConstants.kFrontLeftTurningEncoderReversed,
+    DriveConstants.kFrontLeftEncoderCanId,
+    DriveConstants.kFrontLeftChassisAngularOffset,
+    DriveConstants.kFrontLeftAbsoluteEncoderReversed
+  );
 
-    public SwerveModule backRight = new SwerveModule(
-            DriveConstants.kRearRightDrivingCanId,
-            DriveConstants.kRearRightTurningCanId,
-            DriveConstants.kBackRightDriveEncoderReversed,
-            DriveConstants.kBackRightTurningEncoderReversed,
-            DriveConstants.kRearRightEncoderCanId,
-            DriveConstants.kBackRightChassisAngularOffset,
-            DriveConstants.kBackRightAbsoluteEncoderReversed);
+  public SwerveModule frontRight = new SwerveModule(
+    DriveConstants.kFrontRightDrivingCanId,
+    DriveConstants.kFrontRightTurningCanId,
+    DriveConstants.kFrontRightDriveEncoderReversed,
+    DriveConstants.kFrontRightTurningEncoderReversed,
+    DriveConstants.kFrontRightEncoderCanId,
+    DriveConstants.kFrontRightChassisAngularOffset,
+    DriveConstants.kFrontRightAbsoluteEncoderReversed
+  );
 
-    // The gyro
-    private final NavXGyroSubsystem gyro;
+  public SwerveModule backLeft = new SwerveModule(
+    DriveConstants.kRearLeftDrivingCanId,
+    DriveConstants.kRearLeftTurningCanId,
+    DriveConstants.kBackLeftDriveEncoderReversed,
+    DriveConstants.kBackLeftTurningEncoderReversed,
+    DriveConstants.kRearLeftEncoderCanId,
+    DriveConstants.kBackLeftChassisAngularOffset,
+    DriveConstants.kBackLeftAbsoluteEncoderReversed
+  );
 
-    // Shuffleboard
-    private final ShuffleboardTab m_tab;
+  public SwerveModule backRight = new SwerveModule(
+    DriveConstants.kRearRightDrivingCanId,
+    DriveConstants.kRearRightTurningCanId,
+    DriveConstants.kBackRightDriveEncoderReversed,
+    DriveConstants.kBackRightTurningEncoderReversed,
+    DriveConstants.kRearRightEncoderCanId,
+    DriveConstants.kBackRightChassisAngularOffset,
+    DriveConstants.kBackRightAbsoluteEncoderReversed
+  );
 
-    public SwerveSubsystem(XboxController controller) {
-        m_tab = Shuffleboard.getTab("swerve");
-        Controller = controller;
+  // The gyro
+  private final AHRS gyro = new AHRS(SPI.Port.kMXP);
 
-        //PID
-        p = m_tab.add("p", ModuleConstants.kTurningP).getEntry();
-        i = m_tab.add("i", ModuleConstants.kTurningI).getEntry();
-        d = m_tab.add("d", ModuleConstants.kTurningD).getEntry();
-        
-        gyro = new NavXGyroSubsystem();
-        new Thread(() -> {
-            try {
-                Thread.sleep(DriveConstants.kBootupDelay);
-                zeroHeading();
-            } catch (Exception e) {
-            }
-        }).start();
-        m_tab.addNumber("Heading", this::getHeading);
+  // Shuffleboard
+  private final ShuffleboardTab m_tab;
 
-        //Configure AutoBuilder last
-        AutoBuilder.configureHolonomic(
-            this::getPose, // Robot pose supplier
-            this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-            this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-            AutoConstants.kAutoConfig,
-            () -> {
-              // Boolean supplier that controls when the path will be mirrored for the red alliance
-              // This will flip the path being followed to the red side of the field.
-              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+  public SwerveSubsystem() {
+    new Thread(() -> {
+      try {
+        Thread.sleep(DriveConstants.kBootupDelay);
+        zeroHeading();
+      } catch (Exception e) {}
+    })
+      .start();
+    m_tab = Shuffleboard.getTab("Swerve");
+    m_tab.addNumber("Heading", this::getHeading);
+  }
 
-              var alliance = DriverStation.getAlliance();
-              if (alliance.isPresent()) {
-                return alliance.get() == DriverStation.Alliance.Red;
-              }
-              return false;
-            },
-            this // Reference to this subsystem to set requirements
+  public void zeroHeading() {
+    gyro.reset();
+  }
+
+  public double getHeading() {
+    return Math.IEEEremainder(gyro.getAngle(), 360);
+  }
+
+  public Rotation2d getRotation2d() {
+    return Rotation2d.fromDegrees(getHeading());
+  }
+
+  public void stopModules() {
+    frontLeft.stop();
+    frontRight.stop();
+    backLeft.stop();
+    backRight.stop();
+  }
+
+  /**
+   * @param desiredStates The states the modules should move toward. In order,
+   *                      front left, front right, back left, back right.
+   */
+  public void setModuleStates(SwerveModuleState[] desiredStates) {
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+      desiredStates,
+      DriveConstants.kMaxSpeedMetersPerSecond
     );
+    frontLeft.setDesiredState(desiredStates[0]);
+    frontRight.setDesiredState(desiredStates[1]);
+    backLeft.setDesiredState(desiredStates[2]);
+    backRight.setDesiredState(desiredStates[3]);
+  }
+
+  public void testMotor() {
+    double rx = Controller.getRightX();
+    double ry = Controller.getRightY();
+    double lx = Controller.getLeftX();
+    double ly = Controller.getLeftY();
+
+    System.out.println(Controller.getPOV());
+
+    if (Controller.getPOV() > -1) {
+      int pov = Controller.getPOV();
+      frontLeft.setDesiredState(
+        new SwerveModuleState(0, Rotation2d.fromDegrees(pov))
+      );
+      frontRight.setDesiredState(
+        new SwerveModuleState(0, Rotation2d.fromDegrees(pov))
+      );
+      backLeft.setDesiredState(
+        new SwerveModuleState(0, Rotation2d.fromDegrees(pov))
+      );
+      backRight.setDesiredState(
+        new SwerveModuleState(0, Rotation2d.fromDegrees(pov))
+      );
     }
 
-    // Gyro data shenanigans
-    public void zeroHeading() {gyro.reset();}
-    public void resetPose(Pose2d pose) {gyro.setPose(pose);}
+    double speedMultiplyer = !Controller.getRightBumper() ? 1 : .3;
 
-    public double getHeading() {return Math.IEEEremainder(gyro.getAngle(), 360);}
-    public Rotation2d getRotation2d() {return Rotation2d.fromDegrees(getHeading());}
-    public double getX() {return gyro.getDisplacementX();}
-    public double getY() {return gyro.getDisplacementY();}
-    public double getXSpeed() {return gyro.getVelocityX();}
-    public double getYSpeed() {return gyro.getVelocityY();}
-    public double getTurnSpeed() {return gyro.getRate();}
+    SwerveModule module = null;
 
-    public Pose2d getPose() {return new Pose2d(getX(), getY(), getRotation2d());}
-    public ChassisSpeeds getRobotRelativeSpeeds() {return new ChassisSpeeds(getXSpeed(), getYSpeed(), getTurnSpeed());}
-    public void driveRobotRelative(ChassisSpeeds speeds) {
-        setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds));
+    if (Controller.getYButton()) module = frontRight; else if (
+      Controller.getXButton()
+    ) module = frontLeft; else if (Controller.getBButton()) module =
+      backRight; else if (Controller.getAButton()) module = backLeft;
+
+    if (module == null) {
+      frontLeft.setDesiredState(
+        new SwerveModuleState(
+          Controller.getLeftY() * speedMultiplyer,
+          Rotation2d.fromRotations(.5 * Controller.getLeftX())
+        )
+      );
+      frontRight.setDesiredState(
+        new SwerveModuleState(
+          Controller.getLeftY() * speedMultiplyer,
+          Rotation2d.fromRotations(.5 * Controller.getLeftX())
+        )
+      );
+      backLeft.setDesiredState(
+        new SwerveModuleState(
+          Controller.getLeftY() * speedMultiplyer,
+          Rotation2d.fromRotations(.5 * Controller.getLeftX())
+        )
+      );
+      backRight.setDesiredState(
+        new SwerveModuleState(
+          Controller.getLeftY() * speedMultiplyer,
+          Rotation2d.fromRotations(.5 * Controller.getLeftX())
+        )
+      );
+      return;
     }
 
-    public void stopModules() {
-        frontLeft.stop();
-        frontRight.stop();
-        backLeft.stop();
-        backRight.stop();
-    }
+    frontLeft.setDesiredState(new SwerveModuleState());
+    frontRight.setDesiredState(new SwerveModuleState());
+    backLeft.setDesiredState(new SwerveModuleState());
+    backRight.setDesiredState(new SwerveModuleState());
 
-    /**
-     * @param desiredStates The states the modules should move toward. In order,
-     *                      front left, front right, back left, back right.
-     */
-    public void setModuleStates(SwerveModuleState[] desiredStates) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
-        frontLeft.setDesiredState(desiredStates[0]);
-        frontRight.setDesiredState(desiredStates[1]);
-        backLeft.setDesiredState(desiredStates[2]);
-        backRight.setDesiredState(desiredStates[3]);
-    }
-
-    public void testMotor() {
-        double rx = Controller.getRightX();
-        double ry = Controller.getRightY();
-        double lx = Controller.getLeftX();
-        double ly = Controller.getLeftY();
-
-        System.out.println(Controller.getPOV());
-
-        if (Controller.getPOV() > -1) {
-            int pov = Controller.getPOV();
-            frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(pov)));
-            frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(pov)));
-            backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(pov)));
-            backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(pov)));
-        }
-
-        double speedMultiplyer = !Controller.getRightBumper() ? 1 : .3;
-
-        SwerveModule module = null;
-
-        if (Controller.getYButton())
-            module = frontRight;
-        else if (Controller.getXButton())
-            module = frontLeft;
-        else if (Controller.getBButton())
-            module = backRight;
-        else if (Controller.getAButton())
-            module = backLeft;
-
-        if (module == null) {
-            frontLeft.setDesiredState(new SwerveModuleState(Controller.getLeftY() * speedMultiplyer,
-                    Rotation2d.fromRotations(.5 * Controller.getLeftX())));
-            frontRight.setDesiredState(new SwerveModuleState(Controller.getLeftY() * speedMultiplyer,
-                    Rotation2d.fromRotations(.5 * Controller.getLeftX())));
-            backLeft.setDesiredState(new SwerveModuleState(Controller.getLeftY() * speedMultiplyer,
-                    Rotation2d.fromRotations(.5 * Controller.getLeftX())));
-            backRight.setDesiredState(new SwerveModuleState(Controller.getLeftY() * speedMultiplyer,
-                    Rotation2d.fromRotations(.5 * Controller.getLeftX())));
-            return;
-        }
-
-        frontLeft.setDesiredState(new SwerveModuleState());
-        frontRight.setDesiredState(new SwerveModuleState());
-        backLeft.setDesiredState(new SwerveModuleState());
-        backRight.setDesiredState(new SwerveModuleState());
-
-        module.setDesiredState(new SwerveModuleState(Controller.getLeftY() * speedMultiplyer,
-                Rotation2d.fromRotations(.5 * Controller.getLeftX())));
-    }
+    module.setDesiredState(
+      new SwerveModuleState(
+        Controller.getLeftY() * speedMultiplyer,
+        Rotation2d.fromRotations(.5 * Controller.getLeftX())
+      )
+    );
+  } // state.angle.getDegrees() + Controller.getLeftX() * 10
 }
