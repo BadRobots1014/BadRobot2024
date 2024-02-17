@@ -96,8 +96,8 @@ public final class Constants {
 
     public static final long kBootupDelay = 1000; // milliseconds of delay to allow the navx to start up
 
-    public static final double kXSlewRateLimit = 2; // TODO adjust slew limits
-    public static final double kYSlewRateLimit = 2;
+    public static final double kXSlewRateLimit = 8; //TODO: adjust slew limits
+    public static final double kYSlewRateLimit = 8;
     public static final double kTurnSlewRateLimit = 10;
 
     public static final double kTeleMaxRadiansPerSec = Math.PI; // TODO adjust max teleop speeds
@@ -131,7 +131,7 @@ public final class Constants {
   public static final class OIConstants {
 
     public static final int kDriverControllerPort = 0;
-    public static final double kDriveDeadband = 0.05;
+    public static final double kDriveDeadband = 0.01;
   }
 
   // TODO These are old and should be removed
