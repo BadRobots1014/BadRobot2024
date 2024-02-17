@@ -27,6 +27,9 @@ public class ShooterSubsystem extends SubsystemBase {
   private static boolean shooterRunning = false;
 
   public ShooterSubsystem(double defaultpower) {
+    m_frontMotor = new CANSparkFlex(ShooterConstants.kFrontMotorCanId, MotorType.kBrushless);
+    m_backMotor = new CANSparkFlex(ShooterConstants.kBackMotorCanId, MotorType.kBrushless);
+
     m_frontMotorPower = m_shuffleboardtab.add("Front Motor Power", defaultpower)
         .withWidget(BuiltInWidgets.kNumberSlider)
         .withProperties(Map.of("min", -1.0, "max", 1.0))
@@ -37,9 +40,6 @@ public class ShooterSubsystem extends SubsystemBase {
         .getEntry();
 
     m_shuffleboardtab.addBoolean("Motor Spinning", () -> ShooterSubsystem.isShooterRunning());
-
-    m_frontMotor = new CANSparkFlex(ShooterConstants.kFrontMotorCanId, MotorType.kBrushless);
-    m_backMotor = new CANSparkFlex(ShooterConstants.kBackMotorCanId, MotorType.kBrushless);
   }
 
   private static double clampPower(double power) {

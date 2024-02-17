@@ -25,6 +25,7 @@ public class NavXGyroSubsystem extends SubsystemBase {
     m_tab.addNumber("Yaw", this::getYaw);
     m_tab.addNumber("Roll", this::getRoll);
     m_tab.addNumber("Pitch", this::getPitch);
+    m_tab.addNumber("Angle", this::getAngle);
     m_tab.addNumber("X Displacement", this::getDisplacementX);
     m_tab.addNumber("Y Displacement", this::getDisplacementY);
     m_tab.addNumber("Z Displacement", this::getDisplacementZ);
