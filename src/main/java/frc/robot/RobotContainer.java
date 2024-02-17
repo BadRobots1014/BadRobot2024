@@ -18,7 +18,7 @@ import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.UpdatePIDCommand;
 import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.subsystems.SwerveSubsystem;
-
+import frc.robot.subsystems.NavXGyroSubsystem;
 // Shooter
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.commands.ShooterCommand;
@@ -37,7 +37,8 @@ public class RobotContainer {
   Joystick m_rightJoystick = new Joystick(0);
   Joystick m_leftJoystick = new Joystick(1);
 
-  private final SwerveSubsystem m_robotDrive = new SwerveSubsystem(m_driverController);
+  private final NavXGyroSubsystem m_gyro = new NavXGyroSubsystem();
+  private final SwerveSubsystem m_robotDrive = new SwerveSubsystem(m_driverController, m_gyro);
 
   // Shooter Subsystem
   //private final ShooterSubsystem m_shooterarmsystem = new ShooterSubsystem(0.0);
@@ -85,6 +86,8 @@ public class RobotContainer {
         .whileTrue(new ZeroHeadingCommand(m_robotDrive));
     new JoystickButton(m_driverController, XboxController.Button.kY.value)
         .whileTrue(new UpdatePIDCommand(m_robotDrive));
+    new JoystickButton(m_driverController, XboxController.Button.kBack.value)
+        .whileTrue(new ZeroHeadingCommand(m_robotDrive));
     // Temporarily comment out as there is no shooter on our robot yet
     /*
     new JoystickButton(m_driverController, XboxController.Button.kA.value)

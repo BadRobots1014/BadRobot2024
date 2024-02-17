@@ -29,6 +29,9 @@ public class NavXGyroSubsystem extends SubsystemBase {
     m_tab.addNumber("X Displacement", this::getDisplacementX);
     m_tab.addNumber("Y Displacement", this::getDisplacementY);
     m_tab.addNumber("Z Displacement", this::getDisplacementZ);
+    m_tab.addNumber("X Offset", this::getOffsetX);
+    m_tab.addNumber("Y Offset", this::getOffsetY);
+    m_tab.addNumber("Z Offset", this::getOffsetZ);
   }
 
   public void periodic() {}
@@ -36,11 +39,14 @@ public class NavXGyroSubsystem extends SubsystemBase {
   public double getYaw() {return navx.getYaw();}
   public double getPitch() {return navx.getPitch();}
   public double getRoll() {return navx.getRoll();}
-  public double getAngle() {return navx.getAngle();}
+  public double getAngle() {return navx.getAngle() % 360;}
 
   public double getDisplacementX() {return navx.getDisplacementX() + xOffset;}
   public double getDisplacementY() {return navx.getDisplacementY() + yOffset;}
   public double getDisplacementZ() {return navx.getDisplacementZ() + zOffset;}
+  public double getOffsetX() {return xOffset;}
+  public double getOffsetY() {return yOffset;}
+  public double getOffsetZ() {return zOffset;}
 
   public double getVelocityX() {return navx.getVelocityX();}
   public double getVelocityY() {return navx.getVelocityY();}

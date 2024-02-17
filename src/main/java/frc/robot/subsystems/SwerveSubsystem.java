@@ -75,7 +75,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // Shuffleboard
     private final ShuffleboardTab m_tab;
 
-    public SwerveSubsystem(XboxController controller) {
+    public SwerveSubsystem(XboxController controller, NavXGyroSubsystem navx) {
         m_tab = Shuffleboard.getTab("swerve");
         Controller = controller;
 
@@ -84,7 +84,7 @@ public class SwerveSubsystem extends SubsystemBase {
         i = m_tab.add("i", ModuleConstants.kTurningI).getEntry();
         d = m_tab.add("d", ModuleConstants.kTurningD).getEntry();
         
-        gyro = new NavXGyroSubsystem();
+        gyro = navx;
         new Thread(() -> {
             try {
                 Thread.sleep(DriveConstants.kBootupDelay);
