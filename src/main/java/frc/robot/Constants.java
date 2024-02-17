@@ -96,8 +96,8 @@ public final class Constants {
 
     public static final long kBootupDelay = 1000; // milliseconds of delay to allow the navx to start up
 
-    public static final double kXSlewRateLimit = 2; // TODO adjust slew limits
-    public static final double kYSlewRateLimit = 2;
+    public static final double kXSlewRateLimit = 8; //TODO: adjust slew limits
+    public static final double kYSlewRateLimit = 8;
     public static final double kTurnSlewRateLimit = 10;
 
     public static final double kTeleMaxRadiansPerSec = Math.PI / 2; // TODO adjust max teleop speeds
