@@ -29,11 +29,6 @@ public final class Constants {
     // TODO turn field oriented on or off
     public static final boolean kFieldOriented = true;
 
-    // Driving Parameters - Note that these are not the maximum capable speeds of
-    // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = .6;
-    public static final double kMaxAngularSpeed = 3 * Math.PI; // radians per second
-
     // Distance between centers of right and left wheels on robot
     public static final double kTrackWidth = Units.inchesToMeters(24.75);
     // Distance between front and back wheels on robot
