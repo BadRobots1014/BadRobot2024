@@ -100,8 +100,10 @@ public final class Constants {
     public static final double kYSlewRateLimit = 2;
     public static final double kTurnSlewRateLimit = 10;
 
-    public static final double kTeleMaxRadiansPerSec = Math.PI; // TODO adjust max teleop speeds
-    public static final double kTeleMaxMetersPerSec = 2.8;
+    public static final double kTeleMaxRadiansPerSec = Math.PI / 2; // TODO adjust max teleop speeds
+    public static final double kFastTeleMaxRadiansPerSec = Math.PI;
+    public static final double kTeleMaxMetersPerSec = 0.6;
+    public static final double kFastTeleMaxMetersPerSec = 0.9;
 
     public static final double kJoystickDeadzone = 0;
 

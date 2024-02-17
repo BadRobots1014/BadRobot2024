@@ -131,7 +131,7 @@ public class SwerveModule {
     state = optimize(state, getState().angle);
     m_lastStateOptimized = state;
     driveMotor.set(
-      state.speedMetersPerSecond * DriveConstants.kMaxSpeedMetersPerSecond
+      state.speedMetersPerSecond //* DriveConstants.kMaxSpeedMetersPerSecond
     );
     turningMotor.set(
       m_lastPIDOutput =

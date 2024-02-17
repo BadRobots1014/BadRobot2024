@@ -65,7 +65,8 @@ public class RobotContainer {
         () -> Math.pow(getLeftX(), 3),
         () -> Math.pow(getLeftY(), 3),
         () -> Math.pow(getRightX(), 3),
-        () -> DriveConstants.kFieldOriented
+        () -> DriveConstants.kFieldOriented,
+        () -> getFastMode()
       )
     );
 
@@ -150,5 +151,13 @@ public class RobotContainer {
       Constants.DriveConstants.kJoystickDeadzone
     ) return 0;
     return -m_driverController.getLeftY();
+  }
+
+  boolean fastMode = false;
+  boolean getFastMode() {
+    if (m_driverController.getRightBumperPressed()){
+      fastMode = !fastMode;
+    }
+    return fastMode;
   }
 }

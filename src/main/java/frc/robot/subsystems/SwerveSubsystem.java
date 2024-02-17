@@ -114,10 +114,10 @@ public class SwerveSubsystem extends SubsystemBase {
    *                      front left, front right, back left, back right.
    */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-      desiredStates,
-      DriveConstants.kMaxSpeedMetersPerSecond
-    );
+    // SwerveDriveKinematics.desaturateWheelSpeeds(
+    //   desiredStates,
+    //   DriveConstants.kMaxSpeedMetersPerSecond
+    // );
     frontLeft.setDesiredState(desiredStates[0]);
     frontRight.setDesiredState(desiredStates[1]);
     backLeft.setDesiredState(desiredStates[2]);
