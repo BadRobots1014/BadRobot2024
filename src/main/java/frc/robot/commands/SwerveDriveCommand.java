@@ -54,10 +54,10 @@ public class SwerveDriveCommand extends Command {
     double maxDriveSpeed = fastMode ? DriveConstants.kFastTeleMaxMetersPerSec : DriveConstants.kTeleMaxMetersPerSec;
     double maxTurnSpeed = fastMode ? DriveConstants.kFastTeleMaxRadiansPerSec : DriveConstants.kTeleMaxMetersPerSec;
     xSpeed = xLimiter.calculate(xSpeed) * maxDriveSpeed;
-    ySpeed = yLimiter.calculate(ySpeed) * maxTurnSpeed;
+    ySpeed = yLimiter.calculate(ySpeed) * maxDriveSpeed;
     turningSpeed =
       turningLimiter.calculate(turningSpeed) *
-      DriveConstants.kTeleMaxRadiansPerSec;
+      maxTurnSpeed;
 
     // I am speed
     ChassisSpeeds chassisSpeeds;
