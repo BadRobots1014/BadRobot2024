@@ -19,7 +19,7 @@ import frc.robot.commands.UpdatePIDCommand;
 import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-
+import frc.robot.commands.ShootCommand;
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -94,7 +94,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController, XboxController.Button.kY.value)
       .whileTrue(new UpdatePIDCommand(m_robotDrive));
     new JoystickButton(m_driverController, XboxController.Button.kA.value)
-      .toggleOnTrue(new ShooterCommand(m_shooterarmsystem));
+      .toggleOnTrue(new ShootCommand(m_shooterarmsystem));
   }
 
   /**
