@@ -116,10 +116,6 @@ public class RobotContainer {
   }
 
   double getRightX() {
-    if (
-      Math.abs(m_driverController.getRightX()) <
-      Constants.DriveConstants.kJoystickDeadzone
-    ) return 0;
     return -m_driverController.getRightX();
   }
 
@@ -131,10 +127,6 @@ public class RobotContainer {
       if (pov == 270) return -1;
     }
 
-    if (
-      Math.abs(m_driverController.getLeftX()) <
-      Constants.DriveConstants.kJoystickDeadzone
-    ) return 0;
     return -m_driverController.getLeftX();
   }
 
@@ -145,11 +137,7 @@ public class RobotContainer {
       if (pov == 0) return -1;
       if (pov == 180) return 1;
     }
-
-    if (
-      Math.abs(m_driverController.getLeftY()) <
-      Constants.DriveConstants.kJoystickDeadzone
-    ) return 0;
+    
     return -m_driverController.getLeftY();
   }
 

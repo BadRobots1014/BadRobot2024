@@ -105,8 +105,6 @@ public final class Constants {
     public static final double kTeleMaxMetersPerSec = 0.6;
     public static final double kFastTeleMaxMetersPerSec = 0.9;
 
-    public static final double kJoystickDeadzone = 0;
-
     public static final Button kTestMotorButton = Button.kLeftBumper;
   }
 
@@ -133,7 +131,7 @@ public final class Constants {
   public static final class OIConstants {
 
     public static final int kDriverControllerPort = 0;
-    public static final double kDriveDeadband = 0.05;
+    public static final double kDriveDeadband = 0.01;
   }
 
   // TODO These are old and should be removed
