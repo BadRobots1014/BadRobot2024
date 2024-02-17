@@ -24,6 +24,11 @@ public class ShooterSubsystem extends SubsystemBase {
   public final CANSparkFlex m_backMotor;
 
   public ShooterSubsystem(double defaultpower) {
+
+    m_frontMotor =
+      new CANSparkFlex(ShooterConstants.kFrontMotorCanId, MotorType.kBrushless);
+    m_backMotor =
+      new CANSparkFlex(ShooterConstants.kBackMotorCanId, MotorType.kBrushless);
     // Displays whether or not the shooter is running
     m_shuffleboardtab.addBoolean("Motor Spinning", this::isShooterRunning);
 
@@ -42,11 +47,6 @@ public class ShooterSubsystem extends SubsystemBase {
         .withWidget(BuiltInWidgets.kNumberSlider)
         .withProperties(Map.of("min", -1.0, "max", 1.0))
         .getEntry();
-
-    m_frontMotor =
-      new CANSparkFlex(ShooterConstants.kFrontMotorCanId, MotorType.kBrushless);
-    m_backMotor =
-      new CANSparkFlex(ShooterConstants.kBackMotorCanId, MotorType.kBrushless);
   }
 
   // Function to run the shooter motors
