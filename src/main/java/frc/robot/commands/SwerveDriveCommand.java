@@ -13,7 +13,7 @@ public class SwerveDriveCommand extends Command {
 
   public final SwerveSubsystem swerveSubsystem;
   public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
-  public final Supplier<Boolean> fieldOrientedFunction;
+  public final Supplier<Boolean> fieldOrientedFunction, fastModeFunction;
   public final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
   public SwerveDriveCommand(
@@ -21,13 +21,15 @@ public class SwerveDriveCommand extends Command {
     Supplier<Double> xSupplier,
     Supplier<Double> ySupplier,
     Supplier<Double> turnSupplier,
-    Supplier<Boolean> fieldOriented
+    Supplier<Boolean> fieldOriented,
+    Supplier<Boolean> fastMode
   ) {
     swerveSubsystem = subsystem;
     xSpdFunction = xSupplier;
     ySpdFunction = ySupplier;
     turningSpdFunction = turnSupplier;
     fieldOrientedFunction = fieldOriented;
+    fastModeFunction = fastMode;
     xLimiter = new SlewRateLimiter(DriveConstants.kXSlewRateLimit);
     yLimiter = new SlewRateLimiter(DriveConstants.kYSlewRateLimit);
     turningLimiter = new SlewRateLimiter(DriveConstants.kTurnSlewRateLimit);
@@ -40,6 +42,7 @@ public class SwerveDriveCommand extends Command {
     double xSpeed = xSpdFunction.get();
     double ySpeed = ySpdFunction.get();
     double turningSpeed = turningSpdFunction.get();
+    boolean fastMode = fastModeFunction.get();
 
     // Death
     xSpeed = Math.abs(xSpeed) > OIConstants.kDriveDeadband ? xSpeed : 0;
@@ -48,11 +51,13 @@ public class SwerveDriveCommand extends Command {
       Math.abs(turningSpeed) > OIConstants.kDriveDeadband ? turningSpeed : 0;
 
     // Slew soup
-    xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleMaxMetersPerSec;
-    ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleMaxMetersPerSec;
+    double maxDriveSpeed = fastMode ? DriveConstants.kFastTeleMaxMetersPerSec : DriveConstants.kTeleMaxMetersPerSec;
+    double maxTurnSpeed = fastMode ? DriveConstants.kFastTeleMaxRadiansPerSec : DriveConstants.kTeleMaxMetersPerSec;
+    xSpeed = xLimiter.calculate(xSpeed) * maxDriveSpeed;
+    ySpeed = yLimiter.calculate(ySpeed) * maxDriveSpeed;
     turningSpeed =
       turningLimiter.calculate(turningSpeed) *
-      DriveConstants.kTeleMaxRadiansPerSec;
+      maxTurnSpeed;
 
     // I am speed
     ChassisSpeeds chassisSpeeds;
