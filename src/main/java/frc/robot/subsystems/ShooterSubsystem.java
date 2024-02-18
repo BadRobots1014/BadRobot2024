@@ -92,6 +92,9 @@ public class ShooterSubsystem extends SubsystemBase {
       return true;
     }
   }
+  //Insert Function to set shooter to an angle here
+  
+
 
   @Override
   public void periodic() {

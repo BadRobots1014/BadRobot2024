@@ -85,12 +85,14 @@ public class SwerveDriveCommand extends Command {
                 //need to potentially add something to clear previous yaw if hasent seen tag in a while
             }
             turningSpeed = MathUtil.clamp(0 - currentTx, -1.0, 1.0); //rotate robot to face tag
+            //Insert set shooter angle here
             
 
 
 
         }
-        if(autoAimMode.get() == DriveConstants.kRigidAutoAim){//Rigid autoaim will lock all controls while button is held and keep the robot in a set known position where it is known to have 100% hit rate to fire into speaker
+        if(autoAimMode.get() == DriveConstants.kRigidAutoAim){
+            //Rigid autoaim will lock all controls while button is held and keep the robot in a set known position where it is known to have 100% hit rate to fire into speaker
             //TODO: make worky
             if(AprilTagCurrentID != -1){
                 currentTargetYaw = m_LimelightSubsystem.getAprilTagPoseYaw();
@@ -106,6 +108,7 @@ public class SwerveDriveCommand extends Command {
             } else {
                 xSpeed = MathUtil.clamp((0 - currentTargetX)/10, -1.0, 1.0);
             }
+            //Insert set shooter angle here
         }
 
         // Death
