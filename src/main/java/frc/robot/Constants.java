@@ -25,6 +25,11 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 public final class Constants {
 
   public static final class DriveConstants {
+//autoaim constants
+    public static final Integer kAutoAimInactive = 0;
+    public static final Integer kFlexibleAutoAim = 1;
+    public static final Integer kRigidAutoAim = 2;
+    public static final double kAutoAimSensitivity = 0.2;
 
     // TODO turn field oriented on or off
     public static final boolean kFieldOriented = true;
@@ -150,6 +155,12 @@ public final class Constants {
         kMaxAngularSpeedRadiansPerSecondSquared
       );
   }
+
+  public static final class LimelightConstants {
+    public static final double kCamHeight = 0; //Height of the limelight from the ground
+    public static final double kCamAngle = 0; //Pitch angle of direction the limelight is pointed in
+
+}
 
   public static final class ShooterConstants {
 

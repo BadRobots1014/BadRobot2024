@@ -17,6 +17,8 @@ import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.UpdatePIDCommand;
 import frc.robot.commands.ZeroHeadingCommand;
+import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.NavXGyroSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -40,9 +42,33 @@ public class RobotContainer {
   private final SwerveSubsystem m_robotDrive = new SwerveSubsystem(
     m_driverController
   );
+//NavX subsystem
+private final NavXGyroSubsystem m_GyroSubsystem = new NavXGyroSubsystem();
+
+//Limelight subsystem
+  private final LimelightSubsystem m_LimelightSubsystem = new LimelightSubsystem();
 
   // Shooter Subsystem
   private final ShooterSubsystem m_shooterarmsystem = new ShooterSubsystem(0.0);
+
+   //Autoaim Commands
+   private final SwerveDriveCommand m_FlexibleAutoAimCommand = new SwerveDriveCommand(
+    m_robotDrive,
+    m_LimelightSubsystem,
+    () -> Math.pow(getLeftX(), 3),
+    () -> Math.pow(getLeftY(), 3),
+    () -> Math.pow(getRightX(), 3),
+    () -> DriveConstants.kFieldOriented,
+    () -> DriveConstants.kFlexibleAutoAim);
+
+    private final SwerveDriveCommand m_RigidAutoAimCommand = new SwerveDriveCommand(
+    m_robotDrive,
+    m_LimelightSubsystem,
+    () -> Math.pow(getLeftX(), 3),
+    () -> Math.pow(getLeftY(), 3),
+    () -> Math.pow(getRightX(), 3),
+    () -> DriveConstants.kFieldOriented,
+    () -> DriveConstants.kRigidAutoAim);
 
   // Paths
   private PathPlannerTrajectory m_autoTraj;
@@ -57,16 +83,17 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    m_robotDrive.setDefaultCommand(
-      new SwerveDriveCommand(
+    m_robotDrive.setDefaultCommand(new SwerveDriveCommand(
         m_robotDrive,
+        m_LimelightSubsystem,
+        //m_GyroSubsystem,
         () -> Math.pow(getLeftX(), 3),
         () -> Math.pow(getLeftY(), 3),
         () -> Math.pow(getRightX(), 3),
         () -> DriveConstants.kFieldOriented,
-        () -> getFastMode()
-      )
-    );
+        () -> DriveConstants.kAutoAimInactive)
+        );
+
 
     // m_robotDrive.setDefaultCommand();
 
