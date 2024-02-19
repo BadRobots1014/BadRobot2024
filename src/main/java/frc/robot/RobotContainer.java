@@ -98,15 +98,6 @@ public class RobotContainer {
       .toggleOnTrue(new ShooterCommand(m_shooterarmsystem));
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    return new ShootAndDriveAutoCommand(m_shooterarmsystem, m_robotDrive);
-  }
-
   double getRightX() {
     return -m_driverController.getRightX();
   }
@@ -139,5 +130,14 @@ public class RobotContainer {
       fastMode = !fastMode;
     }
     return fastMode;
+  }
+
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  public Command getAutonomousCommand() {
+    return new ShootAndDriveAutoCommand(m_shooterarmsystem, m_robotDrive);
   }
 }
