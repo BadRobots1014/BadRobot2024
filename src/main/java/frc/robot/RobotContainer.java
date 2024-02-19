@@ -17,6 +17,7 @@ import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.UpdatePIDCommand;
 import frc.robot.commands.ZeroHeadingCommand;
+import frc.robot.commands.auto.ShootAndDriveAutoCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -97,17 +98,6 @@ public class RobotContainer {
       .toggleOnTrue(new ShooterCommand(m_shooterarmsystem));
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    m_auto = new PathPlannerAuto("New Auto");
-    return m_auto;
-    // return m_robotDrive.followTrajectoryCommand(m_autoTraj, m_autoPath, true);
-  }
-
   double getRightX() {
     return -m_driverController.getRightX();
   }
@@ -140,5 +130,14 @@ public class RobotContainer {
       fastMode = !fastMode;
     }
     return fastMode;
+  }
+
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  public Command getAutonomousCommand() {
+    return new ShootAndDriveAutoCommand(m_shooterarmsystem, m_robotDrive);
   }
 }
