@@ -18,18 +18,11 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class ShootAndDriveAutoCommand extends SequentialCommandGroup {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
   public ShootAndDriveAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve) {
     super(
-      // TODO: Make this drive distance and/or line up with the cone before the RunToPosition command should run
-
       new ShooterCommand(shoot).withTimeout(2),
-      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(.3), supplyDouble(0), supplyBoolean(false), supplyBoolean(false))
-      .withTimeout(1)
+      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), supplyBoolean(false), supplyBoolean(false))
+      .withTimeout(3)
     );
   }
 
