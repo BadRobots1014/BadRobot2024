@@ -7,7 +7,7 @@ public class ShootCommand extends SequentialCommandGroup {
         ShooterSubsystem shooterSubsystem
     ) {
         addCommands(
-            new ShooterCommand(shooterSubsystem, "front").withTimeout(2.5),
+            new ShooterCommand(shooterSubsystem, "front").withTimeout(2),
             new ShooterCommand(shooterSubsystem, "both")
         );
     }

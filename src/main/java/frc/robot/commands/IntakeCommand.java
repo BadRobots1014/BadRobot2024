@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 /** An example command that uses an example subsystem. */
 public class IntakeCommand extends Command {
@@ -31,8 +30,7 @@ public class IntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double [] powers = {0.35, -0.35};
-    m_subsystem.setPower(powers);
+    m_subsystem.runIntake();
     System.out.println("Running intake...");
   }
 

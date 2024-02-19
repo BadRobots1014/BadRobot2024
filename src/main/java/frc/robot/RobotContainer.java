@@ -19,7 +19,9 @@ import frc.robot.commands.UpdatePIDCommand;
 import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShootCommand;
+
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -32,17 +34,15 @@ public class RobotContainer {
 
   // The driver's controller
   XboxController m_driverController = new XboxController(
-    OIConstants.kDriverControllerPort
-  );
+      OIConstants.kDriverControllerPort);
   Joystick m_rightJoystick = new Joystick(0);
   Joystick m_leftJoystick = new Joystick(1);
 
   private final SwerveSubsystem m_robotDrive = new SwerveSubsystem(
-    m_driverController
-  );
+      m_driverController);
 
   // Shooter Subsystem
-  private final ShooterSubsystem m_shooterarmsystem = new ShooterSubsystem(0.0);
+  private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem(1.0, -0.35);
 
   // Paths
   private PathPlannerTrajectory m_autoTraj;
@@ -58,15 +58,13 @@ public class RobotContainer {
    */
   public RobotContainer() {
     m_robotDrive.setDefaultCommand(
-      new SwerveDriveCommand(
-        m_robotDrive,
-        () -> Math.pow(getLeftX(), 3),
-        () -> Math.pow(getLeftY(), 3),
-        () -> Math.pow(getRightX(), 3),
-        () -> DriveConstants.kFieldOriented,
-        () -> getFastMode()
-      )
-    );
+        new SwerveDriveCommand(
+            m_robotDrive,
+            () -> Math.pow(getLeftX(), 3),
+            () -> Math.pow(getLeftY(), 3),
+            () -> Math.pow(getRightX(), 3),
+            () -> DriveConstants.kFieldOriented,
+            () -> getFastMode()));
 
     // m_robotDrive.setDefaultCommand();
 
@@ -90,11 +88,13 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(m_driverController, XboxController.Button.kStart.value)
-      .whileTrue(new ZeroHeadingCommand(m_robotDrive));
+        .whileTrue(new ZeroHeadingCommand(m_robotDrive));
     new JoystickButton(m_driverController, XboxController.Button.kY.value)
-      .whileTrue(new UpdatePIDCommand(m_robotDrive));
+        .whileTrue(new UpdatePIDCommand(m_robotDrive));
     new JoystickButton(m_driverController, XboxController.Button.kA.value)
-      .toggleOnTrue(new ShootCommand(m_shooterarmsystem));
+        .toggleOnTrue(new ShootCommand(m_shooterSubsystem));
+    new JoystickButton(m_driverController, XboxController.Button.kB.value)
+        .toggleOnTrue(new IntakeCommand(m_shooterSubsystem));
   }
 
   /**
@@ -116,8 +116,10 @@ public class RobotContainer {
     int pov = m_driverController.getPOV();
 
     if (pov > -1) {
-      if (pov == 90) return 1;
-      if (pov == 270) return -1;
+      if (pov == 90)
+        return 1;
+      if (pov == 270)
+        return -1;
     }
 
     return -m_driverController.getLeftX();
@@ -127,16 +129,19 @@ public class RobotContainer {
     int pov = m_driverController.getPOV();
 
     if (pov > -1) {
-      if (pov == 0) return -1;
-      if (pov == 180) return 1;
+      if (pov == 0)
+        return -1;
+      if (pov == 180)
+        return 1;
     }
-    
+
     return -m_driverController.getLeftY();
   }
 
   boolean fastMode = false;
+
   boolean getFastMode() {
-    if (m_driverController.getRightBumperPressed()){
+    if (m_driverController.getRightBumperPressed()) {
       fastMode = !fastMode;
     }
     return fastMode;

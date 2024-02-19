@@ -26,13 +26,11 @@ public class ShooterCommand extends Command {
   @Override
   public void execute() {
     if (commandType == "front") {
-      double [] powers = {1.0, 0.0};
-      m_subsystem.setPower(powers);
+      m_subsystem.runShooter(0.0);
       System.out.println("Running front shooter motor...");
     }
     else if (commandType == "both") {
-      double [] powers = {1.0, -1.0};
-      m_subsystem.setPower(powers);
+      m_subsystem.runShooter();
       System.out.println("Running both shooter motors...");
     }
   }

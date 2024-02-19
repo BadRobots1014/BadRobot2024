@@ -160,7 +160,7 @@ public final class Constants {
 
     // This should probably be changed
     // Had it to 1 and 2 for testing purposes
-    public static final int kFrontMotorCanId = 2;
-    public static final int kBackMotorCanId = 1;
+    public static final int kFrontMotorCanId = 62;
+    public static final int kBackMotorCanId = 61;
   }
 }
