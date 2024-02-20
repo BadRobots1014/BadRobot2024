@@ -1,18 +1,23 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
-
 /** An example command that uses an example subsystem. */
-public class ShooterCommand extends Command {
+public class IntakeCommand extends Command {
 
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final ShooterSubsystem m_subsystem;
-  private final String commandType;
-  private boolean m_Finished = false;
 
-  public ShooterCommand(ShooterSubsystem subsystem, String CommandType) {
-    commandType = CommandType;
+  /**
+   * Creates a new ExampleCommand.
+   *
+   * @param subsystem The subsystem used by this command.
+   */
+  public IntakeCommand(ShooterSubsystem subsystem) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -25,26 +30,19 @@ public class ShooterCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (commandType.equals("front")) {
-      m_subsystem.runShooter(0.0);
-      System.out.println("Running front shooter motor...");
-    }
-    else if (commandType.equals("both")) {
-      m_subsystem.runShooter();
-      System.out.println("Running both shooter motors...");
-    }
+    m_subsystem.runIntake();
+    System.out.println("Running intake...");
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_subsystem.stopShooter();
-    System.out.println("Stopping shooter...");
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_Finished;
+    return false;
   }
 }
