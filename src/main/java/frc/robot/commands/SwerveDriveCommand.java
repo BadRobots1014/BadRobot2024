@@ -52,7 +52,7 @@ public class SwerveDriveCommand extends Command {
 
     // Slew soup
     double maxDriveSpeed = fastMode ? DriveConstants.kFastTeleMaxMetersPerSec : DriveConstants.kTeleMaxMetersPerSec;
-    double maxTurnSpeed = fastMode ? DriveConstants.kFastTeleMaxRadiansPerSec : DriveConstants.kTeleMaxMetersPerSec;
+    double maxTurnSpeed = fastMode ? DriveConstants.kFastTeleMaxRadiansPerSec : DriveConstants.kTeleMaxRadiansPerSec;
     xSpeed = xLimiter.calculate(xSpeed) * maxDriveSpeed;
     ySpeed = yLimiter.calculate(ySpeed) * maxDriveSpeed;
     turningSpeed =
