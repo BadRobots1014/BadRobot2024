@@ -41,7 +41,6 @@ public class ShooterSubsystem extends SubsystemBase {
     m_frontMotorPower =
       m_shuffleboardtab
         .add("Front Motor Power", defaultShooterPower)
-        .withWidget(BuiltInWidgets.kNumberSlider)
         .withProperties(Map.of("min", -1.0, "max", 1.0))
         .getEntry();
 
@@ -49,13 +48,11 @@ public class ShooterSubsystem extends SubsystemBase {
     m_backMotorPower =
       m_shuffleboardtab
         .add("Back Motor Power", defaultShooterPower)
-        .withWidget(BuiltInWidgets.kNumberSlider)
         .withProperties(Map.of("min", -1.0, "max", 1.0))
         .getEntry();
     
     m_intakePower = m_shuffleboardtab
     .add("Intake Power", defaultIntakePower)
-    .withWidget(BuiltInWidgets.kNumberSlider)
     .withProperties(Map.of("min", -1.0, "max", 1.0))
     .getEntry();
   }
