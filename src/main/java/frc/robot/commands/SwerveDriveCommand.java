@@ -51,14 +51,18 @@ public class SwerveDriveCommand extends Command {
         yLimiter = new SlewRateLimiter(DriveConstants.kYSlewRateLimit);
         turningLimiter = new SlewRateLimiter(DriveConstants.kTurnSlewRateLimit);
 
-//if(autoAimMode.get() == DriveConstants.kFlexibleAutoAim){
+
+if(autoAimMode.get() == DriveConstants.kFlexibleAutoAim){
         //m_AutoAimtab.addNumber("Current Tag ID", m_LimelightSubsystem.getAprilTagIDSupplier());
-        // m_AutoAimtab.addNumber("Target Yaw:", this::getCurrentTargetYaw);
-        // m_AutoAimtab.addNumber("Yaw:", this::getCurrentYaw);
-        // m_AutoAimtab.addNumber("X", this::getXSpeed);
-        // m_AutoAimtab.addNumber("Y", this::getYSpeed);
-        // m_AutoAimtab.addNumber("Turn Speed", this::getTurnSpeed);
-//}
+        m_AutoAimtab.addNumber("Target Yaw:", this::getCurrentTargetYaw);
+        m_AutoAimtab.addNumber("Yaw:", this::getCurrentYaw);
+        m_AutoAimtab.addNumber("X", this::getXSpeed);
+        m_AutoAimtab.addNumber("Y", this::getYSpeed);
+        m_AutoAimtab.addNumber("Turn Speed", this::getTurnSpeed);
+}else if(autoAimMode.get() == DriveConstants.kAutoAimInactive){
+    m_AutoAimtab.addNumber("Current Tag ID", m_LimelightSubsystem.getAprilTagIDSupplier());
+
+}
 
 
         addRequirements(swerveSubsystem);
@@ -82,11 +86,12 @@ public class SwerveDriveCommand extends Command {
 
         if(autoAimMode.get() == DriveConstants.kFlexibleAutoAim){ //Flexible Auto Aim
             //Flexible autoaim will allow the driver to move around the field while button is held while locking the rotation and shooter alignments to point towards the speaker
-            if(AprilTagCurrentID != -1){
+            if(AprilTagCurrentID == 3){
                 currentTargetYaw = m_LimelightSubsystem.getCameraPoseYaw();//set turningspeed while it sees tag
                 //need to potentially add something to clear previous yaw if hasent seen tag in a while
+            turningSpeed = MathUtil.clamp((0 - currentTx)/80, -1.0, 1.0); //rotate robot to face tag
             }
-            turningSpeed = MathUtil.clamp(0 - currentTx, -1.0, 1.0); //rotate robot to face tag
+            
             //Insert set shooter angle here
             
 
@@ -96,20 +101,21 @@ public class SwerveDriveCommand extends Command {
         if(autoAimMode.get() == DriveConstants.kRigidAutoAim){
             //Rigid autoaim will lock all controls while button is held and keep the robot in a set known position where it is known to have 100% hit rate to fire into speaker
             //TODO: make worky
-            if(AprilTagCurrentID != -1){
+            if(AprilTagCurrentID == 3){
                 currentTargetYaw = m_LimelightSubsystem.getAprilTagPoseYaw();
-                
-            }
-            //turningSpeed = MathUtil.clamp(0.2 * (m_LimelightSubsystem.getAutoAimYawTurnDistance()), -1.0, 1.0); //0.2 of max speed turn
-            turningSpeed = MathUtil.clamp((currentTargetYaw/30),-1.0,1.0);
-            
-            //ySpeed = ; TBD how far to move to
-
-            if (currentTargetX == DriveConstants.kAutoAimSensitivity) {
+                turningSpeed = MathUtil.clamp((0-currentTx)/80,-1.0,1.0);
+                if (currentTargetX == DriveConstants.kAutoAimSensitivity) {
                 xSpeed = 0;
             } else {
                 xSpeed = MathUtil.clamp((0 - currentTargetX)/10, -1.0, 1.0);
             }
+            }
+            //turningSpeed = MathUtil.clamp(0.2 * (m_LimelightSubsystem.getAutoAimYawTurnDistance()), -1.0, 1.0); //0.2 of max speed turn
+            
+            
+            //ySpeed = ; TBD how far to move to
+
+            
             //Insert set shooter angle here
         }
 
