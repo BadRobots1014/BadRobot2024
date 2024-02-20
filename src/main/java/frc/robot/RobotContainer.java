@@ -143,6 +143,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new ShootAndDriveAutoCommand(m_shooterarmsystem, m_robotDrive);
+    return new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive);
   }
 }

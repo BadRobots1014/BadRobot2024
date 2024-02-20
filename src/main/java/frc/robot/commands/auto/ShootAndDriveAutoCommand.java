@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.ShootCommand;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -20,7 +20,7 @@ public class ShootAndDriveAutoCommand extends SequentialCommandGroup {
 
   public ShootAndDriveAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve) {
     super(
-      new ShooterCommand(shoot).withTimeout(2),
+      new ShootCommand(shoot).withTimeout(4),
       new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), supplyBoolean(false), supplyBoolean(false))
       .withTimeout(3)
     );
