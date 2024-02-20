@@ -25,11 +25,11 @@ public class ShooterCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (commandType == "front") {
+    if (commandType.equals("front")) {
       m_subsystem.runShooter(0.0);
       System.out.println("Running front shooter motor...");
     }
-    else if (commandType == "both") {
+    else if (commandType.equals("both")) {
       m_subsystem.runShooter();
       System.out.println("Running both shooter motors...");
     }
