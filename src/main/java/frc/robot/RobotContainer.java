@@ -144,6 +144,5 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     m_auto = new PathPlannerAuto("Drive Short Auto");
     return m_auto;
-    // return m_robotDrive.followTrajectoryCommand(m_autoTraj, m_autoPath, true);
   }
 }
