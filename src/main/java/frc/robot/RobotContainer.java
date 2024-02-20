@@ -123,9 +123,9 @@ private final NavXGyroSubsystem m_GyroSubsystem = new NavXGyroSubsystem();
     new JoystickButton(m_driverController, XboxController.Button.kA.value)
       .toggleOnTrue(new ShooterCommand(m_shooterarmsystem));
     //autoaim commands
-    new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
+    new JoystickButton(m_driverController, XboxController.Button.kX.value)
     .whileTrue(m_FlexibleAutoAimCommand);
-    new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
+    new JoystickButton(m_driverController, XboxController.Button.kY.value)
     .whileTrue(m_RigidAutoAimCommand);
     //may conflict with other branch button bindings
   }
