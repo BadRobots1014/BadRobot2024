@@ -51,13 +51,15 @@ public class SwerveDriveCommand extends Command {
         yLimiter = new SlewRateLimiter(DriveConstants.kYSlewRateLimit);
         turningLimiter = new SlewRateLimiter(DriveConstants.kTurnSlewRateLimit);
 
+//if(autoAimMode.get() == DriveConstants.kFlexibleAutoAim){
+        //m_AutoAimtab.addNumber("Current Tag ID", m_LimelightSubsystem.getAprilTagIDSupplier());
+        // m_AutoAimtab.addNumber("Target Yaw:", this::getCurrentTargetYaw);
+        // m_AutoAimtab.addNumber("Yaw:", this::getCurrentYaw);
+        // m_AutoAimtab.addNumber("X", this::getXSpeed);
+        // m_AutoAimtab.addNumber("Y", this::getYSpeed);
+        // m_AutoAimtab.addNumber("Turn Speed", this::getTurnSpeed);
+//}
 
-        m_AutoAimtab.addNumber("Current Tag ID", m_LimelightSubsystem.getAprilTagIDSupplier());
-        m_AutoAimtab.addNumber("Target Yaw:", this::getCurrentTargetYaw);
-        m_AutoAimtab.addNumber("Yaw:", this::getCurrentYaw);
-         m_AutoAimtab.addNumber("X", this::getXSpeed);
-         m_AutoAimtab.addNumber("Y", this::getYSpeed);
-         m_AutoAimtab.addNumber("Turn", this::getTurnSpeed);
 
         addRequirements(swerveSubsystem);
     }
