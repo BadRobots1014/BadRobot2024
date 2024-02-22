@@ -95,6 +95,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
   // Gyro data shenanigans
     public void zeroHeading() {gyro.reset();}
+    public void resetPose() {
+        gyro.reset();
+        gyro.resetDisplacement();
+    }
     public void resetPose(Pose2d pose) {
         //TODO Re-add displacement offset
         gyro.reset();
@@ -112,7 +116,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public Pose2d getPose() {return new Pose2d(getX(), getY(), getRotation2d());}
     public ChassisSpeeds getRobotRelativeSpeeds() {return new ChassisSpeeds(getXSpeed(), getYSpeed(), getTurnSpeed());}
     public void driveRobotRelative(ChassisSpeeds speeds) {
-        setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds));
+        setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds), DriveConstants.kTeleMaxMetersPerSec);
     }
 
   public void stopModules() {
@@ -126,11 +130,11 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param desiredStates The states the modules should move toward. In order,
    *                      front left, front right, back left, back right.
    */
-  public void setModuleStates(SwerveModuleState[] desiredStates) {
-    // SwerveDriveKinematics.desaturateWheelSpeeds(
-    //   desiredStates,
-    //   DriveConstants.kMaxSpeedMetersPerSecond
-    // );
+  public void setModuleStates(SwerveModuleState[] desiredStates, double maxModuleSpeed) {
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+      desiredStates,
+      maxModuleSpeed
+    );
     frontLeft.setDesiredState(desiredStates[0]);
     frontRight.setDesiredState(desiredStates[1]);
     backLeft.setDesiredState(desiredStates[2]);

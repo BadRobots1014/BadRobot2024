@@ -55,9 +55,7 @@ public class SwerveDriveCommand extends Command {
     double maxTurnSpeed = fastMode ? DriveConstants.kFastTeleMaxRadiansPerSec : DriveConstants.kTeleMaxRadiansPerSec;
     xSpeed = xLimiter.calculate(xSpeed) * maxDriveSpeed;
     ySpeed = yLimiter.calculate(ySpeed) * maxDriveSpeed;
-    turningSpeed =
-      turningLimiter.calculate(turningSpeed) *
-      maxTurnSpeed;
+    turningSpeed = turningLimiter.calculate(turningSpeed) * maxTurnSpeed;
 
     // I am speed
     ChassisSpeeds chassisSpeeds;
@@ -79,7 +77,7 @@ public class SwerveDriveCommand extends Command {
       DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
     // Actually do the thing
-    swerveSubsystem.setModuleStates(moduleStates);
+    swerveSubsystem.setModuleStates(moduleStates, maxDriveSpeed);
   }
 
   @Override

@@ -31,9 +31,25 @@ public class DriveToPositionCommand extends Command {
     this.goalX = goalX;
     this.goalY = goalY;
     this.goalAngle = goalAngle;
-    this.xSpdFunction = goalX;
-    this.ySpdFunction = goalY;
-    this.turningSpdFunction = goalAngle;
+    //The speed the wheels run at should be proportional to the distance to the goal point (desaturated to a more reasonable speed later)
+    this.xSpdFunction = new Supplier<Double>() {
+      @Override
+      public Double get() {
+        return goalX.get() - swerve.getX();
+      }
+    };
+    this.ySpdFunction = new Supplier<Double>() {
+      @Override
+      public Double get() {
+        return goalY.get() - swerve.getY();
+      }
+    };
+    this.turningSpdFunction = new Supplier<Double>() {
+      @Override
+      public Double get() {
+        return goalAngle.get() - swerve.getHeading();
+      }
+    };
     fieldOrientedFunction = fieldOriented;
     fastModeFunction = fastMode;
     xLimiter = new SlewRateLimiter(DriveConstants.kXSlewRateLimit);
@@ -47,18 +63,13 @@ public class DriveToPositionCommand extends Command {
   @Override
   public void initialize() {
     if (reset.get()) {
-      swerve.resetPose(new Pose2d());
+      swerve.resetPose();
     }
   }
 
   @Override
   public void execute() {
-    
-  }
-
-  @Override
-  public void end(boolean interrupted) {
-    swerve.stopModules();
+    driveCommand.schedule();
   }
 
   @Override
