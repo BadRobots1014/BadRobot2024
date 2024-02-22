@@ -27,7 +27,7 @@ public final class Constants {
   public static final class DriveConstants {
 
     // TODO turn field oriented on or off
-    public static final boolean kFieldOriented = false;
+    public static final boolean kFieldOriented = true;
 
     // Distance between centers of right and left wheels on robot
     public static final double kTrackWidth = Units.inchesToMeters(24.75);
@@ -162,8 +162,7 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
-
-    public static final int kFrontMotorCanId = 61;
-    public static final int kBackMotorCanId = 62;
+    public static final int kFrontMotorCanId = 62;
+    public static final int kBackMotorCanId = 61;
   }
 }
