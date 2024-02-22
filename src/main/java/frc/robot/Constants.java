@@ -29,11 +29,6 @@ public final class Constants {
     // TODO turn field oriented on or off
     public static final boolean kFieldOriented = false;
 
-    // Driving Parameters - Note that these are not the maximum capable speeds of
-    // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = .6;
-    public static final double kMaxAngularSpeed = 3 * Math.PI; // radians per second
-
     // Distance between centers of right and left wheels on robot
     public static final double kTrackWidth = Units.inchesToMeters(24.75);
     // Distance between front and back wheels on robot
@@ -106,14 +101,14 @@ public final class Constants {
 
     public static final long kBootupDelay = 1000; // milliseconds of delay to allow the navx to start up
 
-    public static final double kXSlewRateLimit = 2; // TODO adjust slew limits
-    public static final double kYSlewRateLimit = 2;
+    public static final double kXSlewRateLimit = 8; //TODO: adjust slew limits
+    public static final double kYSlewRateLimit = 8;
     public static final double kTurnSlewRateLimit = 10;
 
-    public static final double kTeleMaxRadiansPerSec = Math.PI; // TODO adjust max teleop speeds
-    public static final double kTeleMaxMetersPerSec = 2.8;
-
-    public static final double kJoystickDeadzone = 0;
+    public static final double kTeleMaxRadiansPerSec = Math.PI / 2; // TODO adjust max teleop speeds
+    public static final double kFastTeleMaxRadiansPerSec = Math.PI;
+    public static final double kTeleMaxMetersPerSec = 0.6;
+    public static final double kFastTeleMaxMetersPerSec = 0.9;
 
     public static final Button kTestMotorButton = Button.kLeftBumper;
   }
@@ -141,7 +136,7 @@ public final class Constants {
   public static final class OIConstants {
 
     public static final int kDriverControllerPort = 0;
-    public static final double kDriveDeadband = 0.05;
+    public static final double kDriveDeadband = 0.01;
   }
 
   // TODO These are old and should be removed
