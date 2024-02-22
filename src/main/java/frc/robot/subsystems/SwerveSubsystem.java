@@ -79,13 +79,13 @@ public class SwerveSubsystem extends SubsystemBase {
   private final ShuffleboardTab m_tab;
 
   public SwerveSubsystem() {
+    //Delay to allow navx to boot up
     new Thread(() -> {
       try {
         Thread.sleep(DriveConstants.kBootupDelay);
         zeroHeading();
       } catch (Exception e) {}
-    })
-      .start();
+    }).start();
     m_tab = Shuffleboard.getTab("Swerve");
     m_tab.addNumber("Heading", this::getHeading);
   }
@@ -125,37 +125,25 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void testMotor() {
-    double rx = Controller.getRightX();
-    double ry = Controller.getRightY();
-    double lx = Controller.getLeftX();
-    double ly = Controller.getLeftY();
-
     System.out.println(Controller.getPOV());
+    m_tab.addInteger("POV", Controller::getPOV);
 
     if (Controller.getPOV() > -1) {
       int pov = Controller.getPOV();
-      frontLeft.setDesiredState(
-        new SwerveModuleState(0, Rotation2d.fromDegrees(pov))
-      );
-      frontRight.setDesiredState(
-        new SwerveModuleState(0, Rotation2d.fromDegrees(pov))
-      );
-      backLeft.setDesiredState(
-        new SwerveModuleState(0, Rotation2d.fromDegrees(pov))
-      );
-      backRight.setDesiredState(
-        new SwerveModuleState(0, Rotation2d.fromDegrees(pov))
-      );
+      frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(pov)));
+      frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(pov)));
+      backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(pov)));
+      backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(pov)));
     }
 
-    double speedMultiplyer = !Controller.getRightBumper() ? 1 : .3;
+    double speedMultiplyer = Controller.getRightBumper() ? .3 : 1;
 
     SwerveModule module = null;
 
-    if (Controller.getYButton()) module = frontRight; else if (
-      Controller.getXButton()
-    ) module = frontLeft; else if (Controller.getBButton()) module =
-      backRight; else if (Controller.getAButton()) module = backLeft;
+    if (Controller.getYButton()) module = frontRight;
+    else if (Controller.getXButton()) module = frontLeft;
+    else if (Controller.getBButton()) module = backRight;
+    else if (Controller.getAButton()) module = backLeft;
 
     if (module == null) {
       frontLeft.setDesiredState(
@@ -196,5 +184,5 @@ public class SwerveSubsystem extends SubsystemBase {
         Rotation2d.fromRotations(.5 * Controller.getLeftX())
       )
     );
-  } // state.angle.getDegrees() + Controller.getLeftX() * 10
+  }
 }
