@@ -119,6 +119,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
   public void winchUp() {m_winchMotor.set(getWinchPowers()[0]);}
   public void winchDown() {m_winchMotor.set(getWinchPowers()[1]);}
+  public void stopWinch() {m_winchMotor.stopMotor();}
 
   // Function to clamp the power to a value between -1 and 1
   public static double clampPower(double power) {

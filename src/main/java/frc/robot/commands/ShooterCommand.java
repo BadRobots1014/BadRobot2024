@@ -13,22 +13,28 @@ public class ShooterCommand extends Command {
     addRequirements(subsystem);
   }
 
+  public ShooterCommand(ShooterSubsystem subsystem) {
+    m_commandType = "both";
+    m_subsystem = subsystem;
+    addRequirements(subsystem);
+  }
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_commandType.equals("front")) {
-      m_subsystem.runShooter(0.0);
-    }
-    else if (m_commandType.equals("both")) {
-      m_subsystem.runShooter();
-    }
+    if (m_commandType.equals("both")) m_subsystem.runShooter();
+    else if (m_commandType.equals("front")) m_subsystem.runShooter(0.0);
+    else if (m_commandType.equals("index")) m_subsystem.runIndex();
+    else if (m_commandType.equals("winch up")) m_subsystem.winchUp();
+    else if (m_commandType.equals("winch down")) m_subsystem.winchDown();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.stopShooter();
-    System.out.println("Stopping shooter...");
+    if (m_commandType.equals("both") || m_commandType.equals("front")) m_subsystem.stopShooter();
+    else if (m_commandType.equals("index")) m_subsystem.stopIndex();
+    else if (m_commandType.equals("winch up") || m_commandType.equals("winch down")) m_subsystem.stopWinch();
   }
 
   // Returns true when the command should end.
