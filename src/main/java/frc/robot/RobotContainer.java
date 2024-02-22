@@ -43,7 +43,7 @@ public class RobotContainer {
       m_driverController);
 
   // Shooter Subsystem
-  private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem(1.0, -0.35);
+  private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
 
   // Paths
   private PathPlannerTrajectory m_autoTraj;
@@ -66,8 +66,6 @@ public class RobotContainer {
             () -> Math.pow(getRightX(), 3),
             () -> DriveConstants.kFieldOriented,
             () -> getFastMode()));
-
-    // m_robotDrive.setDefaultCommand();
 
     // Configure the button bindings
     configureButtonBindings();
