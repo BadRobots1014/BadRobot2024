@@ -50,17 +50,17 @@ public final class Constants {
     //Using tall bot?
     public static final boolean tallBot = true;
 
-    //Short bot additional offsets
+    //Short bot offsets
     public static final double kFROffset = Math.PI / 2 - 2;
     public static final double kBROffset = -Math.PI;
     public static final double kBLOffset = -Math.PI / 2;
     public static final double kFLOffset = 0;
 
-    //Tall bot additional offsets TODO fix these offsets
-    public static final double kTallFROffset = -.597; //This one's good
-    public static final double kTallBROffset = .071; //This one needs work
-    public static final double kTallBLOffset = .314; //This one's good
-    public static final double kTallFLOffset = .134; //This one needs work
+    //Tall bot offsets TODO fix these offsets
+    public static final double kTallFROffset = -.097 * Math.PI * 2; //This one's good
+    public static final double kTallBROffset = .179 * Math.PI * 2; //This one needs work
+    public static final double kTallBLOffset = .314 * Math.PI * 2 + (Math.PI / 2); //This one's good
+    public static final double kTallFLOffset = .106 * Math.PI * 2; //This one needs work
 
     // Angular offsets of the modules relative to the chassis in radians
     public static final double kFrontRightChassisAngularOffset = (tallBot ? kTallFROffset : kFROffset);
