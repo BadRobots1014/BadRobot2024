@@ -40,9 +40,9 @@ public class ShooterSubsystem extends SubsystemBase {
     m_frontMotor.setIdleMode(IdleMode.kBrake);
     m_backMotor.setIdleMode(IdleMode.kBrake);
     m_indexMotor.setIdleMode(IdleMode.kBrake);
-    
+
     // Displays whether or not the shooter is running
-    m_shuffleboardtab.addBoolean("Motor Spinning", this::isShooterRunning);
+    m_shuffleboardtab.addBoolean("Motor Running", this::isShooterRunning);
 
     // Shuffleboard number slider for front motor power
     m_frontMotorPower = m_shuffleboardtab
