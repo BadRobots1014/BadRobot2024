@@ -3,6 +3,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
@@ -29,16 +30,17 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public final CANSparkFlex m_frontMotor;
   public final CANSparkFlex m_backMotor;
-  public final CANSparkFlex m_indexMotor;
+  public final CANSparkMax m_indexMotor;
 
   public ShooterSubsystem() {
 
     m_frontMotor = new CANSparkFlex(ShooterConstants.kFrontMotorCanId, MotorType.kBrushless);
     m_backMotor = new CANSparkFlex(ShooterConstants.kBackMotorCanId, MotorType.kBrushless);
-    m_indexMotor = new CANSparkFlex(ShooterConstants.kIndexMotorCanId, MotorType.kBrushless);
+    m_indexMotor = new CANSparkMax(ShooterConstants.kIndexMotorCanId, MotorType.kBrushless);
     m_frontMotor.setIdleMode(IdleMode.kBrake);
     m_backMotor.setIdleMode(IdleMode.kBrake);
     m_indexMotor.setIdleMode(IdleMode.kBrake);
+    
     // Displays whether or not the shooter is running
     m_shuffleboardtab.addBoolean("Motor Spinning", this::isShooterRunning);
 
