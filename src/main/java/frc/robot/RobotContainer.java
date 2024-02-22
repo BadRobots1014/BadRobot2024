@@ -92,10 +92,10 @@ public class RobotContainer {
         .whileTrue(new ZeroHeadingCommand(m_robotDrive));
     new JoystickButton(m_driverController, XboxController.Button.kY.value)
         .whileTrue(new UpdatePIDCommand(m_robotDrive));
-    new JoystickButton(m_driverController, XboxController.Button.kA.value)
-        .toggleOnTrue(new ShootCommand(m_shooterSubsystem));
-    new JoystickButton(m_driverController, XboxController.Button.kB.value)
-        .toggleOnTrue(new IntakeCommand(m_shooterSubsystem));
+    new JoystickButton(m_driverController, XboxController.Axis.kRightTrigger.value)
+        .whileTrue(new ShootCommand(m_shooterSubsystem));
+    new JoystickButton(m_driverController, XboxController.Axis.kLeftTrigger.value)
+        .whileTrue(new IntakeCommand(m_shooterSubsystem));
   }
 
   double getRightX() {
