@@ -8,19 +8,15 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ShooterConstants;
 import java.util.Map;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-  private final ShuffleboardTab m_shuffleboardtab = Shuffleboard.getTab(
-    "Shooter"
-  );
+  private final ShuffleboardTab m_shuffleboardtab = Shuffleboard.getTab("Shooter");
 
   private final GenericEntry m_frontMotorPower;
   private final GenericEntry m_backMotorPower;
