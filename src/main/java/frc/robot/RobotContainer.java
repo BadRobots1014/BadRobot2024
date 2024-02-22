@@ -9,6 +9,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DriveConstants;
@@ -17,7 +18,7 @@ import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.UpdatePIDCommand;
 import frc.robot.commands.ZeroHeadingCommand;
-import frc.robot.commands.auto.ShootAndDriveAutoCommand;
+import frc.robot.commands.auto.*;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.IntakeCommand;
@@ -54,6 +55,12 @@ public class RobotContainer {
   private double m_testMotorId = 0;
   private double m_testMotorSpeed = 0;
 
+  private final Command m_shootAndDriveAutoCommand = new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive);
+  private final Command m_shootAndDriveRightAutoCommand = new ShootAndDriveRightAutoCommand(m_shooterSubsystem, m_robotDrive);
+  private final Command m_shootAndDriveLeftAutoCommand = new ShootAndDriveLeftAutoCommand(m_shooterSubsystem, m_robotDrive);
+
+  SendableChooser<Command> m_autoChooser = new SendableChooser<>(); 
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -76,6 +83,10 @@ public class RobotContainer {
     m_autoPath = PathPlannerPath.fromPathFile("New Path");
     // m_autoTraj = new PathPlannerTrajectory(m_autoPath,
     // m_robotDrive.getModuleStates(), m_robotDrive.getRotation2d());
+
+    m_autoChooser.setDefaultOption("Center Auto", m_shootAndDriveAutoCommand);
+    m_autoChooser.addOption("Left Auto", m_shootAndDriveLeftAutoCommand);
+    m_autoChooser.addOption("Right Auto", m_shootAndDriveRightAutoCommand);
   }
 
   /**
@@ -143,6 +154,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive);
+    return m_autoChooser.getSelected();
   }
 }
