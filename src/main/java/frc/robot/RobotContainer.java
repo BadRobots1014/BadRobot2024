@@ -4,16 +4,11 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.PathPlannerTrajectory;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.UpdatePIDCommand;
 import frc.robot.commands.ZeroHeadingCommand;
@@ -34,25 +29,12 @@ public class RobotContainer {
   // The robot's subsystems
 
   // The driver's controller
-  XboxController m_driverController = new XboxController(
-      OIConstants.kDriverControllerPort);
-  Joystick m_rightJoystick = new Joystick(0);
-  Joystick m_leftJoystick = new Joystick(1);
+  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
-  private final SwerveSubsystem m_robotDrive = new SwerveSubsystem(
-      m_driverController);
-
-  // Shooter Subsystem
+  // Subsystems
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
-
-  // Paths
-  private PathPlannerTrajectory m_autoTraj;
-  private PathPlannerPath m_autoPath;
-  private PathPlannerAuto m_auto;
-
-  // TEST
-  private double m_testMotorId = 0;
-  private double m_testMotorSpeed = 0;
+  private final SwerveSubsystem m_robotDrive = new SwerveSubsystem(m_driverController);
+  private boolean fastMode = false;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -65,15 +47,10 @@ public class RobotContainer {
             () -> Math.pow(getLeftY(), 3),
             () -> Math.pow(getRightX(), 3),
             () -> DriveConstants.kFieldOriented,
-            () -> getFastMode()));
+            this::getFastMode));
 
     // Configure the button bindings
     configureButtonBindings();
-
-    // Setup paths
-    m_autoPath = PathPlannerPath.fromPathFile("New Path");
-    // m_autoTraj = new PathPlannerTrajectory(m_autoPath,
-    // m_robotDrive.getModuleStates(), m_robotDrive.getRotation2d());
   }
 
   /**
@@ -101,8 +78,7 @@ public class RobotContainer {
   }
 
   double getLeftX() {
-    int pov = m_driverController.getPOV();
-
+    var pov = m_driverController.getPOV();
     if (pov > -1) {
       if (pov == 90)
         return 1;
@@ -126,12 +102,8 @@ public class RobotContainer {
     return -m_driverController.getLeftY();
   }
 
-  boolean fastMode = false;
-
   boolean getFastMode() {
-    if (m_driverController.getRightBumperPressed()) {
-      fastMode = !fastMode;
-    }
+    if (m_driverController.getRightBumperPressed()) fastMode = !fastMode;
     return fastMode;
   }
 
