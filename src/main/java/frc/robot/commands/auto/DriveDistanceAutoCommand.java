@@ -16,16 +16,20 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.NavXGyroSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class ShootAndDriveAutoCommand extends SequentialCommandGroup {
+public class DriveDistanceAutoCommand extends SequentialCommandGroup {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
-  public ShootAndDriveAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve) {
+  //distance is distance from shin in need of breaking
+  
+  public DriveDistanceAutoCommand(double heading, ShooterSubsystem shoot, SwerveSubsystem swerve, NavXGyroSubsystem gyro) {
+    
+    
     super(
-      new ShootCommand(shoot).withTimeout(4),
       new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), supplyBoolean(false), supplyBoolean(false))
       .withTimeout(3)
     );
   }
+  
 
   private static Supplier<Double> supplyDouble(double d) {return new Supplier<Double>() {@Override public Double get() {return d;}};}
   private static Supplier<Boolean> supplyBoolean(boolean b) {return new Supplier<Boolean>() {@Override public Boolean get() {return b;}};}

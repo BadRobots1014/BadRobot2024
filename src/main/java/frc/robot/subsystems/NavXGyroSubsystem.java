@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -51,6 +53,31 @@ public class NavXGyroSubsystem extends SubsystemBase {
   public double getVelocityZ() {
     return navx.getVelocityZ();
   }
+
+  public double getHeading() {
+    return Math.IEEEremainder(navx.getAngle(), 360);
+  }
+
+  public double getDisplacementX(){
+    return navx.getDisplacementX();
+  }
+  public double getDisplacementY(){
+    return navx.getDisplacementY();
+  }
+  public double getDisplacementZ(){
+    return navx.getDisplacementZ();
+  }
+
+  public BooleanSupplier autoTurnIsFinished(){
+  return ()-> false;
+  }
+
+
+
+  public void convertToJoystickValues(double initial, double distance, double heading){
+    
+  }
+
 
   public void reset() {
     navx.reset();
