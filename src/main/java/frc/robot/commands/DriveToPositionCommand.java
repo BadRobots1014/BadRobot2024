@@ -31,13 +31,13 @@ public class DriveToPositionCommand extends Command {
     this.xSpdFunction = new Supplier<Double>() {
       @Override
       public Double get() {
-        return goalX.get() - swerve.getX();
+        return -(goalX.get() - swerve.getX());
       }
     };
     this.ySpdFunction = new Supplier<Double>() {
       @Override
       public Double get() {
-        return goalY.get() - swerve.getY();
+        return -(goalY.get() - swerve.getY());
       }
     };
     this.turningSpdFunction = new Supplier<Double>() {
