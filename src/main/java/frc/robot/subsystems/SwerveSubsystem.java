@@ -91,6 +91,8 @@ public class SwerveSubsystem extends SubsystemBase {
         zeroHeading();
       } catch (Exception e) {}
     }).start();
+
+    //Shuffle bored
     m_tab = Shuffleboard.getTab("Swerve");
     m_tab.addNumber("Heading", this::getHeading);
     m_tab.addNumber("Yaw", this::getYaw);
@@ -98,6 +100,9 @@ public class SwerveSubsystem extends SubsystemBase {
     m_tab.addNumber("Pitch", this::getPitch);
     m_tab.addNumber("X", this::getX);
     m_tab.addNumber("Y", this::getY);
+    m_tab.addNumber("X Offset", () -> offsetX);
+    m_tab.addNumber("Y Offset", () -> offsetY);
+    m_tab.add("Pose", getPose());
   }
 
   // Gyro data shenanigans
