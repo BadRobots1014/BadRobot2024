@@ -129,7 +129,7 @@ public final class Constants {
     public static final double kModuleDeadband = 0.005;
     public static final double kTurningP = 1;
     public static final double kTurningI = 0.0;
-    public static final double kTurningD = 0.004;
+    public static final double kTurningD = 0.0;
     public static final double kTurningPeriod = .005;
   }
 
