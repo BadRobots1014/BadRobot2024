@@ -20,6 +20,7 @@ import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.commands.auto.ShootAndDriveAutoCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ShooterCommand;
@@ -92,7 +93,9 @@ public class RobotContainer {
     new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
       .whileTrue(new IntakeCommand(m_shooterSubsystem));
     new JoystickButton(m_driverController, XboxController.Button.kX.value)
-      .whileTrue(getPOV() == -1 ? null : (getPOV() == 0 ? new ShooterCommand(m_shooterSubsystem, "winch up") : new ShooterCommand(m_shooterSubsystem, "winch down")));
+      .whileTrue(new ShooterCommand(m_shooterSubsystem, "winch up"));
+    new JoystickButton(m_driverController, XboxController.Button.kA.value)
+      .whileTrue(new ShooterCommand(m_shooterSubsystem, "winch down"));
   }
 
   double getRightX() {return m_driverController.getRightX();}
