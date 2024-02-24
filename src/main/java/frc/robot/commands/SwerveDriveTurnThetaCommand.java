@@ -23,13 +23,14 @@ public class SwerveDriveTurnThetaCommand extends Command {
   public final Supplier<Double> xSupplier = ()-> 0.0;
   public final Supplier<Double> ySupplier = ()-> 0.0;
   public final Supplier<Double> turnSupplier = ()-> 0.0;
+  private boolean isTurnFinished = false;
   private double initial_yaw;
   private double targetTheta;
 
   public SwerveDriveTurnThetaCommand(
     SwerveSubsystem subsystem,
-    NavXGyroSubsystem gyro,// oh boy i love greek gyros
-    double turnAmount
+    NavXGyroSubsystem gyro,// oh boy i love eating gyros
+    double turnDegrees
   ) {
     swerveSubsystem = subsystem;
     m_gyroSubsystem = gyro;
@@ -38,7 +39,7 @@ public class SwerveDriveTurnThetaCommand extends Command {
     turningSpdFunction = turnSupplier;
     fieldOrientedFunction = fieldOriented;
     fastModeFunction = fastMode;
-    targetTheta = turnAmount;
+    targetTheta = turnDegrees;
     xLimiter = new SlewRateLimiter(DriveConstants.kXSlewRateLimit);
     yLimiter = new SlewRateLimiter(DriveConstants.kYSlewRateLimit);
     turningLimiter = new SlewRateLimiter(DriveConstants.kTurnSlewRateLimit);
@@ -49,6 +50,7 @@ public class SwerveDriveTurnThetaCommand extends Command {
   public void initialize(){
     m_gyroSubsystem.reset();
     initial_yaw = m_gyroSubsystem.getYaw();
+    isTurnFinished = false;
   }
 
   @Override
@@ -56,6 +58,10 @@ public class SwerveDriveTurnThetaCommand extends Command {
     //autoturny stuffs
     double theta = initial_yaw - m_gyroSubsystem.getYaw();
     double speed = theta / 45;
+
+    if(m_gyroSubsystem.getYaw() >= targetTheta - 0.005 && m_gyroSubsystem.getYaw() <= targetTheta + 0.005){ //may need to adjust how sensitive it is
+      isTurnFinished = true;
+    }
     
 
 
@@ -115,6 +121,6 @@ turningSpeed = MathUtil.clamp(speed, -1.0,1.0);
 
   @Override
   public boolean isFinished() {
-    return false;
+    return isTurnFinished; //im assuming this stops the command when its finished turning
   }
 }

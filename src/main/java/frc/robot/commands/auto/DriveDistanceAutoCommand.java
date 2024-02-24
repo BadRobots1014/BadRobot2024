@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.commands.SwerveDriveDistanceCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.NavXGyroSubsystem;
@@ -21,12 +22,11 @@ public class DriveDistanceAutoCommand extends SequentialCommandGroup {
 
   //distance is distance from shin in need of breaking
   
-  public DriveDistanceAutoCommand(double heading, ShooterSubsystem shoot, SwerveSubsystem swerve, NavXGyroSubsystem gyro) {
+  public DriveDistanceAutoCommand(SwerveSubsystem swerve, NavXGyroSubsystem gyro) {
     
     
     super(
-      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), supplyBoolean(false), supplyBoolean(false))
-      .withTimeout(3)
+      new SwerveDriveDistanceCommand(swerve,gyro,1,45)//move 1 meter at a movement heading 45 degrees to the right
     );
   }
   

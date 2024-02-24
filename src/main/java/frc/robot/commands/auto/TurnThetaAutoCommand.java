@@ -4,33 +4,30 @@
 
 package frc.robot.commands.auto;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
-import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.commands.SwerveDriveDistanceCommand;
+import frc.robot.commands.SwerveDriveTurnThetaCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.NavXGyroSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class TurnAmountAutoCommand extends SequentialCommandGroup {
+public class TurnThetaAutoCommand extends SequentialCommandGroup {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
-  //private final NavXGyroSubsystem m_gyroSubsystem;
-
-  //heading is the direction the shin in need of breaking is
-  //0 is forwards, 90 is right, 180 is back, 270 is left
-  public TurnAmountAutoCommand(double heading, ShooterSubsystem shoot, SwerveSubsystem swerve) {
+  //distance is distance from shin in need of breaking
+  
+  public TurnThetaAutoCommand(SwerveSubsystem swerve, NavXGyroSubsystem gyro) {
     
     
     super(
-      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(0), supplyDouble(0), supplyBoolean(false), supplyBoolean(false))
-      //.onlyWhile()
+      new SwerveDriveTurnThetaCommand(swerve,gyro,-45)//turn robot 45 degrees to the left
     );
   }
   
