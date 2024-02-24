@@ -131,7 +131,7 @@ public class RobotContainer {
   boolean fastMode = false;
 
   boolean getFastMode() {
-    if (m_driverController.getRightBumperPressed()) {
+    if (m_driverController.getBButton()) {
       fastMode = !fastMode;
     }
     return fastMode;
