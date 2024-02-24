@@ -154,10 +154,10 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
-    public static final int kBackMotorCanId = 61;
-    public static final int kFrontMotorCanId = 62;
-    public static final int kIndexMotorCanId = 63;
-    public static final int kWinchMotorCanId = 64;
+    public static final int kBackMotorCanId = 51;
+    public static final int kFrontMotorCanId = 52;
+    public static final int kIndexMotorCanId = 53;
+    public static final int kWinchMotorCanId = 54;
 
     public static final double kFrontShootPower = 1.0;
     public static final double kBackShootPower = 0.8;

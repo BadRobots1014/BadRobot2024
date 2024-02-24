@@ -29,18 +29,18 @@ public class ShooterSubsystem extends SubsystemBase {
   public final CANSparkFlex m_frontMotor;
   public final CANSparkFlex m_backMotor;
   // public final CANSparkMax m_indexMotor;
-  // public final CANSparkMax m_winchMotor;
+  public final CANSparkMax m_winchMotor;
 
   public ShooterSubsystem() {
 
     m_frontMotor = new CANSparkFlex(ShooterConstants.kFrontMotorCanId, MotorType.kBrushless);
     m_backMotor = new CANSparkFlex(ShooterConstants.kBackMotorCanId, MotorType.kBrushless);
     // m_indexMotor = new CANSparkMax(ShooterConstants.kIndexMotorCanId, MotorType.kBrushless);
-    // m_winchMotor = new CANSparkMax(ShooterConstants.kWinchMotorCanId, MotorType.kBrushless);
+    m_winchMotor = new CANSparkMax(ShooterConstants.kWinchMotorCanId, MotorType.kBrushless);
     m_frontMotor.setIdleMode(IdleMode.kBrake);
     m_backMotor.setIdleMode(IdleMode.kBrake);
     // m_indexMotor.setIdleMode(IdleMode.kBrake);
-    // m_winchMotor.setIdleMode(IdleMode.kBrake);
+    m_winchMotor.setIdleMode(IdleMode.kBrake);
 
     // Displays whether or not the shooter is running
     m_shuffleboardtab.addBoolean("Shooter Running", this::isShooterRunning);
@@ -117,9 +117,9 @@ public class ShooterSubsystem extends SubsystemBase {
       clampPower(m_winchDownPower.getDouble(ShooterConstants.kWinchDownPower))
     };
   }
-  // public void winchUp() {m_winchMotor.set(getWinchPowers()[0]);}
-  // public void winchDown() {m_winchMotor.set(getWinchPowers()[1]);}
-  // public void stopWinch() {m_winchMotor.stopMotor();}
+  public void winchUp() {m_winchMotor.set(getWinchPowers()[0]);}
+  public void winchDown() {m_winchMotor.set(getWinchPowers()[1]);}
+  public void stopWinch() {m_winchMotor.stopMotor();}
 
   // Function to clamp the power to a value between -1 and 1
   public static double clampPower(double power) {
