@@ -8,13 +8,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.NavXGyroSubsystem;
 import java.util.function.Supplier;
 
 public class SwerveDriveTurnThetaCommand extends Command {
 
   public final SwerveSubsystem swerveSubsystem;
-  public final NavXGyroSubsystem m_gyroSubsystem;
   public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
   public final Supplier<Boolean> fieldOrientedFunction, fastModeFunction;
   public final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
@@ -24,16 +22,17 @@ public class SwerveDriveTurnThetaCommand extends Command {
   public final Supplier<Double> ySupplier = ()-> 0.0;
   public final Supplier<Double> turnSupplier = ()-> 0.0;
   private boolean isTurnFinished = false;
-  private double initial_yaw;
+  private double initial_heading;
   private double targetTheta;
+  private double currentHeading;
 
   public SwerveDriveTurnThetaCommand(
     SwerveSubsystem subsystem,
-    NavXGyroSubsystem gyro,// oh boy i love eating gyros
+    //NavXGyroSubsystem gyro,// oh boy i love eating gyros
     double turnDegrees
   ) {
     swerveSubsystem = subsystem;
-    m_gyroSubsystem = gyro;
+    //m_gyroSubsystem = gyro;
     xSpdFunction = xSupplier;
     ySpdFunction = ySupplier;
     turningSpdFunction = turnSupplier;
@@ -48,18 +47,19 @@ public class SwerveDriveTurnThetaCommand extends Command {
 
   @Override
   public void initialize(){
-    m_gyroSubsystem.reset();
-    initial_yaw = m_gyroSubsystem.getYaw();
+    swerveSubsystem.zeroHeading();
+    initial_heading = swerveSubsystem.getHeading();
     isTurnFinished = false;
   }
 
   @Override
   public void execute() {
     //autoturny stuffs
-    double theta = initial_yaw - m_gyroSubsystem.getYaw();
+    currentHeading = swerveSubsystem.getHeading();
+    double theta = targetTheta - swerveSubsystem.getHeading();
     double speed = theta / 45;
 
-    if(m_gyroSubsystem.getYaw() >= targetTheta - 0.005 && m_gyroSubsystem.getYaw() <= targetTheta + 0.005){ //may need to adjust how sensitive it is
+    if(Math.abs(theta) < 0.005){ //may need to adjust how sensitive it is
       isTurnFinished = true;
     }
     

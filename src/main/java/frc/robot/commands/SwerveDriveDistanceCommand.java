@@ -9,13 +9,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.NavXGyroSubsystem;
 import java.util.function.Supplier;
 
 public class SwerveDriveDistanceCommand extends Command {
 
   public final SwerveSubsystem swerveSubsystem;
-  public final NavXGyroSubsystem m_gyroSubsystem;
+  //public final NavXGyroSubsystem m_gyroSubsystem; oh boy i love eating gyros
   public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
   public final Supplier<Boolean> fieldOrientedFunction, fastModeFunction;
   public final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
@@ -36,12 +35,12 @@ public class SwerveDriveDistanceCommand extends Command {
 
   public SwerveDriveDistanceCommand(
     SwerveSubsystem subsystem,
-    NavXGyroSubsystem gyro,// oh boy i love greek gyros
+    //NavXGyroSubsystem gyro,// oh boy i love greek gyros
     double disMeters,
     double movHeadingDegrees
   ) {
     swerveSubsystem = subsystem;
-    m_gyroSubsystem = gyro;
+   // m_gyroSubsystem = gyro;
     xSpdFunction = xSupplier;
     ySpdFunction = ySupplier;
     turningSpdFunction = turnSupplier;
@@ -57,39 +56,36 @@ public class SwerveDriveDistanceCommand extends Command {
 
   @Override
   public void initialize(){
-    m_gyroSubsystem.reset();
-    initial_yaw = m_gyroSubsystem.getYaw();
+    swerveSubsystem.resetPose();
+    //initial_yaw = swerveSubsystem.getHeading();
     isDriveFinished = false;
     
     //based on old photo of toecracker bot, it appears that -X is forwards, +X is backwards, +Y is right and -Y is left
-    initialX = m_gyroSubsystem.getDisplacementX(); //should be forwards/backwards
-    initialY = m_gyroSubsystem.getDisplacementY(); //should be right/left based on this image : https://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaichttps://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaichttps://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaichttps://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaic
-    initialZ = m_gyroSubsystem.getDisplacementZ();
+    initialX = swerveSubsystem.getX(); //should be forwards/backwards
+    initialY = swerveSubsystem.getY(); //should be right/left based on this image : https://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaichttps://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaichttps://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaichttps://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaic
+    //initialZ = m_gyroSubsystem.getDisplacementZ();
     //displacement XY and Z are all in meters
   }
 
   @Override
   public void execute() {
     //fix axes so not compuzzling
-  adjustedInitialX = initialY;      //so should now be +X is right and -X is left
-  adjustedInitialY = initialX * -1;  // so +Y should now be forwards and -Y should be back
+  adjustedInitialX = initialX;      //so should now be +X is right and -X is left
+  adjustedInitialY = initialY;  // so +Y should now be forwards and -Y should be back
 
   //also corrected to make sense
-  double currentX = m_gyroSubsystem.getDisplacementY();
-  double currentY = m_gyroSubsystem.getDisplacementX() * -1;
+  double currentX = swerveSubsystem.getX();
+  double currentY = swerveSubsystem.getY();
 
     //autodrivedistance stuffs
-    double targetX = Math.sin(targetDistance*Math.sin(Math.toRadians(movementHeading))) + initialX; 
-    double targetY = Math.cos(targetDistance*Math.cos(Math.toRadians(movementHeading))) + initialY;
+    double targetX = targetDistance*Math.sin(Math.toRadians(movementHeading)) + adjustedInitialX; 
+    double targetY = targetDistance*Math.cos(Math.toRadians(movementHeading)) + adjustedInitialY;
 
 
     double deltaX = (targetX - currentX);
     double deltaY = (targetY - currentY);
 
-    if(currentX >= targetX - 0.005 && currentX <= targetX + 0.005){ //may need to adjust how sensitive it is
-      isDriveFinished = true;
-    }
-    if(currentY >= targetY - 0.005 && currentY <= targetY + 0.005){ //may need to adjust how sensitive it is
+    if(Math.abs(deltaX) <= 0.005 && Math.abs(deltaY) <= 0.005){ //may need to adjust how sensitive it is
       isDriveFinished = true;
     }
 

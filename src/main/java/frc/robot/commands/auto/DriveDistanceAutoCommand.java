@@ -14,7 +14,6 @@ import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.SwerveDriveDistanceCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.NavXGyroSubsystem;
 
 /** An example command that uses an example subsystem. */
 public class DriveDistanceAutoCommand extends SequentialCommandGroup {
@@ -22,11 +21,11 @@ public class DriveDistanceAutoCommand extends SequentialCommandGroup {
 
   //distance is distance from shin in need of breaking
   
-  public DriveDistanceAutoCommand(SwerveSubsystem swerve, NavXGyroSubsystem gyro) {
+  public DriveDistanceAutoCommand(SwerveSubsystem swerve) {
     
     
     super(
-      new SwerveDriveDistanceCommand(swerve,gyro,1,45)//move 1 meter at a movement heading 45 degrees to the right
+      new SwerveDriveDistanceCommand(swerve,1,45)//move 1 meter at a movement heading 45 degrees to the right
     );
   }
   

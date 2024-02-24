@@ -15,7 +15,6 @@ import frc.robot.commands.SwerveDriveDistanceCommand;
 import frc.robot.commands.SwerveDriveTurnThetaCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.NavXGyroSubsystem;
 
 /** An example command that uses an example subsystem. */
 public class TurnThetaAutoCommand extends SequentialCommandGroup {
@@ -23,11 +22,11 @@ public class TurnThetaAutoCommand extends SequentialCommandGroup {
 
   //distance is distance from shin in need of breaking
   
-  public TurnThetaAutoCommand(SwerveSubsystem swerve, NavXGyroSubsystem gyro) {
+  public TurnThetaAutoCommand(SwerveSubsystem swerve) {
     
     
     super(
-      new SwerveDriveTurnThetaCommand(swerve,gyro,-45)//turn robot 45 degrees to the left
+      new SwerveDriveTurnThetaCommand(swerve,-45)//turn robot 45 degrees to the left
     );
   }
   

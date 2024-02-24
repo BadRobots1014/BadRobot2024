@@ -14,7 +14,7 @@ import frc.robot.commands.ShootCommand;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.NavXGyroSubsystem;
+
 
 /** An example command that uses an example subsystem. */
 public class ShootAndDriveAutoCommand extends SequentialCommandGroup {
