@@ -129,7 +129,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public ChassisSpeeds getRobotRelativeSpeeds() {return new ChassisSpeeds(getXSpeed(), getYSpeed(), getTurnSpeed());}
   public void driveRobotRelative(ChassisSpeeds speeds) {
-      setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds));
+      setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds), DriveConstants.kTeleMaxMetersPerSec);
   }
 
 
