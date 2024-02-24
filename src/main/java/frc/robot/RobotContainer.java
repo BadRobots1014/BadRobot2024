@@ -43,26 +43,27 @@ public class RobotContainer {
   private final ShuffleboardTab m_tab;
   private SendableChooser<Command> m_chosenAuto = new SendableChooser<>();
 
+  private boolean fieldOriented = DriveConstants.kFieldOriented;
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    m_robotDrive.setDefaultCommand(
-        new SwerveDriveCommand(
+    m_robotDrive.setDefaultCommand(new SwerveDriveCommand(
             m_robotDrive,
             () -> Math.pow(getLeftX(), 3),
             () -> Math.pow(getLeftY(), 3),
             () -> Math.pow(getRightX(), 3),
-            () -> DriveConstants.kFieldOriented,
+            this::getFieldOriented,
             this::getFastMode));
 
     m_tab = Shuffleboard.getTab("Auto");
 
     m_chosenAuto.setDefaultOption("Shoot and drive middle",
       new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d()));
-    m_chosenAuto.addOption("Shoot and drive right",
-      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(45))));
     m_chosenAuto.addOption("Shoot and drive left",
+      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(45))));
+    m_chosenAuto.addOption("Shoot and drive right",
       new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(-45))));
 
     m_tab.add(m_chosenAuto);
@@ -81,7 +82,7 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, XboxController.Button.kStart.value)
+    new JoystickButton(m_driverController, XboxController.Button.kBack.value)
         .whileTrue(new ZeroHeadingCommand(m_robotDrive));
     new JoystickButton(m_driverController, XboxController.Button.kY.value)
         .whileTrue(new UpdatePIDCommand(m_robotDrive));
@@ -121,10 +122,17 @@ public class RobotContainer {
   }
 
   boolean getFastMode() {
-    if (m_driverController.getBButton()) {
+    if (m_driverController.getBButtonPressed()) {
       fastMode = !fastMode;
     }
     return fastMode;
+  }
+
+  boolean getFieldOriented() {
+    if (m_driverController.getStartButtonPressed()) {
+      fieldOriented = !fieldOriented;
+    }
+    return fieldOriented;
   }
 
   /**
