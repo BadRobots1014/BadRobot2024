@@ -102,7 +102,6 @@ public class SwerveSubsystem extends SubsystemBase {
     m_tab.addNumber("Y", this::getY);
     m_tab.addNumber("X Offset", () -> offsetX);
     m_tab.addNumber("Y Offset", () -> offsetY);
-    m_tab.add("Pose", getPose());
   }
 
   // Gyro data shenanigans
