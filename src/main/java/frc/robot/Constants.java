@@ -106,8 +106,8 @@ public final class Constants {
 
     public static final double kTeleMaxRadiansPerSec = Math.PI / 2; // TODO adjust max teleop speeds
     public static final double kFastTeleMaxRadiansPerSec = Math.PI;
-    public static final double kTeleMaxMetersPerSec = 0.6;
-    public static final double kFastTeleMaxMetersPerSec = 0.9;
+    public static final double kTeleMaxMetersPerSec = 0.3;
+    public static final double kFastTeleMaxMetersPerSec = 0.6;
 
     public static final Button kTestMotorButton = Button.kLeftBumper;
   }
@@ -165,7 +165,7 @@ public final class Constants {
     public static final double kBackIntakePower = -0.30;
     public static final double kIndexPower = 0.35;
     public static final double kWinchUpPower = 0.5;
-    public static final double kWinchDownPower = -0.5;
+    public static final double kWinchDownPower = -1;
   }
 
   public static final class LimelightConstants {
