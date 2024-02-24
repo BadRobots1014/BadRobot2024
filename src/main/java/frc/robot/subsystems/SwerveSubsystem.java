@@ -1,8 +1,10 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.SPI;
@@ -21,6 +23,9 @@ public class SwerveSubsystem extends SubsystemBase {
   public GenericEntry p;
   public GenericEntry i;
   public GenericEntry d;
+
+  public double offsetX = 0;
+  public double offsetY = 0;
 
   public SwerveSubsystem(XboxController controller) {
     m_tab = Shuffleboard.getTab("swerve");
@@ -79,28 +84,53 @@ public class SwerveSubsystem extends SubsystemBase {
   private final ShuffleboardTab m_tab;
 
   public SwerveSubsystem() {
+    //Delay to allow navx to boot up
     new Thread(() -> {
       try {
         Thread.sleep(DriveConstants.kBootupDelay);
         zeroHeading();
       } catch (Exception e) {}
-    })
-      .start();
+    }).start();
     m_tab = Shuffleboard.getTab("Swerve");
     m_tab.addNumber("Heading", this::getHeading);
+    m_tab.addNumber("Yaw", this::getYaw);
+    m_tab.addNumber("Roll", this::getRoll);
+    m_tab.addNumber("Pitch", this::getPitch);
   }
 
-  public void zeroHeading() {
+  // Gyro data shenanigans
+  public void zeroHeading() {gyro.reset();}
+  public void resetPose() {
     gyro.reset();
+    gyro.resetDisplacement();
+  }
+  public void resetPose(Pose2d pose) {
+    gyro.reset();
+    gyro.resetDisplacement();
+    setOffset(pose);
+  }
+  public void setOffset(Pose2d pose) {
+    gyro.setAngleAdjustment(pose.getRotation().getDegrees());
+    offsetX = pose.getX();
+    offsetY = pose.getY();
+  }
+  public double getHeading() {return Math.IEEEremainder(gyro.getAngle(), 360);}
+  public Rotation2d getRotation2d() {return Rotation2d.fromDegrees(getHeading());}
+  public double getYaw() {return Math.IEEEremainder(gyro.getYaw(), 360);}
+  public double getRoll() {return Math.IEEEremainder(gyro.getRoll(), 360);}
+  public double getPitch() {return Math.IEEEremainder(gyro.getPitch(), 360);}
+  public double getX() {return gyro.getDisplacementX() + offsetX;}
+  public double getY() {return gyro.getDisplacementY() + offsetY;}
+  public double getXSpeed() {return gyro.getVelocityX();}
+  public double getYSpeed() {return gyro.getVelocityY();}
+  public double getTurnSpeed() {return gyro.getRate();}
+  public Pose2d getPose() {return new Pose2d(getX(), getY(), getRotation2d());}
+
+  public ChassisSpeeds getRobotRelativeSpeeds() {return new ChassisSpeeds(getXSpeed(), getYSpeed(), getTurnSpeed());}
+  public void driveRobotRelative(ChassisSpeeds speeds) {
+      setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds));
   }
 
-  public double getHeading() {
-    return Math.IEEEremainder(gyro.getAngle(), 360);
-  }
-
-  public Rotation2d getRotation2d() {
-    return Rotation2d.fromDegrees(getHeading());
-  }
 
   public void stopModules() {
     frontLeft.stop();
@@ -125,37 +155,25 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void testMotor() {
-    double rx = Controller.getRightX();
-    double ry = Controller.getRightY();
-    double lx = Controller.getLeftX();
-    double ly = Controller.getLeftY();
-
     System.out.println(Controller.getPOV());
+    m_tab.addInteger("POV", Controller::getPOV);
 
     if (Controller.getPOV() > -1) {
       int pov = Controller.getPOV();
-      frontLeft.setDesiredState(
-        new SwerveModuleState(0, Rotation2d.fromDegrees(pov))
-      );
-      frontRight.setDesiredState(
-        new SwerveModuleState(0, Rotation2d.fromDegrees(pov))
-      );
-      backLeft.setDesiredState(
-        new SwerveModuleState(0, Rotation2d.fromDegrees(pov))
-      );
-      backRight.setDesiredState(
-        new SwerveModuleState(0, Rotation2d.fromDegrees(pov))
-      );
+      frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(pov)));
+      frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(pov)));
+      backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(pov)));
+      backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(pov)));
     }
 
-    double speedMultiplyer = !Controller.getRightBumper() ? 1 : .3;
+    double speedMultiplyer = Controller.getRightBumper() ? .3 : 1;
 
     SwerveModule module = null;
 
-    if (Controller.getYButton()) module = frontRight; else if (
-      Controller.getXButton()
-    ) module = frontLeft; else if (Controller.getBButton()) module =
-      backRight; else if (Controller.getAButton()) module = backLeft;
+    if (Controller.getYButton()) module = frontRight;
+    else if (Controller.getXButton()) module = frontLeft;
+    else if (Controller.getBButton()) module = backRight;
+    else if (Controller.getAButton()) module = backLeft;
 
     if (module == null) {
       frontLeft.setDesiredState(
@@ -196,5 +214,5 @@ public class SwerveSubsystem extends SubsystemBase {
         Rotation2d.fromRotations(.5 * Controller.getLeftX())
       )
     );
-  } // state.angle.getDegrees() + Controller.getLeftX() * 10
+  }
 }
