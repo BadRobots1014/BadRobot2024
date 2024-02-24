@@ -36,7 +36,7 @@ public class RobotContainer {
 
   // Subsystems
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
-  private final SwerveSubsystem m_robotDrive = new SwerveSubsystem(m_driverController);
+  private final SwerveSubsystem m_robotDrive = new SwerveSubsystem();
   private boolean fastMode = false;
 
   // Auto
