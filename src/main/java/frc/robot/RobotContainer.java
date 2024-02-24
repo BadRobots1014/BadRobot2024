@@ -22,6 +22,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShootCommand;
+import frc.robot.commands.ShooterCommand;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -83,43 +84,22 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(m_driverController, XboxController.Button.kBack.value)
-        .whileTrue(new ZeroHeadingCommand(m_robotDrive));
+      .whileTrue(new ZeroHeadingCommand(m_robotDrive));
     new JoystickButton(m_driverController, XboxController.Button.kY.value)
-        .whileTrue(new UpdatePIDCommand(m_robotDrive));
+      .whileTrue(new UpdatePIDCommand(m_robotDrive));
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
-        .whileTrue(new ShootCommand(m_shooterSubsystem));
+      .whileTrue(new ShootCommand(m_shooterSubsystem));
     new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
-        .whileTrue(new IntakeCommand(m_shooterSubsystem));
+      .whileTrue(new IntakeCommand(m_shooterSubsystem));
+    new JoystickButton(m_driverController, XboxController.Button.kX.value)
+      .whileTrue(getPOV() == -1 ? null : (getPOV() == 0 ? new ShooterCommand(m_shooterSubsystem, "winch up") : new ShooterCommand(m_shooterSubsystem, "winch down")));
   }
 
-  double getRightX() {
-    return m_driverController.getRightX();
-  }
+  double getRightX() {return m_driverController.getRightX();}
+  double getLeftX() {return -m_driverController.getLeftX();}
+  double getLeftY() {return -m_driverController.getLeftY();}
+  double getPOV() {return m_driverController.getPOV();}
 
-  double getLeftX() {
-    var pov = m_driverController.getPOV();
-    if (pov > -1) {
-      if (pov == 90)
-        return 1;
-      if (pov == 270)
-        return -1;
-    }
-
-    return -m_driverController.getLeftX();
-  }
-
-  double getLeftY() {
-    int pov = m_driverController.getPOV();
-
-    if (pov > -1) {
-      if (pov == 0)
-        return -1;
-      if (pov == 180)
-        return 1;
-    }
-
-    return -m_driverController.getLeftY();
-  }
 
   boolean getFastMode() {
     if (m_driverController.getBButtonPressed()) {
