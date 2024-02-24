@@ -6,6 +6,7 @@ package frc.robot.commands.auto;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -19,7 +20,7 @@ import frc.robot.subsystems.NavXGyroSubsystem;
 public class ShootAndDriveAutoCommand extends SequentialCommandGroup {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
-  public ShootAndDriveAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve) {
+  public ShootAndDriveAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve, Pose2d startingOffset) {
     super(
       new ShootCommand(shoot).withTimeout(4),
       new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), supplyBoolean(false), supplyBoolean(false))

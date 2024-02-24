@@ -7,9 +7,15 @@ package frc.robot;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -22,7 +28,6 @@ import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.commands.auto.DriveDistanceAutoCommand;
 import frc.robot.commands.auto.ShootAndDriveAutoCommand;
 import frc.robot.commands.auto.TurnThetaAutoCommand;
-import frc.robot.subsystems.NavXGyroSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.IntakeCommand;
@@ -35,42 +40,22 @@ import frc.robot.commands.ShootCommand;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  
-  //Auto Selector
-  private SendableChooser<Command> m_AutoSelector = new SendableChooser<>();
-
-
-  //Auto options
-  private final DriveDistanceAutoCommand m_driveDistanceAuto;
-  private final TurnThetaAutoCommand m_turnThetaAuto;
-  private final ShootAndDriveAutoCommand m_shootAndDriveAuto;
-
-
-
-  // The robot's subsystems
-
   // The driver's controller
   XboxController m_driverController = new XboxController(
       OIConstants.kDriverControllerPort);
   Joystick m_rightJoystick = new Joystick(0);
   Joystick m_leftJoystick = new Joystick(1);
 
-  private final SwerveSubsystem m_robotDrive = new SwerveSubsystem(
-      m_driverController);
 
-  private final NavXGyroSubsystem m_GyroSubsystem = new NavXGyroSubsystem();
-
+  
   // Shooter Subsystem
+  // Subsystems
+  private final SwerveSubsystem m_robotDrive = new SwerveSubsystem(m_driverController);
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem(1.0, -0.35);
 
-  // Paths
-  private PathPlannerTrajectory m_autoTraj;
-  private PathPlannerPath m_autoPath;
-  private PathPlannerAuto m_auto;
-
-  // TEST
-  private double m_testMotorId = 0;
-  private double m_testMotorSpeed = 0;
+  // Auto
+  private final ShuffleboardTab m_tab;
+  private SendableChooser<Command> m_chosenAuto = new SendableChooser<>();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -85,28 +70,40 @@ public class RobotContainer {
             () -> DriveConstants.kFieldOriented,
             () -> getFastMode()));
 
-    // m_robotDrive.setDefaultCommand();
 
+    //Auto Selector
+    m_tab = Shuffleboard.getTab("Auto");
+
+    m_chosenAuto.setDefaultOption("Shoot and drive middle",
+      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d()));
+    m_chosenAuto.addOption("Shoot and drive right",
+      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(45))));
+    m_chosenAuto.addOption("Shoot and drive left",
+      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(-45))));
+    m_chosenAuto.addOption("Shinbreak 1 meter at 45 degrees right", 
+    new DriveDistanceAutoCommand(m_robotDrive));
+    m_chosenAuto.addOption("Shinbreak 45 degrees left", 
+    new TurnThetaAutoCommand(m_robotDrive));
     // Configure the button bindings
     configureButtonBindings();
 
-    //Auto Commands
-    this.m_driveDistanceAuto = new DriveDistanceAutoCommand(m_robotDrive, m_GyroSubsystem);
-    this.m_turnThetaAuto = new TurnThetaAutoCommand(m_robotDrive, m_GyroSubsystem);
-    this.m_shootAndDriveAuto = new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive);
+    // //Auto Commands
+    // this.m_driveDistanceAuto = new DriveDistanceAutoCommand(m_robotDrive, m_GyroSubsystem);
+    // this.m_turnThetaAuto = new TurnThetaAutoCommand(m_robotDrive, m_GyroSubsystem);
+    // this.m_shootAndDriveAuto = new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive);
     
-    //Auto Selector
-    m_AutoSelector.addOption("Shinbreak 1 meter at 45 degrees right", m_driveDistanceAuto);
-    m_AutoSelector.addOption("Shinbreak 45 degrees left", m_turnThetaAuto);
-    m_AutoSelector.addOption("Shoot and Drive Auto", m_shootAndDriveAuto);
+    // //Auto Selector
+    // m_AutoSelector.addOption("Shinbreak 1 meter at 45 degrees right", m_driveDistanceAuto);
+    // m_AutoSelector.addOption("Shinbreak 45 degrees left", m_turnThetaAuto);
+    // m_AutoSelector.addOption("Shoot and Drive Auto", m_shootAndDriveAuto);
 
-    //Auto Shuffleboard Selector
-    Shuffleboard.getTab("Auto Selector").add("Auto Selector Panel", m_AutoSelector);
+    // //Auto Shuffleboard Selector
+    // Shuffleboard.getTab("Auto Selector").add("Auto Selector Panel", m_AutoSelector);
     
     
 
     // Setup paths
-    m_autoPath = PathPlannerPath.fromPathFile("New Path");
+    //m_autoPath = PathPlannerPath.fromPathFile("New Path");
     // m_autoTraj = new PathPlannerTrajectory(m_autoPath,
     // m_robotDrive.getModuleStates(), m_robotDrive.getRotation2d());
   }
@@ -177,6 +174,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     //return new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive);
-    return m_AutoSelector.getSelected();
+    return m_chosenAuto.getSelected();
   }
 }
