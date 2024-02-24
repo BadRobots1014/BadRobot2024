@@ -127,9 +127,9 @@ public final class Constants {
     public static final double kTurningEncoderRPM2RadPerSec =
       kTurningEncoderRot2Rad / 60;
     public static final double kModuleDeadband = 0.005;
-    public static final double kTurningP = .9;
+    public static final double kTurningP = 1;
     public static final double kTurningI = 0.0;
-    public static final double kTurningD = 0.0;
+    public static final double kTurningD = 0.004;
     public static final double kTurningPeriod = .005;
   }
 
@@ -162,7 +162,17 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
-    public static final int kFrontMotorCanId = 62;
     public static final int kBackMotorCanId = 61;
+    public static final int kFrontMotorCanId = 62;
+    public static final int kIndexMotorCanId = 63;
+    public static final int kWinchMotorCanId = 64;
+
+    public static final double kFrontShootPower = 1.0;
+    public static final double kBackShootPower = 0.8;
+    public static final double kFrontIntakePower = -0.35;
+    public static final double kBackIntakePower = 0.0;
+    public static final double kIndexPower = 0.35;
+    public static final double kWinchUpPower = 0.5;
+    public static final double kWinchDownPower = -0.5;
   }
 }
