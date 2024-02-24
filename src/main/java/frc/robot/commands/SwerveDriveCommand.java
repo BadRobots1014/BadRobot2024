@@ -13,7 +13,7 @@ public class SwerveDriveCommand extends Command {
 
   public final SwerveSubsystem swerveSubsystem;
   public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
-  public final Supplier<Boolean> fieldOrientedFunction, fastModeFunction;
+  public Supplier<Boolean> fieldOrientedFunction, fastModeFunction;
   public final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
   public SwerveDriveCommand(
@@ -78,6 +78,15 @@ public class SwerveDriveCommand extends Command {
 
     // Actually do the thing
     swerveSubsystem.setModuleStates(moduleStates, maxDriveSpeed);
+  }
+
+  public void toggleFieldOriented() {
+    fieldOrientedFunction = new Supplier<Boolean>(){
+      @Override
+      public Boolean get() {
+        return !fieldOrientedFunction.get();
+      }
+    };
   }
 
   @Override

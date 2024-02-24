@@ -46,26 +46,27 @@ public class RobotContainer {
   private final ShuffleboardTab m_tab;
   private SendableChooser<Command> m_chosenAuto = new SendableChooser<>();
 
+  private boolean fieldOriented = DriveConstants.kFieldOriented;
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    m_robotDrive.setDefaultCommand(
-        new SwerveDriveCommand(
+    m_robotDrive.setDefaultCommand(new SwerveDriveCommand(
             m_robotDrive,
             () -> Math.pow(getLeftX(), 3),
             () -> Math.pow(getLeftY(), 3),
             () -> Math.pow(getRightX(), 3),
-            () -> DriveConstants.kFieldOriented,
+            this::getFieldOriented,
             this::getFastMode));
 
     m_tab = Shuffleboard.getTab("Auto");
 
     m_chosenAuto.setDefaultOption("Shoot and drive middle",
       new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d()));
-    m_chosenAuto.addOption("Shoot and drive right",
-      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(45))));
     m_chosenAuto.addOption("Shoot and drive left",
+      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(45))));
+    m_chosenAuto.addOption("Shoot and drive right",
       new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(-45))));
     m_chosenAuto.addOption("Drive to (1,1)",
       new DriveToPositionCommand(m_robotDrive, supplyDouble(1), supplyDouble(1), supplyDouble(0), supplyBoolean(true), supplyBoolean(false), supplyBoolean(true)));
@@ -86,7 +87,7 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, XboxController.Button.kStart.value)
+    new JoystickButton(m_driverController, XboxController.Button.kBack.value)
         .whileTrue(new ZeroHeadingCommand(m_robotDrive));
     new JoystickButton(m_driverController, XboxController.Button.kY.value)
         .whileTrue(new UpdatePIDCommand(m_robotDrive));
@@ -126,7 +127,7 @@ public class RobotContainer {
   }
 
   boolean getFastMode() {
-    if (m_driverController.getBButton()) {
+    if (m_driverController.getBButtonPressed()) {
       fastMode = !fastMode;
     }
     return fastMode;
@@ -134,6 +135,13 @@ public class RobotContainer {
   
   private static Supplier<Double> supplyDouble(double d) {return new Supplier<Double>() {@Override public Double get() {return d;}};}
   private static Supplier<Boolean> supplyBoolean(boolean b) {return new Supplier<Boolean>() {@Override public Boolean get() {return b;}};}
+
+  boolean getFieldOriented() {
+    if (m_driverController.getStartButtonPressed()) {
+      fieldOriented = !fieldOriented;
+    }
+    return fieldOriented;
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
