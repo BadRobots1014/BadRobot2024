@@ -25,7 +25,7 @@ public class DriveDistanceAutoCommand extends SequentialCommandGroup {
     
     
     super(
-      new SwerveDriveDistanceCommand(swerve,1,45)//move 1 meter at a movement heading 45 degrees to the right
+      new SwerveDriveDistanceCommand(swerve,0.2,0)//move 1 meter at a movement heading 45 degrees to the right
     );
   }
   

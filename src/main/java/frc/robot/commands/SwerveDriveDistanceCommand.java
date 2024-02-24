@@ -57,6 +57,7 @@ public class SwerveDriveDistanceCommand extends Command {
   @Override
   public void initialize(){
     swerveSubsystem.resetPose();
+    swerveSubsystem.setOffset(swerveSubsystem.getPose()); //sets the offset to this pose
     //initial_yaw = swerveSubsystem.getHeading();
     isDriveFinished = false;
     
@@ -71,19 +72,31 @@ public class SwerveDriveDistanceCommand extends Command {
   public void execute() {
     //fix axes so not compuzzling
   adjustedInitialX = initialX;      //so should now be +X is right and -X is left
-  adjustedInitialY = initialY;  // so +Y should now be forwards and -Y should be back
+  adjustedInitialY = initialY * -1;  // so +Y should now be forwards and -Y should be back
 
   //also corrected to make sense
-  double currentX = swerveSubsystem.getX();
-  double currentY = swerveSubsystem.getY();
+    double currentX = swerveSubsystem.getX();
+    double currentY = swerveSubsystem.getY() * -1; //Y+ is actually back 
 
+    
     //autodrivedistance stuffs
     double targetX = targetDistance*Math.sin(Math.toRadians(movementHeading)) + adjustedInitialX; 
-    double targetY = targetDistance*Math.cos(Math.toRadians(movementHeading)) + adjustedInitialY;
-
+    double targetY = (targetDistance*Math.cos(Math.toRadians(movementHeading)) + adjustedInitialY) * -1; //adjust so Y+ is forwards intake
+    
+    
+    System.out.println("Initial X:" + adjustedInitialX);
+    System.out.println("Initial Y:" + adjustedInitialY);
+    System.out.println("Current X:" + currentX);
+    System.out.println("Current Y:" + currentY);
+    System.out.println("targetX: " + targetX);  
+    System.out.println("targetY: " + targetY);  
 
     double deltaX = (targetX - currentX);
     double deltaY = (targetY - currentY);
+
+    // if(movementHeading == 0){
+    //   deltaX = 0;
+    // }
 
     if(Math.abs(deltaX) <= 0.005 && Math.abs(deltaY) <= 0.005){ //may need to adjust how sensitive it is
       isDriveFinished = true;
@@ -100,13 +113,13 @@ public class SwerveDriveDistanceCommand extends Command {
     // Death
     xSpeed = Math.abs(xSpeed) > OIConstants.kDriveDeadband ? xSpeed : 0;
     ySpeed = Math.abs(ySpeed) > OIConstants.kDriveDeadband ? ySpeed : 0;
-    turningSpeed =
-      Math.abs(turningSpeed) > OIConstants.kDriveDeadband ? turningSpeed : 0;
+    turningSpeed = Math.abs(turningSpeed) > OIConstants.kDriveDeadband ? turningSpeed : 0;
 
     //Hyjack joysticks
 
     xSpeed = MathUtil.clamp(deltaX, -0.2, 0.2); //limiting robot to 0.2 for now because I enjoy having unbroken shins
     ySpeed = MathUtil.clamp(deltaY, -0.2, 0.2);
+    turningSpeed = 0;
 
     // xSpeed = MathUtil.clamp(deltaX, -1.0, 1.0);
     // ySpeed = MathUtil.clamp(deltaY, -1.0, 1.0);

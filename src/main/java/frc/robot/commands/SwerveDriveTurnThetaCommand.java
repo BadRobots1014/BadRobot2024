@@ -80,6 +80,8 @@ public class SwerveDriveTurnThetaCommand extends Command {
     //Hyjack joysticks
 
 turningSpeed = MathUtil.clamp(speed, -1.0,1.0);
+xSpeed = 0;
+ySpeed = 0;
 
 
     // Slew soup

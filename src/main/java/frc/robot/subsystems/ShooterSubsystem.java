@@ -23,8 +23,8 @@ public class ShooterSubsystem extends SubsystemBase {
   private final GenericEntry m_frontIntakePower;
   private final GenericEntry m_backIntakePower;
   private final GenericEntry m_indexPower;
-  private final GenericEntry m_winchUpPower;
-  private final GenericEntry m_winchDownPower;
+  // private final GenericEntry m_winchUpPower;
+  // private final GenericEntry m_winchDownPower;
 
   public final CANSparkFlex m_frontMotor;
   public final CANSparkFlex m_backMotor;
@@ -61,11 +61,11 @@ public class ShooterSubsystem extends SubsystemBase {
     m_indexPower = m_shuffleboardtab.add("Index Power", ShooterConstants.kIndexPower)
       .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
     
-    m_winchUpPower = m_shuffleboardtab.add("Winch Up Power", ShooterConstants.kWinchUpPower)
-      .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
+    // m_winchUpPower = m_shuffleboardtab.add("Winch Up Power", ShooterConstants.kWinchUpPower)
+    //   .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
 
-    m_winchDownPower = m_shuffleboardtab.add("Winch Down Power", ShooterConstants.kWinchDownPower)
-      .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
+    // m_winchDownPower = m_shuffleboardtab.add("Winch Down Power", ShooterConstants.kWinchDownPower)
+    //   .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
   }
 
   // Shooter stuff
@@ -111,12 +111,12 @@ public class ShooterSubsystem extends SubsystemBase {
   // public void stopIndex() {m_indexMotor.stopMotor();}
 
   // Winch stuff
-  public double[] getWinchPowers() {
-    return new double[] {
-      clampPower(m_winchUpPower.getDouble(ShooterConstants.kWinchUpPower)),
-      clampPower(m_winchDownPower.getDouble(ShooterConstants.kWinchDownPower))
-    };
-  }
+  // public double[] getWinchPowers() {
+  //   return new double[] {
+  //     clampPower(m_winchUpPower.getDouble(ShooterConstants.kWinchUpPower)),
+  //     clampPower(m_winchDownPower.getDouble(ShooterConstants.kWinchDownPower))
+  //   };
+  // }
   // public void winchUp() {m_winchMotor.set(getWinchPowers()[0]);}
   // public void winchDown() {m_winchMotor.set(getWinchPowers()[1]);}
   // public void stopWinch() {m_winchMotor.stopMotor();}
