@@ -4,22 +4,24 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.PathPlannerTrajectory;
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.UpdatePIDCommand;
 import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.commands.auto.ShootAndDriveAutoCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.ShootCommand;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -29,55 +31,44 @@ import frc.robot.subsystems.SwerveSubsystem;
  */
 public class RobotContainer {
 
-  // The robot's subsystems
-
   // The driver's controller
-  XboxController m_driverController = new XboxController(
-    OIConstants.kDriverControllerPort
-  );
-  Joystick m_rightJoystick = new Joystick(0);
-  Joystick m_leftJoystick = new Joystick(1);
+  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
-  private final SwerveSubsystem m_robotDrive = new SwerveSubsystem(
-    m_driverController
-  );
+  // Subsystems
+  private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
+  private final SwerveSubsystem m_robotDrive = new SwerveSubsystem(m_driverController);
+  private boolean fastMode = false;
 
-  // Shooter Subsystem
-  private final ShooterSubsystem m_shooterarmsystem = new ShooterSubsystem(0.0);
-
-  // Paths
-  private PathPlannerTrajectory m_autoTraj;
-  private PathPlannerPath m_autoPath;
-  private PathPlannerAuto m_auto;
-
-  // TEST
-  private double m_testMotorId = 0;
-  private double m_testMotorSpeed = 0;
+  // Auto
+  private final ShuffleboardTab m_tab;
+  private SendableChooser<Command> m_chosenAuto = new SendableChooser<>();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     m_robotDrive.setDefaultCommand(
-      new SwerveDriveCommand(
-        m_robotDrive,
-        () -> Math.pow(getLeftX(), 3),
-        () -> Math.pow(getLeftY(), 3),
-        () -> Math.pow(getRightX(), 3),
-        () -> DriveConstants.kFieldOriented,
-        () -> getFastMode()
-      )
-    );
+        new SwerveDriveCommand(
+            m_robotDrive,
+            () -> Math.pow(getLeftX(), 3),
+            () -> Math.pow(getLeftY(), 3),
+            () -> Math.pow(getRightX(), 3),
+            () -> DriveConstants.kFieldOriented,
+            this::getFastMode));
 
-    // m_robotDrive.setDefaultCommand();
+    m_tab = Shuffleboard.getTab("Auto");
+
+    m_chosenAuto.setDefaultOption("Shoot and drive middle",
+      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d()));
+    m_chosenAuto.addOption("Shoot and drive right",
+      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(45))));
+    m_chosenAuto.addOption("Shoot and drive left",
+      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(-45))));
+
+    m_tab.add(m_chosenAuto);
 
     // Configure the button bindings
     configureButtonBindings();
-
-    // Setup paths
-    m_autoPath = PathPlannerPath.fromPathFile("New Path");
-    // m_autoTraj = new PathPlannerTrajectory(m_autoPath,
-    // m_robotDrive.getModuleStates(), m_robotDrive.getRotation2d());
   }
 
   /**
@@ -91,23 +82,26 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(m_driverController, XboxController.Button.kStart.value)
-      .whileTrue(new ZeroHeadingCommand(m_robotDrive));
+        .whileTrue(new ZeroHeadingCommand(m_robotDrive));
     new JoystickButton(m_driverController, XboxController.Button.kY.value)
-      .whileTrue(new UpdatePIDCommand(m_robotDrive));
-    new JoystickButton(m_driverController, XboxController.Button.kA.value)
-      .toggleOnTrue(new ShooterCommand(m_shooterarmsystem));
+        .whileTrue(new UpdatePIDCommand(m_robotDrive));
+    new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
+        .whileTrue(new ShootCommand(m_shooterSubsystem));
+    new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
+        .whileTrue(new IntakeCommand(m_shooterSubsystem));
   }
 
   double getRightX() {
-    return -m_driverController.getRightX();
+    return m_driverController.getRightX();
   }
 
   double getLeftX() {
-    int pov = m_driverController.getPOV();
-
+    var pov = m_driverController.getPOV();
     if (pov > -1) {
-      if (pov == 90) return 1;
-      if (pov == 270) return -1;
+      if (pov == 90)
+        return 1;
+      if (pov == 270)
+        return -1;
     }
 
     return -m_driverController.getLeftX();
@@ -117,16 +111,17 @@ public class RobotContainer {
     int pov = m_driverController.getPOV();
 
     if (pov > -1) {
-      if (pov == 0) return -1;
-      if (pov == 180) return 1;
+      if (pov == 0)
+        return -1;
+      if (pov == 180)
+        return 1;
     }
-    
+
     return -m_driverController.getLeftY();
   }
 
-  boolean fastMode = false;
   boolean getFastMode() {
-    if (m_driverController.getRightBumperPressed()){
+    if (m_driverController.getBButton()) {
       fastMode = !fastMode;
     }
     return fastMode;
@@ -138,6 +133,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new ShootAndDriveAutoCommand(m_shooterarmsystem, m_robotDrive);
+    return m_chosenAuto.getSelected();
   }
 }

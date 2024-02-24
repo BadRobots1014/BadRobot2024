@@ -1,10 +1,13 @@
+// POSITIVE COUNTERCLOCKWISE
+// NEGATIVE CLOCKWISE
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,93 +16,113 @@ import java.util.Map;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-  private final ShuffleboardTab m_shuffleboardtab = Shuffleboard.getTab(
-    "Shooter"
-  );
+  private final ShuffleboardTab m_shuffleboardtab = Shuffleboard.getTab("Shooter");
 
   private final GenericEntry m_frontMotorPower;
   private final GenericEntry m_backMotorPower;
+  private final GenericEntry m_frontIntakePower;
+  private final GenericEntry m_backIntakePower;
+  private final GenericEntry m_indexPower;
+  private final GenericEntry m_winchUpPower;
+  private final GenericEntry m_winchDownPower;
 
   public final CANSparkFlex m_frontMotor;
   public final CANSparkFlex m_backMotor;
+  // public final CANSparkMax m_indexMotor;
+  // public final CANSparkMax m_winchMotor;
 
-  public ShooterSubsystem(double defaultpower) {
+  public ShooterSubsystem() {
 
-    m_frontMotor =
-      new CANSparkFlex(ShooterConstants.kFrontMotorCanId, MotorType.kBrushless);
-    m_backMotor =
-      new CANSparkFlex(ShooterConstants.kBackMotorCanId, MotorType.kBrushless);
+    m_frontMotor = new CANSparkFlex(ShooterConstants.kFrontMotorCanId, MotorType.kBrushless);
+    m_backMotor = new CANSparkFlex(ShooterConstants.kBackMotorCanId, MotorType.kBrushless);
+    // m_indexMotor = new CANSparkMax(ShooterConstants.kIndexMotorCanId, MotorType.kBrushless);
+    // m_winchMotor = new CANSparkMax(ShooterConstants.kWinchMotorCanId, MotorType.kBrushless);
+    m_frontMotor.setIdleMode(IdleMode.kBrake);
+    m_backMotor.setIdleMode(IdleMode.kBrake);
+    // m_indexMotor.setIdleMode(IdleMode.kBrake);
+    // m_winchMotor.setIdleMode(IdleMode.kBrake);
+
     // Displays whether or not the shooter is running
-    m_shuffleboardtab.addBoolean("Motor Spinning", this::isShooterRunning);
+    m_shuffleboardtab.addBoolean("Shooter Running", this::isShooterRunning);
 
-    // Shuffleboard number slider for front motor power
-    m_frontMotorPower =
-      m_shuffleboardtab
-        .add("Front Motor Power", defaultpower)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(Map.of("min", -1.0, "max", 1.0))
-        .getEntry();
+    // Shuffleboard numbers for various motor powers
+    m_frontMotorPower = m_shuffleboardtab.add("Front Motor Power", ShooterConstants.kFrontShootPower)
+      .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
 
-    // Shuffleboard number slider for the back motor power
-    m_backMotorPower =
-      m_shuffleboardtab
-        .add("Back Motor Power", defaultpower)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(Map.of("min", -1.0, "max", 1.0))
-        .getEntry();
+    m_backMotorPower = m_shuffleboardtab.add("Back Motor Power", ShooterConstants.kBackShootPower)
+      .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
+    
+    m_frontIntakePower = m_shuffleboardtab.add("Front Intake Power", ShooterConstants.kFrontIntakePower)
+      .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
+
+    m_backIntakePower = m_shuffleboardtab.add("Back Intake Power", ShooterConstants.kBackIntakePower)
+      .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
+
+    m_indexPower = m_shuffleboardtab.add("Index Power", ShooterConstants.kIndexPower)
+      .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
+    
+    m_winchUpPower = m_shuffleboardtab.add("Winch Up Power", ShooterConstants.kWinchUpPower)
+      .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
+
+    m_winchDownPower = m_shuffleboardtab.add("Winch Down Power", ShooterConstants.kWinchDownPower)
+      .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
   }
 
-  // Function to run the shooter motors
+  // Shooter stuff
+  public double[] getShooterPowers() { // Function to get the motor powers from shuffleboard and clamp them to a value between -1 and 1
+    return new double[] {
+      clampPower(m_frontMotorPower.getDouble(ShooterConstants.kFrontShootPower)),
+      clampPower(m_backMotorPower.getDouble(ShooterConstants.kBackShootPower))
+    };
+  }
+  public double[] getIntakePowers() {
+    return new double[] {
+      clampPower(m_frontIntakePower.getDouble(ShooterConstants.kFrontIntakePower)),
+      clampPower(m_backIntakePower.getDouble(ShooterConstants.kBackIntakePower))
+    };
+  }
   public void runShooter() {
-    double[] powers = getPower();
-    m_frontMotor.set(powers[0]);
-    m_backMotor.set(powers[1]);
+    m_frontMotor.set(getShooterPowers()[0]);
+    m_backMotor.set(getShooterPowers()[1]);
   }
-
-  // Function to stop the shooter motors
+  public void runShooter(double rearPower) {
+    m_frontMotor.set(getShooterPowers()[0]);
+    m_backMotor.set(rearPower);
+  }
+  public void runIntake() {
+    m_frontMotor.set(getIntakePowers()[0]);
+    m_backMotor.set(getIntakePowers()[1]);
+  }
   public void stopShooter() {
     m_frontMotor.stopMotor();
     m_backMotor.stopMotor();
   }
-
-  // Function to set the speeds of the shooter motors manually in the code
-  public void setPower(double[] powers) {
-    m_frontMotor.set(powers[0]);
-    m_backMotor.set(powers[1]);
+  public boolean isShooterRunning() {
+    if (m_frontMotor.get() == 0 && m_backMotor.get() == 0) { //Check if both motors are stopped
+      return false; //If so, the shooter is not running
+    } else {
+      return true; //Otherwise, the shooter is running
+    }
   }
+
+  // Indexer stuff
+  public double getIndexPower() {return clampPower(m_indexPower.getDouble(ShooterConstants.kIndexPower));}
+  // public void runIndex() {m_indexMotor.set(getIndexPower());}
+  // public void stopIndex() {m_indexMotor.stopMotor();}
+
+  // Winch stuff
+  public double[] getWinchPowers() {
+    return new double[] {
+      clampPower(m_winchUpPower.getDouble(ShooterConstants.kWinchUpPower)),
+      clampPower(m_winchDownPower.getDouble(ShooterConstants.kWinchDownPower))
+    };
+  }
+  // public void winchUp() {m_winchMotor.set(getWinchPowers()[0]);}
+  // public void winchDown() {m_winchMotor.set(getWinchPowers()[1]);}
+  // public void stopWinch() {m_winchMotor.stopMotor();}
 
   // Function to clamp the power to a value between -1 and 1
   public static double clampPower(double power) {
     return MathUtil.clamp(power, -1, 1);
-  }
-
-  // Function to get the motor powers from shuffleboard and clamp them to a value
-  // between -1 and 1
-  public double[] getPower() {
-    return new double[] {
-      clampPower(m_frontMotorPower.getDouble(0.0)),
-      clampPower(m_backMotorPower.getDouble(0.0)),
-    };
-  }
-
-  // Function to check if the shooter is running
-  // I know this looks like it's inverted, but for some reason it works in
-  // shuffleboard so dont change it
-  public boolean isShooterRunning() {
-    if (m_frontMotor.get() == 0 && m_backMotor.get() == 0) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
-
-  @Override
-  public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
   }
 }
