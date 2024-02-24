@@ -4,15 +4,8 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.PathPlannerTrajectory;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -21,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.UpdatePIDCommand;
 import frc.robot.commands.ZeroHeadingCommand;
@@ -41,17 +33,15 @@ import frc.robot.commands.ShootCommand;
  */
 public class RobotContainer {
   // The driver's controller
-  XboxController m_driverController = new XboxController(
-      OIConstants.kDriverControllerPort);
-  Joystick m_rightJoystick = new Joystick(0);
-  Joystick m_leftJoystick = new Joystick(1);
+  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
 
   
   // Shooter Subsystem
   // Subsystems
+  private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
   private final SwerveSubsystem m_robotDrive = new SwerveSubsystem(m_driverController);
-  private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem(1.0, -0.35);
+  private boolean fastMode = false;
 
   // Auto
   private final ShuffleboardTab m_tab;
@@ -68,7 +58,7 @@ public class RobotContainer {
             () -> Math.pow(getLeftY(), 3),
             () -> Math.pow(getRightX(), 3),
             () -> DriveConstants.kFieldOriented,
-            () -> getFastMode()));
+            this::getFastMode));
 
 
     //Auto Selector
@@ -80,10 +70,14 @@ public class RobotContainer {
       new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(45))));
     m_chosenAuto.addOption("Shoot and drive left",
       new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(-45))));
+
     m_chosenAuto.addOption("Shinbreak 1 meter at 45 degrees right", 
     new DriveDistanceAutoCommand(m_robotDrive));
     m_chosenAuto.addOption("Shinbreak 45 degrees left", 
     new TurnThetaAutoCommand(m_robotDrive));
+
+    m_tab.add(m_chosenAuto);
+
     // Configure the button bindings
     configureButtonBindings();
 
@@ -129,12 +123,11 @@ public class RobotContainer {
   }
 
   double getRightX() {
-    return -m_driverController.getRightX();
+    return m_driverController.getRightX();
   }
 
   double getLeftX() {
-    int pov = m_driverController.getPOV();
-
+    var pov = m_driverController.getPOV();
     if (pov > -1) {
       if (pov == 90)
         return 1;
@@ -158,12 +151,8 @@ public class RobotContainer {
     return -m_driverController.getLeftY();
   }
 
-  boolean fastMode = false;
-
   boolean getFastMode() {
-    if (m_driverController.getRightBumperPressed()) {
-      fastMode = !fastMode;
-    }
+    if (m_driverController.getRightBumperPressed()) fastMode = !fastMode;
     return fastMode;
   }
 
