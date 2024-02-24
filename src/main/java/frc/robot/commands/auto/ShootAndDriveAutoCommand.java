@@ -15,10 +15,7 @@ import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
-/** An example command that uses an example subsystem. */
 public class ShootAndDriveAutoCommand extends SequentialCommandGroup {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-
   public ShootAndDriveAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve, Pose2d startingOffset) {
     super(
       new ShootCommand(shoot).withTimeout(4),
