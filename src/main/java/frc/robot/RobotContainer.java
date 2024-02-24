@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
@@ -20,6 +22,7 @@ import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.commands.auto.ShootAndDriveAutoCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.commands.DriveToPositionCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShootCommand;
 
@@ -64,6 +67,8 @@ public class RobotContainer {
       new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(45))));
     m_chosenAuto.addOption("Shoot and drive left",
       new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(-45))));
+    m_chosenAuto.addOption("Drive to (1,1)",
+      new DriveToPositionCommand(m_robotDrive, supplyDouble(1), supplyDouble(1), supplyDouble(0), supplyBoolean(true), supplyBoolean(false), supplyBoolean(true)));
 
     m_tab.add(m_chosenAuto);
 
@@ -126,6 +131,9 @@ public class RobotContainer {
     }
     return fastMode;
   }
+  
+  private static Supplier<Double> supplyDouble(double d) {return new Supplier<Double>() {@Override public Double get() {return d;}};}
+  private static Supplier<Boolean> supplyBoolean(boolean b) {return new Supplier<Boolean>() {@Override public Boolean get() {return b;}};}
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
