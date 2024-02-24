@@ -111,16 +111,18 @@ public class SwerveSubsystem extends SubsystemBase {
     offsetX = pose.getX();
     offsetY = pose.getY();
   }
-  
   public double getHeading() {return Math.IEEEremainder(gyro.getAngle(), 360);}
   public Rotation2d getRotation2d() {return Rotation2d.fromDegrees(getHeading());}
+  public double getYaw() {return Math.IEEEremainder(gyro.getYaw(), 360);}
+  public double getRoll() {return Math.IEEEremainder(gyro.getRoll(), 360);}
+  public double getPitch() {return Math.IEEEremainder(gyro.getPitch(), 360);}
   public double getX() {return gyro.getDisplacementX() + offsetX;}
   public double getY() {return gyro.getDisplacementY() + offsetY;}
   public double getXSpeed() {return gyro.getVelocityX();}
   public double getYSpeed() {return gyro.getVelocityY();}
   public double getTurnSpeed() {return gyro.getRate();}
-
   public Pose2d getPose() {return new Pose2d(getX(), getY(), getRotation2d());}
+
   public ChassisSpeeds getRobotRelativeSpeeds() {return new ChassisSpeeds(getXSpeed(), getYSpeed(), getTurnSpeed());}
   public void driveRobotRelative(ChassisSpeeds speeds) {
       setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds));
