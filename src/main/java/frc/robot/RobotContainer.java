@@ -4,14 +4,8 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.PathPlannerTrajectory;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -21,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.UpdatePIDCommand;
 import frc.robot.commands.ZeroHeadingCommand;
@@ -74,6 +67,8 @@ public class RobotContainer {
       new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(45))));
     m_chosenAuto.addOption("Shoot and drive left",
       new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(-45))));
+
+    m_tab.add(m_chosenAuto);
 
     // Configure the button bindings
     configureButtonBindings();
