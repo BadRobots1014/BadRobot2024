@@ -65,6 +65,8 @@ public class RobotContainer {
     m_chosenAuto.addOption("Shoot and drive left",
       new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(-45))));
 
+    m_tab.add(m_chosenAuto);
+
     // Configure the button bindings
     configureButtonBindings();
   }
