@@ -21,7 +21,7 @@ public class ShootAndDriveAutoCommand extends SequentialCommandGroup {
     super(
       new ShootCommand(shoot).withTimeout(4),
       new SetPoseCommand(swerve, startingOffset).withTimeout(0),
-      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), supplyBoolean(false), supplyBoolean(false))
+      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), supplyBoolean(true), supplyBoolean(false))
       .withTimeout(3)
     );
   }
