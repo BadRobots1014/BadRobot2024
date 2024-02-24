@@ -5,6 +5,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DriveConstants;
@@ -26,8 +29,6 @@ import frc.robot.commands.ShootCommand;
  */
 public class RobotContainer {
 
-  // The robot's subsystems
-
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
@@ -35,6 +36,10 @@ public class RobotContainer {
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
   private final SwerveSubsystem m_robotDrive = new SwerveSubsystem(m_driverController);
   private boolean fastMode = false;
+
+  // Auto
+  private final ShuffleboardTab m_tab;
+  private SendableChooser<Command> m_chosenAuto = new SendableChooser<>();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -48,6 +53,15 @@ public class RobotContainer {
             () -> Math.pow(getRightX(), 3),
             () -> DriveConstants.kFieldOriented,
             this::getFastMode));
+
+    m_tab = Shuffleboard.getTab("Auto");
+
+    m_chosenAuto.setDefaultOption("Shoot and drive middle",
+      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d()));
+    m_chosenAuto.addOption("Shoot and drive right",
+      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(45))));
+    m_chosenAuto.addOption("Shoot and drive left",
+      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(-45))));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -113,6 +127,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive);
+    return m_chosenAuto.getSelected();
   }
 }
