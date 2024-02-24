@@ -90,7 +90,7 @@ public class RobotContainer {
   }
 
   double getRightX() {
-    return -m_driverController.getRightX();
+    return m_driverController.getRightX();
   }
 
   double getLeftX() {
