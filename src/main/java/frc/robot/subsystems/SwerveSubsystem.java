@@ -96,6 +96,8 @@ public class SwerveSubsystem extends SubsystemBase {
     m_tab.addNumber("Yaw", this::getYaw);
     m_tab.addNumber("Roll", this::getRoll);
     m_tab.addNumber("Pitch", this::getPitch);
+    m_tab.addNumber("X", this::getX);
+    m_tab.addNumber("Y", this::getY);
   }
 
   // Gyro data shenanigans
