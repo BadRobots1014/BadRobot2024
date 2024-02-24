@@ -24,6 +24,9 @@ public class SwerveSubsystem extends SubsystemBase {
   public GenericEntry i;
   public GenericEntry d;
 
+  public double offsetX = 0;
+  public double offsetY = 0;
+
   public SwerveSubsystem(XboxController controller) {
     m_tab = Shuffleboard.getTab("swerve");
     Controller = controller;
@@ -95,19 +98,24 @@ public class SwerveSubsystem extends SubsystemBase {
   // Gyro data shenanigans
   public void zeroHeading() {gyro.reset();}
   public void resetPose() {
-      gyro.reset();
-      gyro.resetDisplacement();
+    gyro.reset();
+    gyro.resetDisplacement();
   }
   public void resetPose(Pose2d pose) {
-      //TODO Re-add displacement offset
-      gyro.reset();
-      gyro.resetDisplacement();
+    gyro.reset();
+    gyro.resetDisplacement();
+    setOffset(pose);
   }
-
+  public void setOffset(Pose2d pose) {
+    gyro.setAngleAdjustment(pose.getRotation().getDegrees());
+    offsetX = pose.getX();
+    offsetY = pose.getY();
+  }
+  
   public double getHeading() {return Math.IEEEremainder(gyro.getAngle(), 360);}
   public Rotation2d getRotation2d() {return Rotation2d.fromDegrees(getHeading());}
-  public double getX() {return gyro.getDisplacementX();}
-  public double getY() {return gyro.getDisplacementY();}
+  public double getX() {return gyro.getDisplacementX() + offsetX;}
+  public double getY() {return gyro.getDisplacementY() + offsetY;}
   public double getXSpeed() {return gyro.getVelocityX();}
   public double getYSpeed() {return gyro.getVelocityY();}
   public double getTurnSpeed() {return gyro.getRate();}
