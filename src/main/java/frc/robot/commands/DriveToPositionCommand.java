@@ -43,7 +43,7 @@ public class DriveToPositionCommand extends Command {
     this.turningSpdFunction = new Supplier<Double>() {
       @Override
       public Double get() {
-        return goalAngle.get() - swerve.getHeading();
+        return (goalAngle.get() - swerve.getHeading()) / 360;
       }
     };
     fieldOrientedFunction = fieldOriented;
