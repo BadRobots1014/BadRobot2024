@@ -67,9 +67,9 @@ public class SwerveDriveCommand extends Command {
         isFirstJoystickMove = false;
     }//so the targetTheta is only chosen once
     
-    if(isFirstJoystickMove && turningSpeed >= 0){//turning right
+    if(isFirstJoystickMove && turningSpeed > 0){//turning right
         targetTheta = snappedLowestHeading % 360;
-    }else if(isFirstJoystickMove && turningSpeed <= 0){//turning left
+    }else if(isFirstJoystickMove && turningSpeed < 0){//turning left
         targetTheta = (snappedLowestHeading + 90) % 360;
     }
     
