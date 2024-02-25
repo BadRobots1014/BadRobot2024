@@ -27,7 +27,10 @@ public final class Constants {
   public static final class DriveConstants {
 
     // TODO turn field oriented on or off
-    public static final boolean kFieldOriented = true;
+    public static final boolean kFieldOriented = true; //default orientation mode
+    //degree snapping
+    public static final boolean kDegreeSnappingDefault = false;
+
 
     // Distance between centers of right and left wheels on robot
     public static final double kTrackWidth = Units.inchesToMeters(24.75);
@@ -106,7 +109,7 @@ public final class Constants {
 
     public static final double kTeleMaxRadiansPerSec = Math.PI / 2; // TODO adjust max teleop speeds
     public static final double kFastTeleMaxRadiansPerSec = Math.PI;
-    public static final double kTeleMaxMetersPerSec = 0.3;
+    public static final double kTeleMaxMetersPerSec = 0.15; //old value 0.3
     public static final double kFastTeleMaxMetersPerSec = 0.6;
 
     public static final Button kTestMotorButton = Button.kLeftBumper;

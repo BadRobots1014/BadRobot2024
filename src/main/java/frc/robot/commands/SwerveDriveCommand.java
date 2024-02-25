@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -13,7 +14,7 @@ public class SwerveDriveCommand extends Command {
 
   public final SwerveSubsystem swerveSubsystem;
   public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
-  public Supplier<Boolean> fieldOrientedFunction, fastModeFunction;
+  public Supplier<Boolean> fieldOrientedFunction, fastModeFunction, degreeSnap;
   public final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
   public SwerveDriveCommand(
@@ -22,7 +23,8 @@ public class SwerveDriveCommand extends Command {
     Supplier<Double> ySupplier,
     Supplier<Double> turnSupplier,
     Supplier<Boolean> fieldOriented,
-    Supplier<Boolean> fastMode
+    Supplier<Boolean> fastMode,
+    Supplier<Boolean> degSnap
   ) {
     swerveSubsystem = subsystem;
     xSpdFunction = xSupplier;
@@ -30,6 +32,7 @@ public class SwerveDriveCommand extends Command {
     turningSpdFunction = turnSupplier;
     fieldOrientedFunction = fieldOriented;
     fastModeFunction = fastMode;
+    degreeSnap = degSnap;
     xLimiter = new SlewRateLimiter(DriveConstants.kXSlewRateLimit);
     yLimiter = new SlewRateLimiter(DriveConstants.kYSlewRateLimit);
     turningLimiter = new SlewRateLimiter(DriveConstants.kTurnSlewRateLimit);
@@ -42,13 +45,43 @@ public class SwerveDriveCommand extends Command {
     double xSpeed = xSpdFunction.get();
     double ySpeed = ySpdFunction.get();
     double turningSpeed = turningSpdFunction.get();
-    boolean fastMode = fastModeFunction.get();
 
     // Death
     xSpeed = Math.abs(xSpeed) > OIConstants.kDriveDeadband ? xSpeed : 0;
     ySpeed = Math.abs(ySpeed) > OIConstants.kDriveDeadband ? ySpeed : 0;
-    turningSpeed =
-      Math.abs(turningSpeed) > OIConstants.kDriveDeadband ? turningSpeed : 0;
+    turningSpeed = Math.abs(turningSpeed) > OIConstants.kDriveDeadband ? turningSpeed : 0; //aka deadbands
+
+    boolean fastMode = fastModeFunction.get();
+
+    boolean isFirstJoystickMove = false; //so it doesent go turning around every loop
+
+    boolean degSnapMode = degreeSnap.get();
+    double currentHeading = swerveSubsystem.getHeading();
+    double snappedLowestHeading = ( (int)(currentHeading/90) ) * 90; //snaps to the leftmost straight heading 
+    double targetTheta = 0;
+
+    if((Math.abs(turningSpeed) < 0.1) && degreeSnap.get()){//if joystick  is within 0.1 of 0
+        turningSpeed = 0;
+        isFirstJoystickMove = true;
+    }else{
+        isFirstJoystickMove = false;
+    }//so the targetTheta is only chosen once
+    
+    if(isFirstJoystickMove && turningSpeed >= 0){//turning right
+        targetTheta = snappedLowestHeading % 360;
+    }else if(isFirstJoystickMove && turningSpeed <= 0){//turning left
+        targetTheta = (snappedLowestHeading + 90) % 360;
+    }
+    
+    double deltaTheta = targetTheta - swerveSubsystem.getHeading();
+
+    if(Math.abs(deltaTheta) < 0.005){
+        deltaTheta = 0; //to stop oscillations
+    }
+
+    //Hyjack right joystick for snapping
+    turningSpeed = MathUtil.clamp((deltaTheta / 45),-1.0,1.0);
+
 
     // Slew soup
     double maxDriveSpeed = fastMode ? DriveConstants.kFastTeleMaxMetersPerSec : DriveConstants.kTeleMaxMetersPerSec;
