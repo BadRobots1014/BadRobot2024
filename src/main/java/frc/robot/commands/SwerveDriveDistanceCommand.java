@@ -64,7 +64,6 @@ public class SwerveDriveDistanceCommand extends Command {
     //based on old photo of toecracker bot, it appears that -X is forwards, +X is backwards, +Y is right and -Y is left
     initialX = swerveSubsystem.getX(); //should be forwards/backwards
     initialY = swerveSubsystem.getY(); //should be right/left based on this image : https://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaichttps://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaichttps://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaichttps://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaic
-    //initialZ = m_gyroSubsystem.getDisplacementZ();
     //displacement XY and Z are all in meters
   }
 
@@ -81,7 +80,7 @@ public class SwerveDriveDistanceCommand extends Command {
     
     //autodrivedistance stuffs
     double targetX = targetDistance*Math.sin(Math.toRadians(movementHeading)) + adjustedInitialX; 
-    double targetY = (targetDistance*Math.cos(Math.toRadians(movementHeading)) + adjustedInitialY) * -1; //adjust so Y+ is forwards intake
+    double targetY = (targetDistance*Math.cos(Math.toRadians(movementHeading)) * -1 + adjustedInitialY); //adjust so Y+ is forwards intake
     
     
     System.out.println("Initial X:" + adjustedInitialX);
@@ -99,6 +98,12 @@ public class SwerveDriveDistanceCommand extends Command {
     // }
 
     if(Math.abs(deltaX) <= 0.005 && Math.abs(deltaY) <= 0.005){ //may need to adjust how sensitive it is
+      isDriveFinished = true;
+    }
+    
+    if((Math.abs(deltaY) >= (targetY - initialY) + 1) || (Math.abs(deltaX) >= (targetX - initialX) + 1)){
+      //prevent runoffs if the inversion of axes is wrong and robot runs more than a meter in the wrong direction
+      //can be removed later once confirmed it works
       isDriveFinished = true;
     }
 
