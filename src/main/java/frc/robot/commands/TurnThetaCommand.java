@@ -62,15 +62,15 @@ public class TurnThetaCommand extends Command {
     double turningSpeed = turningSpdFunction.get();
     boolean fastMode = fastModeFunction.get();
 
-    // Death
-    xSpeed = Math.abs(xSpeed) > OIConstants.kDriveDeadband ? xSpeed : 0;
-    ySpeed = Math.abs(ySpeed) > OIConstants.kDriveDeadband ? ySpeed : 0;
-    turningSpeed = Math.abs(turningSpeed) > OIConstants.kDriveDeadband ? turningSpeed : 0;
-
     //Hyjack joysticks
     turningSpeed = MathUtil.clamp(speed, -1.0,1.0);
     xSpeed = 0;
     ySpeed = 0;
+
+    // Death
+    xSpeed = Math.abs(xSpeed) > OIConstants.kDriveDeadband ? xSpeed : 0;
+    ySpeed = Math.abs(ySpeed) > OIConstants.kDriveDeadband ? ySpeed : 0;
+    turningSpeed = Math.abs(turningSpeed) > OIConstants.kDriveDeadband ? turningSpeed : 0;
 
     // Slew soup
     double maxDriveSpeed = fastMode ? DriveConstants.kFastTeleMaxMetersPerSec : DriveConstants.kTeleMaxMetersPerSec;
