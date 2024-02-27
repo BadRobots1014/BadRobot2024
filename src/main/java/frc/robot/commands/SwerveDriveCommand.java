@@ -16,6 +16,9 @@ public class SwerveDriveCommand extends Command {
   public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
   public Supplier<Boolean> fieldOrientedFunction, fastModeFunction, degreeSnap;
   public final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
+  private boolean isFirstJoystickMove = false; //so it doesent go turning around every loop
+  private boolean prevFirstJoystickState = isFirstJoystickMove;
+  private boolean isFirstJoystickActive = false;
 
   public SwerveDriveCommand(
     SwerveSubsystem subsystem,
@@ -53,7 +56,6 @@ public class SwerveDriveCommand extends Command {
 
     boolean fastMode = fastModeFunction.get();
 
-    boolean isFirstJoystickMove = false; //so it doesent go turning around every loop
 
     boolean degSnapMode = degreeSnap.get();
     double currentHeading = swerveSubsystem.getHeading();
@@ -66,18 +68,26 @@ public class SwerveDriveCommand extends Command {
     double targetTheta = 0;
 
     if((Math.abs(turningSpeed) < 0.1) && degreeSnap.get()){//if joystick  is within 0.1 of 0
-        turningSpeed = 0;
-        isFirstJoystickMove = true;
-    }else{
+        //turningSpeed = 0;
         isFirstJoystickMove = false;
+    }else{
+        isFirstJoystickMove = true;
     }//so the targetTheta is only chosen once
-    System.out.println("isFirstJoystickMove" + isFirstJoystickMove);
-    
-    if(turningSpeed > 0){//turning right
+
+    if(prevFirstJoystickState != isFirstJoystickMove){
+        if((turningSpeed > 0)){//turning right
+        isFirstJoystickMove = false;
         targetTheta = snappedLowestHeading % 360;
-    }else if(turningSpeed < 0){//turning left
+    }else if((turningSpeed < 0)){//turning left
+        isFirstJoystickMove = false;
         targetTheta = (snappedLowestHeading + 90) % 360;
     }
+        prevFirstJoystickState = isFirstJoystickMove;
+    }
+
+    System.out.println("isFirstJoystickMove" + isFirstJoystickMove);
+    
+    
 
     System.out.println("Target Theta" + targetTheta);
     
