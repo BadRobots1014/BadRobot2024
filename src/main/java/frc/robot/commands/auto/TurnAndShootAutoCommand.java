@@ -13,16 +13,20 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.SetPoseCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.commands.TurnThetaCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class ShootAndDriveAutoCommand extends SequentialCommandGroup {
-  public ShootAndDriveAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve, Pose2d startingOffset) {
+public class TurnAndShootAutoCommand extends SequentialCommandGroup {
+  public TurnAndShootAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve, Pose2d startingOffset, double turnDegrees) {
     super(
-      new ShootCommand(shoot).withTimeout(4),
       new SetPoseCommand(swerve, startingOffset).withTimeout(0),
       new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), supplyBoolean(true), supplyBoolean(true))
-      .withTimeout(3)
+      .withTimeout(1.9),
+      new TurnThetaCommand(swerve, turnDegrees).withTimeout(1),
+      new ShootCommand(shoot).withTimeout(4),
+      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), supplyBoolean(true), supplyBoolean(true))
+      .withTimeout(2.8)
     );
   }
 
