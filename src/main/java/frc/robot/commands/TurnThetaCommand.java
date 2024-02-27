@@ -52,7 +52,7 @@ public class TurnThetaCommand extends Command {
     double theta = targetTheta - swerveSubsystem.getHeading();
     double speed = theta / 45;
 
-    if(Math.abs(theta) < 0.005){ //TODO may need to adjust how sensitive it is
+    if(Math.abs(speed) < 0.005){ //TODO may need to adjust how sensitive it is
       isTurnFinished = true;
     }
 
