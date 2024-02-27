@@ -57,7 +57,9 @@ public class SwerveDriveCommand extends Command {
 
     boolean degSnapMode = degreeSnap.get();
     double currentHeading = swerveSubsystem.getHeading();
+    System.out.println("CurrentHeading: " + currentHeading);
     double snappedLowestHeading = ( (int)(currentHeading/90) ) * 90; //snaps to the leftmost straight heading 
+    System.out.println("snappedLowestHeading: " + snappedLowestHeading);
     double targetTheta = 0;
 
     if((Math.abs(turningSpeed) < 0.1) && degreeSnap.get()){//if joystick  is within 0.1 of 0
@@ -66,21 +68,27 @@ public class SwerveDriveCommand extends Command {
     }else{
         isFirstJoystickMove = false;
     }//so the targetTheta is only chosen once
+    System.out.println("isFirstJoystickMove" + isFirstJoystickMove);
     
     if(isFirstJoystickMove && turningSpeed > 0){//turning right
         targetTheta = snappedLowestHeading % 360;
     }else if(isFirstJoystickMove && turningSpeed < 0){//turning left
         targetTheta = (snappedLowestHeading + 90) % 360;
     }
+
+    System.out.println("Target Theta" + targetTheta);
     
     double deltaTheta = targetTheta - swerveSubsystem.getHeading();
 
-    if(Math.abs(deltaTheta) < 0.005){
+    if(Math.abs(deltaTheta/45) < 0.005){
         deltaTheta = 0; //to stop oscillations
     }
 
     //Hyjack right joystick for snapping
+    if(degreeSnap.get() == true){
     turningSpeed = MathUtil.clamp((deltaTheta / 45),-1.0,1.0);
+    }
+    
 
 
     // Slew soup
@@ -88,9 +96,7 @@ public class SwerveDriveCommand extends Command {
     double maxTurnSpeed = fastMode ? DriveConstants.kFastTeleMaxRadiansPerSec : DriveConstants.kTeleMaxRadiansPerSec;
     xSpeed = xLimiter.calculate(xSpeed) * maxDriveSpeed;
     ySpeed = yLimiter.calculate(ySpeed) * maxDriveSpeed;
-    turningSpeed =
-      turningLimiter.calculate(turningSpeed) *
-      maxTurnSpeed;
+    turningSpeed = turningLimiter.calculate(turningSpeed) * maxTurnSpeed;
 
     // I am speed
     ChassisSpeeds chassisSpeeds;

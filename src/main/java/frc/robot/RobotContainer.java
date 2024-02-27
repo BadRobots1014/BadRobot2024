@@ -116,7 +116,9 @@ public class RobotContainer {
 
   boolean getDegreeSnappingMode(){
     if(m_driverController.getRightTriggerAxis() >= 0.5){
-      degreeSnappingMode = !degreeSnappingMode;
+      degreeSnappingMode = true;
+    }else{
+      degreeSnappingMode = false;
     }
     return degreeSnappingMode;
   }
