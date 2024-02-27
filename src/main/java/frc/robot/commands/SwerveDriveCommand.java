@@ -17,7 +17,7 @@ public class SwerveDriveCommand extends Command {
   public Supplier<Boolean> fieldOrientedFunction, fastModeFunction, degreeSnap;
   public final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
   private boolean isFirstJoystickMove = false; //so it doesent go turning around every loop
-  private boolean prevFirstJoystickState = isFirstJoystickMove;
+  private boolean prevFirstJoystickState = false;
   private boolean isFirstJoystickActive = false;
 
   public SwerveDriveCommand(
@@ -86,9 +86,6 @@ public class SwerveDriveCommand extends Command {
     }
 
     System.out.println("isFirstJoystickMove" + isFirstJoystickMove);
-    
-    
-
     System.out.println("Target Theta" + targetTheta);
     
     double deltaTheta = targetTheta - swerveSubsystem.getHeading();
@@ -99,7 +96,7 @@ public class SwerveDriveCommand extends Command {
 
     //Hyjack right joystick for snapping
     if(degreeSnap.get() == true){
-    turningSpeed = MathUtil.clamp((deltaTheta / 45),-1.0,1.0);
+    turningSpeed = MathUtil.clamp(-1*(deltaTheta / 45),-1.0,1.0); //reverse pos/neg directions to align with gyro
     }
     
 
