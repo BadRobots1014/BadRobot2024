@@ -28,18 +28,18 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public final CANSparkFlex m_frontMotor;
   public final CANSparkFlex m_backMotor;
-  public final CANSparkMax m_indexMotor;
+  // public final CANSparkMax m_indexMotor;
   public final CANSparkMax m_winchMotor;
 
   public ShooterSubsystem() {
 
     m_frontMotor = new CANSparkFlex(ShooterConstants.kFrontMotorCanId, MotorType.kBrushless);
     m_backMotor = new CANSparkFlex(ShooterConstants.kBackMotorCanId, MotorType.kBrushless);
-    m_indexMotor = new CANSparkMax(ShooterConstants.kIndexMotorCanId, MotorType.kBrushless);
+    // m_indexMotor = new CANSparkMax(ShooterConstants.kIndexMotorCanId, MotorType.kBrushless);
     m_winchMotor = new CANSparkMax(ShooterConstants.kWinchMotorCanId, MotorType.kBrushed);
     m_frontMotor.setIdleMode(IdleMode.kBrake);
     m_backMotor.setIdleMode(IdleMode.kBrake);
-    m_indexMotor.setIdleMode(IdleMode.kBrake);
+    // m_indexMotor.setIdleMode(IdleMode.kBrake);
     m_winchMotor.setIdleMode(IdleMode.kBrake);
 
     // Displays whether or not the shooter is running
@@ -107,8 +107,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   // Indexer stuff
   public double getIndexPower() {return clampPower(m_indexPower.getDouble(ShooterConstants.kIndexPower));}
-  public void runIndex() {m_indexMotor.set(getIndexPower());}
-  public void stopIndex() {m_indexMotor.stopMotor();}
+  // public void runIndex() {m_indexMotor.set(getIndexPower());}
+  // public void stopIndex() {m_indexMotor.stopMotor();}
 
   // Winch stuff
   public double[] getWinchPowers() {
