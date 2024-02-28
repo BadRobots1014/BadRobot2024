@@ -51,8 +51,6 @@ public class RobotContainer {
   private final ShuffleboardTab m_tab;
   private SendableChooser<Command> m_chosenAuto = new SendableChooser<>();
 
-  private boolean fieldOriented = DriveConstants.kFieldOriented;
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -62,7 +60,7 @@ public class RobotContainer {
             () -> Math.pow(getLeftX(), 3),
             () -> Math.pow(getLeftY(), 3),
             () -> Math.pow(getRightX(), 3),
-            this::getFieldOriented,
+            DriveConstants.kFieldOriented,
             this::getFastMode));
 
     // Auto chooser setup
@@ -126,13 +124,6 @@ public class RobotContainer {
       fastMode = !fastMode;
     }
     return fastMode;
-  }
-
-  boolean getFieldOriented() {
-    if (m_driverController.getStartButtonPressed()) {
-      fieldOriented = !fieldOriented;
-    }
-    return fieldOriented;
   }
 
   double getRightX() {return m_driverController.getRightX();}
