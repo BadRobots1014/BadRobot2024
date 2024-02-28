@@ -86,11 +86,15 @@ if(autoAimMode.get() == DriveConstants.kFlexibleAutoAim){
 
         if(autoAimMode.get() == DriveConstants.kFlexibleAutoAim){ //Flexible Auto Aim
             //Flexible autoaim will allow the driver to move around the field while button is held while locking the rotation and shooter alignments to point towards the speaker
+            
+            m_LimelightSubsystem.setPriorityID(3);
+
             if(AprilTagCurrentID == 3){
-                currentTargetYaw = m_LimelightSubsystem.getCameraPoseYaw();//set turningspeed while it sees tag
+                //currentTargetYaw = m_LimelightSubsystem.getCameraPoseYaw();//set turningspeed while it sees tag
                 //need to potentially add something to clear previous yaw if hasent seen tag in a while
             turningSpeed = MathUtil.clamp((0 - currentTx)/80, -1.0, 1.0); //rotate robot to face tag
             }
+            m_LimelightSubsystem.resetPriorityID();
             
             //Insert set shooter angle here
             
@@ -101,15 +105,34 @@ if(autoAimMode.get() == DriveConstants.kFlexibleAutoAim){
         if(autoAimMode.get() == DriveConstants.kRigidAutoAim){
             //Rigid autoaim will lock all controls while button is held and keep the robot in a set known position where it is known to have 100% hit rate to fire into speaker
             //TODO: make worky
+            m_LimelightSubsystem.setPriorityID(3);
+            
             if(AprilTagCurrentID == 3){
-                currentTargetYaw = m_LimelightSubsystem.getAprilTagPoseYaw();
-                turningSpeed = MathUtil.clamp((0-currentTx)/80,-1.0,1.0);
-                if (currentTargetX == DriveConstants.kAutoAimSensitivity) {
-                xSpeed = 0;
+                turningSpeed = MathUtil.clamp((0 - currentTx)/80, -1.0, 1.0);//turn towards apriltag
+                System.out.println("CameraPoseZ: " + m_LimelightSubsystem.getCameraPoseZ());
+                ySpeed = MathUtil.clamp(2 - m_LimelightSubsystem.getCameraPoseZ(),-.2,.2); //2 meters off of apriltag
+                xSpeed = MathUtil.clamp(0 - m_LimelightSubsystem.getCameraPoseX(),-.2,.2); //center on apriltag
             } else {
-                xSpeed = MathUtil.clamp((0 - currentTargetX)/10, -1.0, 1.0);
+                //xSpeed = MathUtil.clamp((0 - currentTargetX)/10, -1.0, 1.0);
+                turningSpeed = 0;
+                xSpeed = 0;
+                ySpeed = 0;
             }
+
+            if(Math.abs(turningSpeed) < 0.005){
+              turningSpeed = 0; //to stop oscillations
+          }
+            if(Math.abs(ySpeed) < 0.005){
+              ySpeed = 0;
             }
+            if(Math.abs(xSpeed) < 0.005){
+              xSpeed = 0;
+            }
+            
+            
+
+            m_LimelightSubsystem.resetPriorityID();
+
             //turningSpeed = MathUtil.clamp(0.2 * (m_LimelightSubsystem.getAutoAimYawTurnDistance()), -1.0, 1.0); //0.2 of max speed turn
             
             

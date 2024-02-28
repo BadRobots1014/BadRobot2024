@@ -203,6 +203,14 @@ public double getAutoAimYawTurnDistance(){
   return delta;
 }
 
+public void setPriorityID(double id){
+  NetworkTableInstance.getDefault().getTable("limelight").getEntry("priorityid").setNumber(id);
+}
+
+public void resetPriorityID(){
+  NetworkTableInstance.getDefault().getTable("limelight").getEntry("priorityid").setNumber(-1);
+}
+
 
 
 
