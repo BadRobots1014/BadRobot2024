@@ -3,6 +3,9 @@ package frc.robot.commands;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -13,15 +16,18 @@ public class SwerveDriveCommand extends Command {
 
   public final SwerveSubsystem swerveSubsystem;
   public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
-  public Supplier<Boolean> fieldOrientedFunction, fastModeFunction;
+  public Supplier<Boolean> fastModeFunction;
   public final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
+  public boolean fieldOrientedFunction;
+  private ShuffleboardTab m_tab;
+  private GenericEntry shuffleFieldOriented;
 
   public SwerveDriveCommand(
     SwerveSubsystem subsystem,
     Supplier<Double> xSupplier,
     Supplier<Double> ySupplier,
     Supplier<Double> turnSupplier,
-    Supplier<Boolean> fieldOriented,
+    boolean fieldOriented,
     Supplier<Boolean> fastMode
   ) {
     swerveSubsystem = subsystem;
@@ -34,6 +40,9 @@ public class SwerveDriveCommand extends Command {
     yLimiter = new SlewRateLimiter(DriveConstants.kYSlewRateLimit);
     turningLimiter = new SlewRateLimiter(DriveConstants.kTurnSlewRateLimit);
     addRequirements(swerveSubsystem);
+
+    m_tab = Shuffleboard.getTab("Field Oriented");
+    shuffleFieldOriented = m_tab.add("Field Oriented", fieldOriented).getEntry();
   }
 
   @Override
@@ -61,7 +70,7 @@ public class SwerveDriveCommand extends Command {
 
     // I am speed
     ChassisSpeeds chassisSpeeds;
-    if (fieldOrientedFunction.get()) {
+    if (shuffleFieldOriented.getBoolean(fieldOrientedFunction)) {
       // Field oriented
       chassisSpeeds =
         ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -80,15 +89,6 @@ public class SwerveDriveCommand extends Command {
 
     // Actually do the thing
     swerveSubsystem.setModuleStates(moduleStates);
-  }
-
-  public void toggleFieldOriented() {
-    fieldOrientedFunction = new Supplier<Boolean>(){
-      @Override
-      public Boolean get() {
-        return !fieldOrientedFunction.get();
-      }
-    };
   }
 
   @Override
