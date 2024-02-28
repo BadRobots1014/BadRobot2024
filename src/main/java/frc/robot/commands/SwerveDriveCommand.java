@@ -56,7 +56,6 @@ public class SwerveDriveCommand extends Command {
 
     boolean fastMode = fastModeFunction.get();
 
-
     boolean degSnapMode = degreeSnap.get();
     double currentHeading = swerveSubsystem.getHeading();
     if(currentHeading < 0){
