@@ -58,9 +58,6 @@ public class SwerveDriveCommand extends Command {
 
     boolean degSnapMode = degreeSnap.get();
     double currentHeading = swerveSubsystem.getHeading();
-    if(currentHeading < 0){
-      currentHeading += 360;
-    }
     System.out.println("CurrentHeading: " + currentHeading);
     double snappedLowestHeading = ( (int)(currentHeading/90) ) * 90; //snaps to the leftmost straight heading 
     System.out.println("snappedLowestHeading: " + snappedLowestHeading);
@@ -73,15 +70,12 @@ public class SwerveDriveCommand extends Command {
         isFirstJoystickMove = true;
     }//so the targetTheta is only chosen once
 
-    if(prevFirstJoystickState != isFirstJoystickMove){
-        if((turningSpeed > 0)){//turning right
-        isFirstJoystickMove = false;
+    System.out.println("isFirstJoystickMove" + isFirstJoystickMove);
+    
+    if(isFirstJoystickMove && turningSpeed > 0){//turning right
         targetTheta = snappedLowestHeading % 360;
-    }else if((turningSpeed < 0)){//turning left
-        isFirstJoystickMove = false;
+    }else if(isFirstJoystickMove && turningSpeed < 0){//turning left
         targetTheta = (snappedLowestHeading + 90) % 360;
-    }
-        prevFirstJoystickState = isFirstJoystickMove;
     }
 
     System.out.println("isFirstJoystickMove" + isFirstJoystickMove);
