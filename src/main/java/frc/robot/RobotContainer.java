@@ -22,7 +22,6 @@ import frc.robot.commands.auto.TurnAndShootAutoCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.commands.BrakeClimbersCommand;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ReleaseClimbersCommand;
@@ -119,8 +118,6 @@ public class RobotContainer {
       .whileTrue(new ClimbCommand(m_climberSubsystem, -.5));
     new JoystickButton(m_auxController, XboxController.Button.kBack.value) // Drop climbers (they go up)
       .whileTrue(new ReleaseClimbersCommand(m_climberSubsystem));
-    new JoystickButton(m_auxController, XboxController.Button.kStart.value) // Brake climbers (they stop)
-      .whileTrue(new BrakeClimbersCommand(m_climberSubsystem));
   }
 
   boolean getFastMode() {
