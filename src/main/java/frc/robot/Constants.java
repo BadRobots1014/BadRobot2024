@@ -168,6 +168,11 @@ public final class Constants {
     public static final double kWinchDownPower = -1;
   }
 
+  public static final class ClimberConstants {
+    public static final int kLeftClimberCanId = 61;
+    public static final int kRightClimberCanId = 62;
+  }
+
   public static final class LimelightConstants {
     public static final double kCamHeight = 0; // Height of the limelight from the ground
     public static final double kCamAngle = 0; // Pitch angle of direction the limelight is pointed in
