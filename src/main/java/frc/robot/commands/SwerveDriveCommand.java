@@ -96,7 +96,7 @@ public class SwerveDriveCommand extends Command {
 
     //Hyjack right joystick for snapping
     if(degreeSnap.get() == true){
-    turningSpeed = MathUtil.clamp(-1*(deltaTheta / 45),-1.0,1.0); //reverse pos/neg directions to align with gyro
+    turningSpeed = MathUtil.clamp((deltaTheta / 45),-1.0,1.0);
     }
     
 
