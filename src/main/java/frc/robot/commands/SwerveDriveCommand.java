@@ -80,6 +80,8 @@ public class SwerveDriveCommand extends Command {
 
     System.out.println("isFirstJoystickMove" + isFirstJoystickMove);
     System.out.println("Target Theta" + targetTheta);
+
+    targetTheta = 0; //always snap to 0 heading
     
     double deltaTheta = targetTheta - swerveSubsystem.getHeading();
 
