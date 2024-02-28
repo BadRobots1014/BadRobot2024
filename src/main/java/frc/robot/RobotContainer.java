@@ -99,7 +99,7 @@ public class RobotContainer {
     // Driver stuff
     new JoystickButton(m_driverController, XboxController.Button.kBack.value) // Reset gyro
       .whileTrue(new ZeroHeadingCommand(m_robotDrive));
-    new JoystickButton(m_driverController, XboxController.Button.kY.value) // Update PID
+    new JoystickButton(m_driverController, XboxController.Button.kY.value) // TODO Autoaim
       .whileTrue(new UpdatePIDCommand(m_robotDrive));
       //                                                       kB.value) // Toggle fastmode
       //                                                       kStart.value) // Toggle field oriented
