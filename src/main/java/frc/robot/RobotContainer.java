@@ -97,8 +97,6 @@ public class RobotContainer {
     // Driver stuff
     new JoystickButton(m_driverController, XboxController.Button.kBack.value) // Reset gyro
       .whileTrue(new ZeroHeadingCommand(m_robotDrive));
-    new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value) // Intake
-      .whileTrue(new IntakeCommand(m_shooterSubsystem));
     // new JoystickButton(m_driverController, XboxController.Button.kY.value) // TODO Autoaim
       // .whileTrue(new UpdatePIDCommand(m_robotDrive));
       //                                                       kRightBumper.value) // Toggle fastmode
@@ -107,6 +105,8 @@ public class RobotContainer {
     // Auxillary stuff
     new JoystickButton(m_auxController, XboxController.Button.kRightBumper.value) // Shoot
       .whileTrue(new ShootCommand(m_shooterSubsystem));
+    new JoystickButton(m_auxController, XboxController.Button.kLeftBumper.value) // Intake
+      .whileTrue(new IntakeCommand(m_shooterSubsystem));
     new JoystickButton(m_auxController, XboxController.Button.kX.value) // Winch up
       .whileTrue(new ShooterCommand(m_shooterSubsystem, "winch up"));
     new JoystickButton(m_auxController, XboxController.Button.kA.value) // Winch down

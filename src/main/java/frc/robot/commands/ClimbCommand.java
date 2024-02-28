@@ -11,24 +11,40 @@ import frc.robot.subsystems.ClimberSubsystem;
 
 public class ClimbCommand extends Command {
   private final ClimberSubsystem m_subsystem;
-  private final Supplier<Double> m_power;
+  private final Supplier<Double> m_leftPower;
+  private final Supplier<Double> m_rightPower;
 
   public ClimbCommand(ClimberSubsystem subsystem, double power) {
     m_subsystem = subsystem;
-    m_power = () -> power;
+    m_leftPower = () -> power;
+    m_rightPower = () -> power;
     addRequirements(subsystem);
   }
 
   public ClimbCommand(ClimberSubsystem subsystem, Supplier<Double> power) {
     m_subsystem = subsystem;
-    m_power = power;
+    m_leftPower = power;
+    m_rightPower = power;
     addRequirements(subsystem);
+  }
+
+  public ClimbCommand(ClimberSubsystem subsystem, double leftPower, double rightPower) {
+    m_subsystem = subsystem;
+    m_leftPower = () -> leftPower;
+    m_rightPower = () -> rightPower;
+  }
+
+  public ClimbCommand(ClimberSubsystem subsystem, Supplier<Double> leftPower, Supplier<Double> rightPower) {
+    m_subsystem = subsystem;
+    m_leftPower = leftPower;
+    m_rightPower = rightPower;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.runClimbers(m_power.get());
+    m_subsystem.runClimber(false, m_leftPower.get());
+    m_subsystem.runClimber(true, m_rightPower.get());
   }
 
   // Called once the command ends or is interrupted.
