@@ -18,6 +18,7 @@ import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.UpdatePIDCommand;
 import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.commands.auto.ShootAndDriveAutoCommand;
+import frc.robot.commands.auto.TurnAndShootAutoCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.ExampleCommand;
@@ -62,14 +63,19 @@ public class RobotContainer {
             this::getDegreeSnappingMode
             ));
 
+    // Auto chooser setup
     m_tab = Shuffleboard.getTab("Auto");
 
-    m_chosenAuto.setDefaultOption("Shoot and drive middle",
+    m_chosenAuto.setDefaultOption("Shoot and drive from middle",
       new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d()));
-    m_chosenAuto.addOption("Shoot and drive left",
+    m_chosenAuto.addOption("Shoot and drive from left",
       new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(45))));
-    m_chosenAuto.addOption("Shoot and drive right",
+    m_chosenAuto.addOption("Shoot and drive from right",
       new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(-45))));
+    m_chosenAuto.addOption("Drive, turn, and shoot from left",
+      new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), 40));
+    m_chosenAuto.addOption("Drive, turn, and shoot from right",
+      new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), -40));
 
     m_tab.add(m_chosenAuto);
 

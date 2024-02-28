@@ -44,7 +44,7 @@ public final class Constants {
         new Translation2d(kWheelBase / 2, kTrackWidth / 2) // Back right
     );
 
-    // Using tall bot?
+    // TODO Using tall bot?
     public static final boolean tallBot = true;
 
     // Short bot offsets
@@ -53,11 +53,11 @@ public final class Constants {
     public static final double kBLOffset = -Math.PI / 2;
     public static final double kFLOffset = 0;
 
-    // Tall bot offsets TODO fix these offsets
-    public static final double kTallFROffset = -.097 * Math.PI * 2; // This one's good
-    public static final double kTallBROffset = .179 * Math.PI * 2; // This one needs work
-    public static final double kTallBLOffset = .314 * Math.PI * 2 + (Math.PI / 2); // This one's good
-    public static final double kTallFLOffset = .106 * Math.PI * 2; // This one needs work
+    // Tall bot offsets
+    public static final double kTallFROffset = -.097 * Math.PI * 2;
+    public static final double kTallBROffset = .179 * Math.PI * 2;
+    public static final double kTallBLOffset = .314 * Math.PI * 2 + (Math.PI / 2);
+    public static final double kTallFLOffset = .106 * Math.PI * 2;
 
     // Angular offsets of the modules relative to the chassis in radians
     public static final double kFrontRightChassisAngularOffset = (tallBot ? kTallFROffset : kFROffset);
