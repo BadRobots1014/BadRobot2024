@@ -65,7 +65,7 @@ public class SwerveDriveCommand extends Command {
     System.out.println("CurrentHeading: " + currentHeading);
     double snappedLowestHeading = ( (int)(currentHeading/90) ) * 90; //snaps to the leftmost straight heading 
     System.out.println("snappedLowestHeading: " + snappedLowestHeading);
-    double targetTheta = 0;
+    double targetTheta = snappedLowestHeading;
 
     if((Math.abs(turningSpeed) < 0.1) && degreeSnap.get()){//if joystick  is within 0.1 of 0
         //turningSpeed = 0;
