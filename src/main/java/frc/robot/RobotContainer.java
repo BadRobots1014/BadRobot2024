@@ -19,9 +19,10 @@ import frc.robot.commands.UpdatePIDCommand;
 import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.commands.auto.ShootAndDriveAutoCommand;
 import frc.robot.commands.auto.TurnAndShootAutoCommand;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ShooterCommand;
@@ -36,11 +37,13 @@ public class RobotContainer {
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  XboxController m_auxController = new XboxController(OIConstants.kSecondControllerPort);
 
   // Subsystems
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
   private final SwerveSubsystem m_robotDrive = new SwerveSubsystem();
   private boolean fastMode = false;
+  private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
 
   // Auto
   private final ShuffleboardTab m_tab;
@@ -90,25 +93,29 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, XboxController.Button.kBack.value)
+
+    // Driver stuff
+    new JoystickButton(m_driverController, XboxController.Button.kBack.value) // Reset gyro
       .whileTrue(new ZeroHeadingCommand(m_robotDrive));
-    new JoystickButton(m_driverController, XboxController.Button.kY.value)
+    new JoystickButton(m_driverController, XboxController.Button.kY.value) // Update PID
       .whileTrue(new UpdatePIDCommand(m_robotDrive));
-    new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
+      //                                                       kB.value) // Toggle fastmode
+      //                                                       kStart.value) // Toggle field oriented
+
+    // Auxillary stuff
+    new JoystickButton(m_auxController, XboxController.Button.kRightBumper.value) // Shoot
       .whileTrue(new ShootCommand(m_shooterSubsystem));
-    new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
+    new JoystickButton(m_auxController, XboxController.Button.kLeftBumper.value) // Intake
       .whileTrue(new IntakeCommand(m_shooterSubsystem));
-    new JoystickButton(m_driverController, XboxController.Button.kX.value)
+    new JoystickButton(m_auxController, XboxController.Button.kX.value) // Winch up
       .whileTrue(new ShooterCommand(m_shooterSubsystem, "winch up"));
-    new JoystickButton(m_driverController, XboxController.Button.kA.value)
+    new JoystickButton(m_auxController, XboxController.Button.kA.value) // Winch down
       .whileTrue(new ShooterCommand(m_shooterSubsystem, "winch down"));
+    new JoystickButton(m_auxController, XboxController.Button.kY.value) // Climber up
+      .whileTrue(new ClimbCommand(m_climberSubsystem, .5));
+    new JoystickButton(m_auxController, XboxController.Button.kB.value) //Climber down
+      .whileTrue(new ClimbCommand(m_climberSubsystem, -.5));
   }
-
-  double getRightX() {return m_driverController.getRightX();}
-  double getLeftX() {return -m_driverController.getLeftX();}
-  double getLeftY() {return -m_driverController.getLeftY();}
-  double getPOV() {return m_driverController.getPOV();}
-
 
   boolean getFastMode() {
     if (m_driverController.getBButtonPressed()) {
@@ -123,6 +130,11 @@ public class RobotContainer {
     }
     return fieldOriented;
   }
+
+  double getRightX() {return m_driverController.getRightX();}
+  double getLeftX() {return -m_driverController.getLeftX();}
+  double getLeftY() {return -m_driverController.getLeftY();}
+  double getPOV() {return m_driverController.getPOV();}
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
