@@ -171,6 +171,8 @@ public final class Constants {
   public static final class ClimberConstants {
     public static final int kLeftClimberCanId = 61;
     public static final int kRightClimberCanId = 62;
+    public static final int kClimberUpPower = 1;
+    public static final int kClimberDownPower = -1;
   }
 
   public static final class LimelightConstants {

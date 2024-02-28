@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.SwerveDriveCommand;
@@ -98,8 +99,8 @@ public class RobotContainer {
     // Driver stuff
     new JoystickButton(m_driverController, XboxController.Button.kBack.value) // Reset gyro
       .whileTrue(new ZeroHeadingCommand(m_robotDrive));
-    new JoystickButton(m_driverController, XboxController.Button.kY.value) // TODO Autoaim
-      .whileTrue(new UpdatePIDCommand(m_robotDrive));
+    // new JoystickButton(m_driverController, XboxController.Button.kY.value) // TODO Autoaim
+      // .whileTrue(new UpdatePIDCommand(m_robotDrive));
       //                                                       kB.value) // Toggle fastmode
       //                                                       kStart.value) // Toggle field oriented
 
@@ -113,9 +114,9 @@ public class RobotContainer {
     new JoystickButton(m_auxController, XboxController.Button.kA.value) // Winch down
       .whileTrue(new ShooterCommand(m_shooterSubsystem, "winch down"));
     new JoystickButton(m_auxController, XboxController.Button.kY.value) // Climber up
-      .whileTrue(new ClimbCommand(m_climberSubsystem, .5));
+      .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberUpPower));
     new JoystickButton(m_auxController, XboxController.Button.kB.value) // Climber down
-      .whileTrue(new ClimbCommand(m_climberSubsystem, -.5));
+      .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberDownPower));
     new JoystickButton(m_auxController, XboxController.Button.kBack.value) // Drop climbers (they go up)
       .whileTrue(new ReleaseClimbersCommand(m_climberSubsystem));
   }
