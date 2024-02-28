@@ -25,6 +25,7 @@ public class SwerveDriveCommand extends Command {
     Supplier<Double> xSupplier,
     Supplier<Double> ySupplier,
     Supplier<Double> turnSupplier,
+    Supplier<Double> rightJoystickY,
     Supplier<Boolean> fieldOriented,
     Supplier<Boolean> fastMode,
     Supplier<Boolean> degSnap
@@ -62,26 +63,10 @@ public class SwerveDriveCommand extends Command {
     double snappedLowestHeading = ( (int)(currentHeading/90) ) * 90; //snaps to the leftmost straight heading 
     System.out.println("snappedLowestHeading: " + snappedLowestHeading);
     double targetTheta = snappedLowestHeading;
-
-    if((Math.abs(turningSpeed) < 0.1) && degreeSnap.get()){//if joystick  is within 0.1 of 0
-        //turningSpeed = 0;
-        isFirstJoystickMove = false;
-    }else{
-        isFirstJoystickMove = true;
-    }//so the targetTheta is only chosen once
-
-    System.out.println("isFirstJoystickMove" + isFirstJoystickMove);
-    
-    if(isFirstJoystickMove && turningSpeed > 0){//turning right
-        targetTheta = snappedLowestHeading % 360;
-    }else if(isFirstJoystickMove && turningSpeed < 0){//turning left
-        targetTheta = (snappedLowestHeading + 90) % 360;
-    }
-
     System.out.println("isFirstJoystickMove" + isFirstJoystickMove);
     System.out.println("Target Theta" + targetTheta);
 
-    targetTheta = 0; //always snap to 0 heading
+    //getTheta = 0; //always snap to 0 heading
     
     double deltaTheta = targetTheta - swerveSubsystem.getHeading();
 
