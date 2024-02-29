@@ -30,6 +30,8 @@ public final class Constants {
     public static final boolean kFieldOriented = true;
 
     public static final boolean kDegreeSnappingDefault = false;
+    public static final double kThetaDeadband = 0.005;
+    public static final double kThetaMultiplier = 1/45;
 
     // Distance between centers of right and left wheels on robot
     public static final double kTrackWidth = Units.inchesToMeters(24.75);

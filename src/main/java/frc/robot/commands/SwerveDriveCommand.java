@@ -61,18 +61,20 @@ public class SwerveDriveCommand extends Command {
     double rightJoystickAngle = Math.atan(rightYAxis/turningSpeed);
     System.out.println("JOYSTICKANGLE: " + rightJoystickAngle);
     double currentHeading = swerveSubsystem.getHeading();
-    if(currentHeading < 0){
-      currentHeading += 360;
-    }
+    if (currentHeading < 0) currentHeading += 360;
     System.out.println("CurrentHeading: " + currentHeading);
-
     double targetTheta = ((rightJoystickAngle - 90) % 360);
-System.out.println("targetTheta: " + targetTheta);
+    System.out.println("targetTheta: " + targetTheta);
+
+    //Theta snap
+    double deltaTheta = targetTheta - swerveSubsystem.getHeading();
+    double thetaSpeed = deltaTheta * DriveConstants.kThetaMultiplier;
+
     // Death
     xSpeed = Math.abs(xSpeed) > OIConstants.kDriveDeadband ? xSpeed : 0;
     ySpeed = Math.abs(ySpeed) > OIConstants.kDriveDeadband ? ySpeed : 0;
-    turningSpeed =
-      Math.abs(turningSpeed) > OIConstants.kDriveDeadband ? turningSpeed : 0;
+    turningSpeed = Math.abs(turningSpeed) > OIConstants.kDriveDeadband ? turningSpeed : 0;
+    thetaSpeed = Math.abs(thetaSpeed) > DriveConstants.kThetaDeadband ? thetaSpeed : 0;
 
     // Slew soup
     double maxDriveSpeed = fastMode ? DriveConstants.kFastTeleMaxMetersPerSec : DriveConstants.kTeleMaxMetersPerSec;
@@ -81,17 +83,10 @@ System.out.println("targetTheta: " + targetTheta);
     ySpeed = yLimiter.calculate(ySpeed) * maxDriveSpeed;
     turningSpeed = turningLimiter.calculate(turningSpeed) * maxTurnSpeed;
 
-
-    double deltaTheta = targetTheta - swerveSubsystem.getHeading();
-
-    if(Math.abs(deltaTheta/45) < 0.005){
-        deltaTheta = 0; //to stop oscillations
-    }
-
     //Hyjack right joystick for snapping
-    if(degreeSnap.get() == true && xSpeed != 0 && ySpeed != 0){
-    turningSpeed = MathUtil.clamp((deltaTheta / 45),-1.0,1.0);
-    System.out.println("SNIP SNIP YOUR SHINS ARE NIPPED");
+    if(degreeSnap.get() && xSpeed != 0 && ySpeed != 0){
+      turningSpeed = MathUtil.clamp(thetaSpeed,-1.0,1.0);
+      System.out.println("SNIP SNIP YOUR SHINS ARE NIPPED");
     }
 
 
