@@ -41,8 +41,8 @@ public class SwerveDriveCommand extends Command {
     turningLimiter = new SlewRateLimiter(DriveConstants.kTurnSlewRateLimit);
     addRequirements(swerveSubsystem);
 
-    m_tab = Shuffleboard.getTab("Field Oriented");
-    shuffleFieldOriented = m_tab.add("Field Oriented", fieldOriented).getEntry();
+    m_tab = Shuffleboard.getTab("Field Oriented" + this.toString());
+    shuffleFieldOriented = m_tab.add("Field Oriented" + this.toString(), fieldOriented).getEntry();
   }
 
   @Override
