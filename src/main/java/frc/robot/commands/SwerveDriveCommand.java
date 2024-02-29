@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -15,8 +16,8 @@ import java.util.function.Supplier;
 public class SwerveDriveCommand extends Command {
 
   public final SwerveSubsystem swerveSubsystem;
-  public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
-  public Supplier<Boolean> fastModeFunction;
+  public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction, rightJoystickYAxis;
+  public Supplier<Boolean> fastModeFunction, degreeSnap;
   public final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
   public boolean fieldOrientedFunction;
   private ShuffleboardTab m_tab;
@@ -27,8 +28,10 @@ public class SwerveDriveCommand extends Command {
     Supplier<Double> xSupplier,
     Supplier<Double> ySupplier,
     Supplier<Double> turnSupplier,
+    Supplier<Double> rightJoystickY,
     boolean fieldOriented,
-    Supplier<Boolean> fastMode
+    Supplier<Boolean> fastMode,
+    Supplier<Boolean> degSnap
   ) {
     swerveSubsystem = subsystem;
     xSpdFunction = xSupplier;
@@ -36,6 +39,8 @@ public class SwerveDriveCommand extends Command {
     turningSpdFunction = turnSupplier;
     fieldOrientedFunction = fieldOriented;
     fastModeFunction = fastMode;
+    degreeSnap = degSnap;
+    rightJoystickYAxis = rightJoystickY;
     xLimiter = new SlewRateLimiter(DriveConstants.kXSlewRateLimit);
     yLimiter = new SlewRateLimiter(DriveConstants.kYSlewRateLimit);
     turningLimiter = new SlewRateLimiter(DriveConstants.kTurnSlewRateLimit);
@@ -52,6 +57,16 @@ public class SwerveDriveCommand extends Command {
     double ySpeed = ySpdFunction.get();
     double turningSpeed = turningSpdFunction.get();
     boolean fastMode = fastModeFunction.get();
+    double rightYAxis = rightJoystickYAxis.get();
+    double rightJoystickAngle = Math.atan(rightYAxis/turningSpeed);
+    System.out.println("JOYSTICKANGLE: " + rightJoystickAngle);
+    double currentHeading = swerveSubsystem.getHeading();
+    if(currentHeading < 0){
+      currentHeading += 360;
+    }
+    System.out.println("CurrentHeading: " + currentHeading);
+
+    double targetTheta = rightJoystickAngle;
 
     // Death
     xSpeed = Math.abs(xSpeed) > OIConstants.kDriveDeadband ? xSpeed : 0;
@@ -67,6 +82,19 @@ public class SwerveDriveCommand extends Command {
     turningSpeed =
       turningLimiter.calculate(turningSpeed) *
       maxTurnSpeed;
+
+
+    double deltaTheta = targetTheta - swerveSubsystem.getHeading();
+
+    if(Math.abs(deltaTheta/45) < 0.005){
+        deltaTheta = 0; //to stop oscillations
+    }
+
+    //Hyjack right joystick for snapping
+    if(degreeSnap.get() == true){
+    turningSpeed = MathUtil.clamp((deltaTheta / 45),-1.0,1.0);
+    }
+
 
     // I am speed
     ChassisSpeeds chassisSpeeds;

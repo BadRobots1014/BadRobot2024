@@ -51,6 +51,8 @@ public class RobotContainer {
   private final ShuffleboardTab m_tab;
   private SendableChooser<Command> m_chosenAuto = new SendableChooser<>();
 
+
+  private boolean degreeSnappingMode = DriveConstants.kDegreeSnappingDefault;
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -60,8 +62,10 @@ public class RobotContainer {
             () -> Math.pow(getLeftX(), 3),
             () -> Math.pow(getLeftY(), 3),
             () -> Math.pow(getRightX(), 3),
+            () -> Math.pow(getRightY(), 3),
             DriveConstants.kFieldOriented,
-            this::getFastMode));
+            this::getFastMode,
+            this::getDegreeSnappingMode));
 
     // Auto chooser setup
     m_tab = Shuffleboard.getTab("Auto");
@@ -127,9 +131,19 @@ public class RobotContainer {
   }
 
   double getRightX() {return m_driverController.getRightX();}
+  double getRightY() {return m_driverController.getRightY();}
   double getLeftX() {return -m_driverController.getLeftX();}
   double getLeftY() {return -m_driverController.getLeftY();}
   double getPOV() {return m_driverController.getPOV();}
+
+  boolean getDegreeSnappingMode(){
+    if(m_driverController.getRightTriggerAxis() >= 0.5){
+      degreeSnappingMode = true;
+    }else{
+      degreeSnappingMode = false;
+    }
+    return degreeSnappingMode;
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
