@@ -48,6 +48,8 @@ public class SwerveDriveCommand extends Command {
 
     m_tab = Shuffleboard.getTab("Field Oriented" + this.toString());
     shuffleFieldOriented = m_tab.add("Field Oriented" + this.toString(), fieldOriented).getEntry();
+    m_tab.addNumber("Joystick Angle", this::getJoystickAngle);
+    m_tab.addNumber("Target theta", this::getTargetTheta);
   }
 
   @Override
@@ -57,14 +59,9 @@ public class SwerveDriveCommand extends Command {
     double ySpeed = ySpdFunction.get();
     double turningSpeed = turningSpdFunction.get();
     boolean fastMode = fastModeFunction.get();
-    double rightYAxis = rightJoystickYAxis.get();
-    double rightJoystickAngle = Math.atan(rightYAxis/turningSpeed);
-    System.out.println("JOYSTICKANGLE: " + rightJoystickAngle);
+    double rightJoystickAngle = getJoystickAngle();
     double currentHeading = swerveSubsystem.getHeading();
-    if (currentHeading < 0) currentHeading += 360;
-    System.out.println("CurrentHeading: " + currentHeading);
-    double targetTheta = ((rightJoystickAngle - 90) % 360);
-    System.out.println("targetTheta: " + targetTheta);
+    double targetTheta = getTargetTheta(currentHeading);
 
     //Theta snap
     double deltaTheta = targetTheta - swerveSubsystem.getHeading();
@@ -111,6 +108,20 @@ public class SwerveDriveCommand extends Command {
 
     // Actually do the thing
     swerveSubsystem.setModuleStates(moduleStates);
+  }
+
+  private double getJoystickAngle() {
+    return Math.atan(rightJoystickYAxis.get()/turningSpdFunction.get()) / Math.PI / 2 * 360;
+  }
+
+  private double getTargetTheta(double heading) {
+    while (heading < 0) heading += 360;
+    while (heading > 359) heading -= 360;
+    return (getJoystickAngle() - 90) % 360;
+  }
+
+  private double getTargetTheta() {
+    return getTargetTheta(swerveSubsystem.getHeading());
   }
 
   @Override
