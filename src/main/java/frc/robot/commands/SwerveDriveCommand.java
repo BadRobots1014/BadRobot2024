@@ -89,7 +89,7 @@ System.out.println("targetTheta: " + targetTheta);
     }
 
     //Hyjack right joystick for snapping
-    if(degreeSnap.get() == true){
+    if(degreeSnap.get() == true && xSpeed != 0 && ySpeed != 0){
     turningSpeed = MathUtil.clamp((deltaTheta / 45),-1.0,1.0);
     System.out.println("SNIP SNIP YOUR SHINS ARE NIPPED");
     }
