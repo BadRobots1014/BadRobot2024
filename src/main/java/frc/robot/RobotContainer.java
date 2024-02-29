@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -117,6 +118,82 @@ public class RobotContainer {
       .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberDownPower));
     new JoystickButton(m_auxController, XboxController.Button.kBack.value) // Drop climbers (they go up)
       .whileTrue(new ReleaseClimbersCommand(m_climberSubsystem));
+
+      //dPad nudge
+
+      new SwerveDriveCommand(//forward
+        m_robotDrive, 
+        ()-> 0.0, 
+        ()-> 0.2, 
+        ()-> 0.0, 
+        DriveConstants.kRobotOriented, 
+        ()-> false)
+        .onlyWhile(() -> getDPad() == 0);
+
+        new SwerveDriveCommand(//back
+        m_robotDrive, 
+        ()-> 0.2, 
+        ()-> -0.2, 
+        ()-> 0.0, 
+        DriveConstants.kRobotOriented, 
+        ()-> false)
+        .onlyWhile(() -> getDPad() == 180);
+
+        new SwerveDriveCommand(//right
+        m_robotDrive, 
+        ()-> 0.2, 
+        ()-> 0.0, 
+        ()-> 0.0, 
+        DriveConstants.kRobotOriented, 
+        ()-> false)
+        .onlyWhile(() -> getDPad() == 90);
+
+        new SwerveDriveCommand(//left
+        m_robotDrive, 
+        ()-> -0.2, 
+        ()-> 0.0, 
+        ()-> 0.0, 
+        DriveConstants.kRobotOriented, 
+        ()-> false)
+        .onlyWhile(() -> getDPad() == 270);
+
+        new SwerveDriveCommand(//45 forward right
+        m_robotDrive, 
+        ()-> 0.2, 
+        ()-> 0.2, 
+        ()-> 0.0, 
+        DriveConstants.kRobotOriented, 
+        ()-> false)
+        .onlyWhile(() -> getDPad() == 45);
+
+        new SwerveDriveCommand(//45 forward left
+        m_robotDrive, 
+        ()-> -0.2, 
+        ()-> 0.2, 
+        ()-> 0.0, 
+        DriveConstants.kRobotOriented, 
+        ()-> false)
+        .onlyWhile(() -> getDPad() == 315);
+
+        new SwerveDriveCommand(//45 back right
+        m_robotDrive, 
+        ()-> 0.2, 
+        ()-> -0.2, 
+        ()-> 0.0, 
+        DriveConstants.kRobotOriented, 
+        ()-> false)
+        .onlyWhile(() -> getDPad() == 135);
+
+        new SwerveDriveCommand(//45 back left
+        m_robotDrive, 
+        ()-> -0.2, 
+        ()-> -0.2, 
+        ()-> 0.0, 
+        DriveConstants.kRobotOriented, 
+        ()-> false)
+        .onlyWhile(() -> getDPad() == 225);
+        
+        //https://docs.wpilib.org/en/stable/docs/software/basic-programming/joystick.html for dpad stuffs
   }
 
   boolean getFastMode() {
@@ -130,6 +207,10 @@ public class RobotContainer {
   double getLeftX() {return -m_driverController.getLeftX();}
   double getLeftY() {return -m_driverController.getLeftY();}
   double getPOV() {return m_driverController.getPOV();}
+
+  double getDPad(){
+    return m_driverController.getPOV(); //The POV angles start at 0 in the up direction, and increase clockwise (e.g. right is 90, upper-left is 315).
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

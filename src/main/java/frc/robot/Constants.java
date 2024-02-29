@@ -28,6 +28,7 @@ public final class Constants {
 
     // TODO turn field oriented on or off
     public static final boolean kFieldOriented = true;
+    public static final boolean kRobotOriented = false;
 
     // Distance between centers of right and left wheels on robot
     public static final double kTrackWidth = Units.inchesToMeters(24.75);
