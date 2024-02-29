@@ -67,7 +67,7 @@ public class SwerveDriveCommand extends Command {
     System.out.println("CurrentHeading: " + currentHeading);
 
     double targetTheta = rightJoystickAngle;
-
+System.out.println("targetTheta: " + targetTheta);
     // Death
     xSpeed = Math.abs(xSpeed) > OIConstants.kDriveDeadband ? xSpeed : 0;
     ySpeed = Math.abs(ySpeed) > OIConstants.kDriveDeadband ? ySpeed : 0;
@@ -79,9 +79,7 @@ public class SwerveDriveCommand extends Command {
     double maxTurnSpeed = fastMode ? DriveConstants.kFastTeleMaxRadiansPerSec : DriveConstants.kTeleMaxRadiansPerSec;
     xSpeed = xLimiter.calculate(xSpeed) * maxDriveSpeed;
     ySpeed = yLimiter.calculate(ySpeed) * maxDriveSpeed;
-    turningSpeed =
-      turningLimiter.calculate(turningSpeed) *
-      maxTurnSpeed;
+    turningSpeed = turningLimiter.calculate(turningSpeed) * maxTurnSpeed;
 
 
     double deltaTheta = targetTheta - swerveSubsystem.getHeading();
@@ -93,6 +91,7 @@ public class SwerveDriveCommand extends Command {
     //Hyjack right joystick for snapping
     if(degreeSnap.get() == true){
     turningSpeed = MathUtil.clamp((deltaTheta / 45),-1.0,1.0);
+    System.out.println("SNIP SNIP YOUR SHINS ARE NIPPED");
     }
 
 
