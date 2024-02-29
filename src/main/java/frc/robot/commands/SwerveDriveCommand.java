@@ -66,7 +66,7 @@ public class SwerveDriveCommand extends Command {
     }
     System.out.println("CurrentHeading: " + currentHeading);
 
-    double targetTheta = (rightJoystickAngle - 90) ÷ 360;
+    double targetTheta = ((rightJoystickAngle - 90) % 360);
 System.out.println("targetTheta: " + targetTheta);
     // Death
     xSpeed = Math.abs(xSpeed) > OIConstants.kDriveDeadband ? xSpeed : 0;
