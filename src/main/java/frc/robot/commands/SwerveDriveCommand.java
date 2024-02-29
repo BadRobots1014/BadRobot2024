@@ -4,6 +4,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -41,8 +42,8 @@ public class SwerveDriveCommand extends Command {
     turningLimiter = new SlewRateLimiter(DriveConstants.kTurnSlewRateLimit);
     addRequirements(swerveSubsystem);
 
-    m_tab = Shuffleboard.getTab("Field Oriented" + this.toString());
-    shuffleFieldOriented = m_tab.add("Field Oriented" + this.toString(), fieldOriented).getEntry();
+    m_tab = Shuffleboard.getTab("Swerve Instance" + this.toString());
+    shuffleFieldOriented = m_tab.add("Field Oriented", fieldOriented).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
   }
 
   @Override

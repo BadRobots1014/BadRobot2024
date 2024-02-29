@@ -57,9 +57,9 @@ public class RobotContainer {
   public RobotContainer() {
     m_robotDrive.setDefaultCommand(new SwerveDriveCommand(
             m_robotDrive,
-            () -> Math.pow(getLeftX(), 3),
-            () -> Math.pow(getLeftY(), 3),
-            () -> Math.pow(getRightX(), 3),
+            () -> getLeftX(),
+            () -> getLeftY(),
+            () -> getRightX(),
             DriveConstants.kFieldOriented,
             this::getFastMode));
     m_climberSubsystem.setDefaultCommand(new ClimbCommand(m_climberSubsystem, this::getAuxLeftY));
