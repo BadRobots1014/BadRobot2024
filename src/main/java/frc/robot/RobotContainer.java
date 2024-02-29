@@ -118,7 +118,8 @@ public class RobotContainer {
     new JoystickButton(m_auxController, XboxController.Button.kBack.value) // Drop climbers (they go up)
       .whileTrue(new ReleaseClimbersCommand(m_climberSubsystem));
     new JoystickButton(m_auxController, XboxController.Button.kRightBumper.value) // Switch to other thingy? Max said to do it
-      .whileTrue(new ClimbCommand(m_climberSubsystem, this::getAuxLeftY, this::getAuxRightY))
+      .whileTrue(new ClimbCommand(m_climberSubsystem, this::getAuxLeftY, this::getAuxRightY));
+    new JoystickButton(m_auxController, XboxController.Button.kRightBumper.value)
       .whileFalse(new WinchCommand(m_shooterSubsystem, this::getAuxRightY));
   }
 

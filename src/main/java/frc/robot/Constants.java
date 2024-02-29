@@ -163,7 +163,7 @@ public final class Constants {
     public static final double kBackShootPower = 0.8;
     public static final double kFrontIntakePower = -0.35;
     public static final double kBackIntakePower = -0.30;
-    public static final double kIndexPower = -0.35;
+    public static final double kIndexPower = -1.0;
     public static final double kWinchUpPower = 0.5;
     public static final double kWinchDownPower = -1;
   }
