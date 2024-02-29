@@ -107,7 +107,7 @@ public final class Constants {
     public static final double kTeleMaxRadiansPerSec = Math.PI / 2; // TODO adjust max teleop speeds
     public static final double kFastTeleMaxRadiansPerSec = Math.PI;
     public static final double kTeleMaxMetersPerSec = 0.3;
-    public static final double kFastTeleMaxMetersPerSec = 0.6;
+    public static final double kFastTeleMaxMetersPerSec = 0.9;
 
     public static final Button kTestMotorButton = Button.kLeftBumper;
   }

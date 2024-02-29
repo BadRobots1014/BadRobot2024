@@ -5,6 +5,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.SPI;
@@ -150,10 +151,10 @@ public class SwerveSubsystem extends SubsystemBase {
    *                      front left, front right, back left, back right.
    */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
-    // SwerveDriveKinematics.desaturateWheelSpeeds(
-    //   desiredStates,
-    //   DriveConstants.kMaxSpeedMetersPerSecond
-    // );
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+      desiredStates,
+      DriveConstants.kTeleMaxMetersPerSec
+    );
     frontLeft.setDesiredState(desiredStates[0]);
     frontRight.setDesiredState(desiredStates[1]);
     backLeft.setDesiredState(desiredStates[2]);
