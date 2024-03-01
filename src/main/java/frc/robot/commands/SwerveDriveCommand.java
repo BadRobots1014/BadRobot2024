@@ -111,7 +111,7 @@ public class SwerveDriveCommand extends Command {
   }
 
   private double getJoystickAngle() {
-    return Math.atan(rightJoystickYAxis.get()/turningSpdFunction.get()) / Math.PI / 2 * 360;
+    return Math.toDegrees(Math.atan(rightJoystickYAxis.get()/turningSpdFunction.get()));// / Math.PI / 2 * 360;
   }
 
   private double getTargetTheta(double heading) {
