@@ -10,29 +10,29 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 public class UpdatePIDCommand extends Command {
 
-    private final SwerveSubsystem m_subsystem;
+  private final SwerveSubsystem m_subsystem;
 
-    public UpdatePIDCommand(SwerveSubsystem subsystem) {
-        m_subsystem = subsystem;
-        addRequirements(subsystem);
-    }
+  public UpdatePIDCommand(SwerveSubsystem subsystem) {
+    m_subsystem = subsystem;
+    addRequirements(subsystem);
+  }
 
-    // Called every time the scheduler runs while the command is scheduled.
-    @Override
-    public void execute() {
-        double p = m_subsystem.p.getDouble(ModuleConstants.kTurningP);
-        double i = m_subsystem.i.getDouble(ModuleConstants.kTurningI);
-        double d = m_subsystem.d.getDouble(ModuleConstants.kTurningD);
-        m_subsystem.frontLeft.turningPidController.setPID(p, i, d);
-        m_subsystem.frontRight.turningPidController.setPID(p, i, d);
-        m_subsystem.backLeft.turningPidController.setPID(p, i, d);
-        m_subsystem.backRight.turningPidController.setPID(p, i, d);
-        System.out.println(p);
-    }
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    double p = m_subsystem.p.getDouble(ModuleConstants.kTurningP);
+    double i = m_subsystem.i.getDouble(ModuleConstants.kTurningI);
+    double d = m_subsystem.d.getDouble(ModuleConstants.kTurningD);
+    m_subsystem.frontLeft.turningPidController.setPID(p, i, d);
+    m_subsystem.frontRight.turningPidController.setPID(p, i, d);
+    m_subsystem.backLeft.turningPidController.setPID(p, i, d);
+    m_subsystem.backRight.turningPidController.setPID(p, i, d);
+    System.out.println(p);
+  }
 
-    // Returns true when the command should end.
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
 }

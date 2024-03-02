@@ -4,7 +4,7 @@ plugins:
 overrides:
   - files: "*.java"
     options:
-      tabWidth: 4                     # Set tab width to 4 spaces
+      tabWidth: 2                    # Set tab width to 4 spaces
       useTabs: false                  # Use spaces instead of tabs
       semi: true                      # Use semicolons at the end of statements
       singleQuote: false              # Use double quotes for strings

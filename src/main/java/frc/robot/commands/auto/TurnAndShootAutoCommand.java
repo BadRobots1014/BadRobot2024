@@ -18,54 +18,54 @@ import java.util.function.Supplier;
 
 public class TurnAndShootAutoCommand extends SequentialCommandGroup {
 
-    public TurnAndShootAutoCommand(
-        ShooterSubsystem shoot,
-        SwerveSubsystem swerve,
-        Pose2d startingOffset,
-        double turnDegrees
-    ) {
-        super(
-            new SetPoseCommand(swerve, startingOffset).withTimeout(0),
-            new SwerveDriveCommand(
-                swerve,
-                supplyDouble(0),
-                supplyDouble(-.3),
-                supplyDouble(0),
-                true,
-                supplyBoolean(true),
-                supplyDouble(0)
-            )
-                .withTimeout(1.9),
-            new TurnThetaCommand(swerve, turnDegrees).withTimeout(1),
-            new ShootCommand(shoot).withTimeout(4),
-            new SwerveDriveCommand(
-                swerve,
-                supplyDouble(0),
-                supplyDouble(-.3),
-                supplyDouble(0),
-                true,
-                supplyBoolean(true),
-                supplyDouble(0)
-            )
-                .withTimeout(2.8)
-        );
-    }
+  public TurnAndShootAutoCommand(
+    ShooterSubsystem shoot,
+    SwerveSubsystem swerve,
+    Pose2d startingOffset,
+    double turnDegrees
+  ) {
+    super(
+      new SetPoseCommand(swerve, startingOffset).withTimeout(0),
+      new SwerveDriveCommand(
+        swerve,
+        supplyDouble(0),
+        supplyDouble(-.3),
+        supplyDouble(0),
+        true,
+        supplyBoolean(true),
+        supplyDouble(0)
+      )
+        .withTimeout(1.9),
+      new TurnThetaCommand(swerve, turnDegrees).withTimeout(1),
+      new ShootCommand(shoot).withTimeout(4),
+      new SwerveDriveCommand(
+        swerve,
+        supplyDouble(0),
+        supplyDouble(-.3),
+        supplyDouble(0),
+        true,
+        supplyBoolean(true),
+        supplyDouble(0)
+      )
+        .withTimeout(2.8)
+    );
+  }
 
-    private static Supplier<Double> supplyDouble(double d) {
-        return new Supplier<Double>() {
-            @Override
-            public Double get() {
-                return d;
-            }
-        };
-    }
+  private static Supplier<Double> supplyDouble(double d) {
+    return new Supplier<Double>() {
+      @Override
+      public Double get() {
+        return d;
+      }
+    };
+  }
 
-    private static Supplier<Boolean> supplyBoolean(boolean b) {
-        return new Supplier<Boolean>() {
-            @Override
-            public Boolean get() {
-                return b;
-            }
-        };
-    }
+  private static Supplier<Boolean> supplyBoolean(boolean b) {
+    return new Supplier<Boolean>() {
+      @Override
+      public Boolean get() {
+        return b;
+      }
+    };
+  }
 }

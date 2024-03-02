@@ -5,10 +5,10 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShootCommand extends SequentialCommandGroup {
 
-    public ShootCommand(ShooterSubsystem shooterSubsystem) {
-        addCommands(
-            new ShooterCommand(shooterSubsystem, "both").withTimeout(3),
-            new ShooterCommand(shooterSubsystem, "all")
-        );
-    }
+  public ShootCommand(ShooterSubsystem shooterSubsystem) {
+    addCommands(
+      new ShooterCommand(shooterSubsystem, "both").withTimeout(3),
+      new ShooterCommand(shooterSubsystem, "all")
+    );
+  }
 }

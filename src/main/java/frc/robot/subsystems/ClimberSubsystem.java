@@ -12,36 +12,36 @@ import frc.robot.Constants.ClimberConstants;
 
 public class ClimberSubsystem extends SubsystemBase {
 
-    private final CANSparkMax leftClimber;
-    private final CANSparkMax rightClimber;
+  private final CANSparkMax leftClimber;
+  private final CANSparkMax rightClimber;
 
-    public ClimberSubsystem() {
-        leftClimber = new CANSparkMax(ClimberConstants.kLeftClimberCanId, MotorType.kBrushed);
-        rightClimber = new CANSparkMax(ClimberConstants.kRightClimberCanId, MotorType.kBrushed);
-        leftClimber.setIdleMode(IdleMode.kBrake);
-        rightClimber.setIdleMode(IdleMode.kBrake);
-    }
+  public ClimberSubsystem() {
+    leftClimber = new CANSparkMax(ClimberConstants.kLeftClimberCanId, MotorType.kBrushed);
+    rightClimber = new CANSparkMax(ClimberConstants.kRightClimberCanId, MotorType.kBrushed);
+    leftClimber.setIdleMode(IdleMode.kBrake);
+    rightClimber.setIdleMode(IdleMode.kBrake);
+  }
 
-    public void runClimbers(double power) {
-        runClimber(false, power);
-        runClimber(true, power);
-    }
+  public void runClimbers(double power) {
+    runClimber(false, power);
+    runClimber(true, power);
+  }
 
-    public void runClimber(boolean right, double power) {
-        if (right) rightClimber.set(power); else leftClimber.set(power);
-    }
+  public void runClimber(boolean right, double power) {
+    if (right) rightClimber.set(power); else leftClimber.set(power);
+  }
 
-    public void stopClimbers() {
-        stopClimber(false);
-        stopClimber(true);
-    }
+  public void stopClimbers() {
+    stopClimber(false);
+    stopClimber(true);
+  }
 
-    public void stopClimber(boolean right) {
-        if (right) rightClimber.stopMotor(); else leftClimber.stopMotor();
-    }
+  public void stopClimber(boolean right) {
+    if (right) rightClimber.stopMotor(); else leftClimber.stopMotor();
+  }
 
-    public void setClimberIdleMode(IdleMode rightMode, IdleMode leftMode) {
-        leftClimber.setIdleMode(leftMode);
-        rightClimber.setIdleMode(rightMode);
-    }
+  public void setClimberIdleMode(IdleMode rightMode, IdleMode leftMode) {
+    leftClimber.setIdleMode(leftMode);
+    rightClimber.setIdleMode(rightMode);
+  }
 }

@@ -9,28 +9,28 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class IntakeCommand extends Command {
 
-    private final ShooterSubsystem m_subsystem;
+  private final ShooterSubsystem m_subsystem;
 
-    public IntakeCommand(ShooterSubsystem subsystem) {
-        m_subsystem = subsystem;
-        addRequirements(subsystem);
-    }
+  public IntakeCommand(ShooterSubsystem subsystem) {
+    m_subsystem = subsystem;
+    addRequirements(subsystem);
+  }
 
-    // Called every time the scheduler runs while the command is scheduled.
-    @Override
-    public void execute() {
-        m_subsystem.runIntake();
-    }
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    m_subsystem.runIntake();
+  }
 
-    // Called once the command ends or is interrupted.
-    @Override
-    public void end(boolean interrupted) {
-        m_subsystem.stopShooter();
-    }
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    m_subsystem.stopShooter();
+  }
 
-    // Returns true when the command should end.
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
 }
