@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.WinchCommand;
 import frc.robot.commands.ZeroHeadingCommand;
@@ -63,6 +64,7 @@ public class RobotContainer {
             DriveConstants.kFieldOriented,
             this::getFastMode));
     m_climberSubsystem.setDefaultCommand(new ClimbCommand(m_climberSubsystem, this::getAuxLeftY));
+    m_shooterSubsystem.setDefaultCommand(new WinchCommand(m_shooterSubsystem, this::POVToWinchSpeed));
 
     // Auto chooser setup
     m_tab = Shuffleboard.getTab("Auto");
@@ -107,10 +109,6 @@ public class RobotContainer {
       .whileTrue(new ShootCommand(m_shooterSubsystem));
     new JoystickButton(m_auxController, XboxController.Button.kLeftBumper.value) // Intake
       .whileTrue(new IntakeCommand(m_shooterSubsystem));
-    new JoystickButton(m_auxController, XboxController.Button.kX.value) // Winch up
-      .whileTrue(new ShooterCommand(m_shooterSubsystem, "winch up"));
-    new JoystickButton(m_auxController, XboxController.Button.kA.value) // Winch down
-      .whileTrue(new ShooterCommand(m_shooterSubsystem, "winch down"));
     new JoystickButton(m_auxController, XboxController.Button.kY.value) // Climber up
       .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberUpPower));
     new JoystickButton(m_auxController, XboxController.Button.kB.value) // Climber down
@@ -134,6 +132,10 @@ public class RobotContainer {
   double getLeftX() {return -m_driverController.getLeftX();}
   double getLeftY() {return -m_driverController.getLeftY();}
   double getPOV() {return m_driverController.getPOV();}
+  double getAuxPOV() {return m_auxController.getPOV();}
+  double POVToWinchSpeed() {
+    return getAuxPOV() == 0 ? ShooterConstants.kWinchUpPower : (getAuxPOV() == 180 ? ShooterConstants.kWinchDownPower : 0);
+  }
 
   double getAuxRightY() {return m_auxController.getRightY();}
   double getAuxLeftY() {return m_auxController.getLeftY();}

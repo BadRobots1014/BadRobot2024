@@ -166,6 +166,7 @@ public final class Constants {
     public static final double kIndexPower = -1.0;
     public static final double kWinchUpPower = 0.5;
     public static final double kWinchDownPower = -1;
+    public static final double kWinchDeadBand = 0.005;
   }
 
   public static final class ClimberConstants {
