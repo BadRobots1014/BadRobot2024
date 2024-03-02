@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.util.function.Supplier;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
@@ -15,8 +16,10 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.WinchCommand;
+import frc.robot.commands.WinchPresetCommand;
 import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.commands.auto.ShootAndDriveAutoCommand;
 import frc.robot.commands.auto.TurnAndShootAutoCommand;
@@ -63,6 +66,7 @@ public class RobotContainer {
             DriveConstants.kFieldOriented,
             this::getFastMode));
     m_climberSubsystem.setDefaultCommand(new ClimbCommand(m_climberSubsystem, this::getAuxLeftY));
+    m_shooterSubsystem.setDefaultCommand(new WinchCommand(m_shooterSubsystem, this::POVToWinchSpeed));
 
     // Auto chooser setup
     m_tab = Shuffleboard.getTab("Auto");
@@ -107,14 +111,14 @@ public class RobotContainer {
       .whileTrue(new ShootCommand(m_shooterSubsystem));
     new JoystickButton(m_auxController, XboxController.Button.kLeftBumper.value) // Intake
       .whileTrue(new IntakeCommand(m_shooterSubsystem));
-    new JoystickButton(m_auxController, XboxController.Button.kX.value) // Winch up
-      .whileTrue(new ShooterCommand(m_shooterSubsystem, "winch up"));
-    new JoystickButton(m_auxController, XboxController.Button.kA.value) // Winch down
-      .whileTrue(new ShooterCommand(m_shooterSubsystem, "winch down"));
     new JoystickButton(m_auxController, XboxController.Button.kY.value) // Climber up
       .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberUpPower));
     new JoystickButton(m_auxController, XboxController.Button.kB.value) // Climber down
       .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberDownPower));
+    new JoystickButton(m_auxController, XboxController.Button.kY.value) // Winch up preset
+      .whileTrue(new WinchPresetCommand(m_shooterSubsystem, 0));
+    new JoystickButton(m_auxController, XboxController.Button.kX.value) // Winch down preset
+      .whileTrue(new WinchPresetCommand(m_shooterSubsystem, 1.5));
     new JoystickButton(m_auxController, XboxController.Button.kBack.value) // Drop climbers (they go up)
       .whileTrue(new ReleaseClimbersCommand(m_climberSubsystem));
     new JoystickButton(m_auxController, XboxController.Button.kRightBumper.value) // Switch to other thingy? Max said to do it
@@ -134,9 +138,12 @@ public class RobotContainer {
   double getLeftX() {return -m_driverController.getLeftX();}
   double getLeftY() {return -m_driverController.getLeftY();}
   double getPOV() {return m_driverController.getPOV();}
-
   double getAuxRightY() {return m_auxController.getRightY();}
   double getAuxLeftY() {return m_auxController.getLeftY();}
+  double getAuxPOV() {return m_auxController.getPOV();}
+  double POVToWinchSpeed() {
+    return getAuxPOV() == 0 ? ShooterConstants.kWinchUpPower : (getAuxPOV() == 180 ? ShooterConstants.kWinchDownPower : 0);
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
