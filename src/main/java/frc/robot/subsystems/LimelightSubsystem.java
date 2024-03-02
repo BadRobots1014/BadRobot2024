@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LimelightConstants;
+import java.util.Map;
 import java.util.function.DoubleSupplier;
 
 public class LimelightSubsystem extends SubsystemBase {
@@ -42,13 +43,14 @@ public class LimelightSubsystem extends SubsystemBase {
         m_tab.addNumber("CameraPose Pitch", this::getCameraPosePitch);
         m_tab.addNumber("CameraPose Yaw", this::getCameraPoseYaw);
 
-        //Gets input from shuffleboard for the height an april tag for testing purposes
+        // Gets input from shuffleboard for the height an april tag for testing purposes
         customTagHeight = m_tab.add("Custom April Tag Height", 0).getEntry();
 
-        //Gets input from shuffleboard for the height of the camera for testing purposes
+        // Gets input from shuffleboard for the height of the camera for testing
+        // purposes
         customCamHeight = m_tab.add("Custom Limelight Height", 0).getEntry();
 
-        //Gets input from shuffleboard for the angle of the camera for testing purposes
+        // Gets input from shuffleboard for the angle of the camera for testing purposes
         customCamAngle = m_tab.add("Custom Limelight Angle", 0).getEntry();
 
         m_tab.addNumber("April Tag Distance", this::getDistance);
@@ -60,18 +62,19 @@ public class LimelightSubsystem extends SubsystemBase {
 
     }
 
-    public double getTagHeight() { //returns height of the viewed april tag in inches based off of their expected game field height
+    public double getTagHeight() { // returns height of the viewed april tag in inches based off of their expected
+        // game field height
         double customHeight = customTagHeight.getDouble(0);
         if (customHeight != 0) return customHeight;
         double id = getAprilTagID();
 
         if (id == 1 || id == 2 || id == 5 || id == 6 || id == 9 || id == 10) {
-            return 53.38; //height of source and amp april tags
+            return 53.38; // height of source and amp april tags
         }
         if (id == 3 || id == 4 || id == 7 || id == 8) {
             return 57.13;
         } else {
-            return 52.00; //remaining tags are for stage april tags
+            return 52.00; // remaining tags are for stage april tags
         }
     }
 
@@ -120,12 +123,12 @@ public class LimelightSubsystem extends SubsystemBase {
             .getEntry("camerapose_targetspace")
             .getDoubleArray(camera3DPose);
         return camera3DPose;
-        //I beleive Translation (X,Y,Z) Rotation(Roll,Pitch,Yaw)
+        // I beleive Translation (X,Y,Z) Rotation(Roll,Pitch,Yaw)
     }
 
-    public double getCameraPoseX() { //Axis side to side on limelight
+    public double getCameraPoseX() { // Axis side to side on limelight
         double[] camera3DPose = getCameraPose();
-        //return camera3DPose[0];
+        // return camera3DPose[0];
         return NetworkTableInstance
             .getDefault()
             .getTable("limelight")
@@ -133,7 +136,7 @@ public class LimelightSubsystem extends SubsystemBase {
             .getDoubleArray(camera3DPose)[0];
     }
 
-    public double getCameraPoseY() { //Axis up and down on limelight
+    public double getCameraPoseY() { // Axis up and down on limelight
         double[] camera3DPose = getCameraPose();
         return NetworkTableInstance
             .getDefault()
@@ -142,7 +145,7 @@ public class LimelightSubsystem extends SubsystemBase {
             .getDoubleArray(camera3DPose)[1];
     }
 
-    public double getCameraPoseZ() { //Axis comming out perpendicular to front of limelight
+    public double getCameraPoseZ() { // Axis comming out perpendicular to front of limelight
         double[] camera3DPose = getCameraPose();
         return NetworkTableInstance
             .getDefault()
@@ -223,13 +226,13 @@ public class LimelightSubsystem extends SubsystemBase {
     }
 
     public double getAutoAimDriveDistanceX() {
-        double distance = 0; //distance to the left in X to offset position
+        double distance = 0; // distance to the left in X to offset position
         double delta = (distance - getAprilTagPoseX()); // - getCameraPoseX();
         return delta;
     }
 
     public double getAutoAimDriveDistanceZ() {
-        double distance = 5; //distance Z from the april tag robot targets
+        double distance = 5; // distance Z from the april tag robot targets
         double delta = (distance - getAprilTagPoseZ()); // - getCameraPoseZ();
         return delta;
     }
@@ -238,6 +241,14 @@ public class LimelightSubsystem extends SubsystemBase {
         double targetYaw = 0;
         double delta = targetYaw - getAprilTagPoseYaw();
         return delta;
+    }
+
+    public void setPriorityID(double id) {
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("priorityid").setNumber(id);
+    }
+
+    public void resetPriorityID() {
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("priorityId").setNumber(-1);
     }
 
     @Override
