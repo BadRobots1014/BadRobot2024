@@ -26,7 +26,7 @@ public class WinchPresetCommand extends Command {
   @Override
   public void execute() {
     if (m_subsystem.getWinchEncoder() > m_goal.get()) {
-      m_subsystem.winchDown();
+      m_subsystem.winchUp();
     }
     else if (m_subsystem.getWinchEncoder() < m_goal.get()) {
       m_subsystem.winchDown();

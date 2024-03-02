@@ -43,10 +43,10 @@ public class ShooterSubsystem extends SubsystemBase {
     m_backMotor = new CANSparkFlex(ShooterConstants.kBackMotorCanId, MotorType.kBrushless);
     m_indexMotor = new CANSparkMax(ShooterConstants.kIndexMotorCanId, MotorType.kBrushless);
     m_winchMotor = new CANSparkMax(ShooterConstants.kWinchMotorCanId, MotorType.kBrushed);
-    m_frontMotor.setIdleMode(IdleMode.kBrake);
-    m_backMotor.setIdleMode(IdleMode.kBrake);
-    m_indexMotor.setIdleMode(IdleMode.kBrake);
-    m_winchMotor.setIdleMode(IdleMode.kBrake);
+    m_frontMotor.setIdleMode(IdleMode.kCoast);
+    m_backMotor.setIdleMode(IdleMode.kCoast);
+    m_indexMotor.setIdleMode(IdleMode.kCoast);
+    m_winchMotor.setIdleMode(IdleMode.kCoast);
     m_winchEncoder = m_winchMotor.getEncoder(Type.kQuadrature, 8192);
 
     // Displays whether or not the shooter is running
