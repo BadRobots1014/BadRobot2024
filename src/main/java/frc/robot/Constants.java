@@ -166,7 +166,10 @@ public final class Constants {
     public static final double kIndexPower = -1.0;
     public static final double kWinchUpPower = 0.5;
     public static final double kWinchDownPower = -1;
+    
     public static final double kWinchDeadBand = 0.05;
+    public static final double kWinchUpPreset = 0;
+    public static final double kWinchDownPreset = 1.5;
   }
 
   public static final class ClimberConstants {
