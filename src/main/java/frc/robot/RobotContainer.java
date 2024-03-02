@@ -66,7 +66,7 @@ public class RobotContainer {
             DriveConstants.kFieldOriented,
             this::getFastMode,
             this::getPOV));
-    m_climberSubsystem.setDefaultCommand(new ClimbCommand(m_climberSubsystem, this::getAuxLeftY));
+    m_climberSubsystem.setDefaultCommand(new ClimbCommand(m_climberSubsystem, this::getAuxLeftY, this::getAuxRightY));
     m_shooterSubsystem.setDefaultCommand(new WinchCommand(m_shooterSubsystem, this::POVToWinchSpeed));
 
     // Auto chooser setup
@@ -112,9 +112,9 @@ public class RobotContainer {
       .whileTrue(new ShootCommand(m_shooterSubsystem));
     new JoystickButton(m_auxController, XboxController.Button.kLeftBumper.value) // Intake
       .whileTrue(new IntakeCommand(m_shooterSubsystem));
-    new JoystickButton(m_auxController, XboxController.Button.kY.value) // Climber up
+    new JoystickButton(m_auxController, XboxController.Button.kB.value) // Climber up
       .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberUpPower));
-    new JoystickButton(m_auxController, XboxController.Button.kB.value) // Climber down
+    new JoystickButton(m_auxController, XboxController.Button.kA.value) // Climber down
       .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberDownPower));
     new JoystickButton(m_auxController, XboxController.Button.kY.value) // Winch up preset
       .whileTrue(new WinchPresetCommand(m_shooterSubsystem, ShooterConstants.kWinchUpPreset));
