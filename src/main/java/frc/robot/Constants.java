@@ -160,7 +160,7 @@ public final class Constants {
     public static final int kWinchMotorCanId = 54;
 
     public static final double kFrontShootPower = 1.0;
-    public static final double kBackShootPower = 0.8;
+    public static final double kBackShootPower = 1.0;
     public static final double kFrontIntakePower = -0.35;
     public static final double kBackIntakePower = -0.30;
     public static final double kIndexPower = -1.0;
