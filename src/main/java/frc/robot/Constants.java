@@ -132,7 +132,7 @@ public final class Constants {
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kSecondControllerPort = 1;
-    public static final double kDriveDeadband = 0.01;
+    public static final double kDriveDeadband = 0.02;
   }
 
   // TODO These are old and should be removed
@@ -164,6 +164,7 @@ public final class Constants {
     public static final double kBackShootPower = 1.0;
     public static final double kFrontIntakePower = -0.35;
     public static final double kBackIntakePower = -0.30;
+    public static final double kIndexIntakePower = .1;
     public static final double kIndexPower = -1.0;
     public static final double kWinchUpPower = 0.5;
     public static final double kWinchDownPower = -1;

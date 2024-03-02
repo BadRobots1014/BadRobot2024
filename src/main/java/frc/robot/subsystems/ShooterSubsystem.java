@@ -28,6 +28,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private final GenericEntry m_frontIntakePower;
   private final GenericEntry m_backIntakePower;
   private final GenericEntry m_indexPower;
+  private final GenericEntry m_indexIntakePower;
   private final GenericEntry m_winchUpPower;
   private final GenericEntry m_winchDownPower;
 
@@ -63,6 +64,8 @@ public class ShooterSubsystem extends SubsystemBase {
       .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
     m_indexPower = m_shuffleboardtab.add("Index Power", ShooterConstants.kIndexPower)
       .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
+    m_indexIntakePower = m_shuffleboardtab.add("Index Intake Power", ShooterConstants.kIndexIntakePower)
+      .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
     m_winchUpPower = m_shuffleboardtab.add("Winch Up Power", ShooterConstants.kWinchUpPower)
       .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
     m_winchDownPower = m_shuffleboardtab.add("Winch Down Power", ShooterConstants.kWinchDownPower)
@@ -82,7 +85,8 @@ public class ShooterSubsystem extends SubsystemBase {
   public double[] getIntakePowers() {
     return new double[] {
       clampPower(m_frontIntakePower.getDouble(ShooterConstants.kFrontIntakePower)),
-      clampPower(m_backIntakePower.getDouble(ShooterConstants.kBackIntakePower))
+      clampPower(m_backIntakePower.getDouble(ShooterConstants.kBackIntakePower)),
+      clampPower(m_indexIntakePower.getDouble(ShooterConstants.kIndexIntakePower))
     };
   }
   public void runShooter() {
@@ -96,10 +100,12 @@ public class ShooterSubsystem extends SubsystemBase {
   public void runIntake() {
     m_frontMotor.set(getIntakePowers()[0]);
     m_backMotor.set(getIntakePowers()[1]);
+    m_indexMotor.set(getIntakePowers()[2]);
   }
   public void stopShooter() {
     m_frontMotor.stopMotor();
     m_backMotor.stopMotor();
+    m_indexMotor.stopMotor();
   }
   public boolean isShooterRunning() {
     if (m_frontMotor.get() == 0 && m_backMotor.get() == 0) { //Check if both motors are stopped
