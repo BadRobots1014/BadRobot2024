@@ -16,6 +16,12 @@ public class WinchPresetCommand extends Command {
     addRequirements(subsystem);
   }
 
+  public WinchPresetCommand(ShooterSubsystem subsystem, double goalPosition) {
+    m_subsystem = subsystem;
+    m_goal = () -> goalPosition;
+    addRequirements(subsystem);
+  }
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {

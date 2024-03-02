@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.util.function.Supplier;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
@@ -18,6 +19,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.WinchCommand;
+import frc.robot.commands.WinchPresetCommand;
 import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.commands.auto.ShootAndDriveAutoCommand;
 import frc.robot.commands.auto.TurnAndShootAutoCommand;
@@ -113,6 +115,10 @@ public class RobotContainer {
       .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberUpPower));
     new JoystickButton(m_auxController, XboxController.Button.kB.value) // Climber down
       .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberDownPower));
+    new JoystickButton(m_auxController, XboxController.Button.kX.value) // Winch up preset
+      .whileTrue(new WinchPresetCommand(m_shooterSubsystem, 0));
+    new JoystickButton(m_auxController, XboxController.Button.kA.value) // Winch down preset
+      .whileTrue(new WinchPresetCommand(m_shooterSubsystem, -3));
     new JoystickButton(m_auxController, XboxController.Button.kBack.value) // Drop climbers (they go up)
       .whileTrue(new ReleaseClimbersCommand(m_climberSubsystem));
     new JoystickButton(m_auxController, XboxController.Button.kRightBumper.value) // Switch to other thingy? Max said to do it
@@ -131,14 +137,13 @@ public class RobotContainer {
   double getRightX() {return m_driverController.getRightX();}
   double getLeftX() {return -m_driverController.getLeftX();}
   double getLeftY() {return -m_driverController.getLeftY();}
+  double getAuxRightY() {return m_auxController.getRightY();}
+  double getAuxLeftY() {return m_auxController.getLeftY();}
   double getPOV() {return m_driverController.getPOV();}
   double getAuxPOV() {return m_auxController.getPOV();}
   double POVToWinchSpeed() {
     return getAuxPOV() == 0 ? ShooterConstants.kWinchUpPower : (getAuxPOV() == 180 ? ShooterConstants.kWinchDownPower : 0);
   }
-
-  double getAuxRightY() {return m_auxController.getRightY();}
-  double getAuxLeftY() {return m_auxController.getLeftY();}
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
