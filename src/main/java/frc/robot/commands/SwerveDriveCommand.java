@@ -55,9 +55,15 @@ public class SwerveDriveCommand extends Command {
   @Override
   public void execute() {
     // Get inputs
-    double xSpeed = xSpdFunction.get();
-    double ySpeed = ySpdFunction.get();
-    double turningSpeed = turningSpdFunction.get();
+    double xSpeed = 0;
+    double ySpeed = 0;
+    double turningSpeed = 0;
+    if(!degreeSnap.get()){
+    xSpeed = xSpdFunction.get();
+    ySpeed = ySpdFunction.get();
+    turningSpeed = turningSpdFunction.get();
+    }
+    
     boolean fastMode = fastModeFunction.get();
     double rightJoystickAngle = getJoystickAngle();
     double currentHeading = swerveSubsystem.getHeading();
@@ -66,6 +72,16 @@ public class SwerveDriveCommand extends Command {
     //Theta snap
     double deltaTheta = targetTheta - swerveSubsystem.getHeading();
     double thetaSpeed = deltaTheta * DriveConstants.kThetaMultiplier;
+
+    //Hyjack right joystick for snapping
+
+    if(degreeSnap.get()){
+    System.out.println("SNIP SNIP YOUR SHINS ARE ABOUT TO BE  NIPPED");
+    }
+    if(degreeSnap.get() && xSpeed != 0 && ySpeed != 0){
+      turningSpeed = MathUtil.clamp(thetaSpeed,-1.0,1.0);
+      System.out.println("SNIP SNIP YOUR SHINS ARE NIPPED");
+    }
 
     // Death
     xSpeed = Math.abs(xSpeed) > OIConstants.kDriveDeadband ? xSpeed : 0;
@@ -80,13 +96,7 @@ public class SwerveDriveCommand extends Command {
     ySpeed = yLimiter.calculate(ySpeed) * maxDriveSpeed;
     turningSpeed = turningLimiter.calculate(turningSpeed) * maxTurnSpeed;
 
-    //Hyjack right joystick for snapping
-    if(degreeSnap.get() && xSpeed != 0 && ySpeed != 0){
-      turningSpeed = MathUtil.clamp(thetaSpeed,-1.0,1.0);
-      System.out.println("SNIP SNIP YOUR SHINS ARE NIPPED");
-    }
-
-
+    
     // I am speed
     ChassisSpeeds chassisSpeeds;
     if (shuffleFieldOriented.getBoolean(fieldOrientedFunction)) {
