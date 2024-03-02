@@ -60,7 +60,7 @@ public class SwerveDriveCommand extends Command {
       fastMode = fastModeFunction.get();
     }
     else {
-      xSpeed = pov.get() == 90 ? DriveConstants.kNudgeSpeed : (pov.get() == 270 ? -DriveConstants.kNudgeSpeed : 0);
+      xSpeed = pov.get() == 90 ? -DriveConstants.kNudgeSpeed : (pov.get() == 270 ? DriveConstants.kNudgeSpeed : 0);
       ySpeed = pov.get() == 0 ? DriveConstants.kNudgeSpeed : (pov.get() == 180 ? -DriveConstants.kNudgeSpeed : 0);
     }
 
