@@ -137,9 +137,9 @@ public class RobotContainer {
   double getRightX() {return m_driverController.getRightX();}
   double getLeftX() {return -m_driverController.getLeftX();}
   double getLeftY() {return -m_driverController.getLeftY();}
+  double getPOV() {return m_driverController.getPOV();}
   double getAuxRightY() {return m_auxController.getRightY();}
   double getAuxLeftY() {return m_auxController.getLeftY();}
-  double getPOV() {return m_driverController.getPOV();}
   double getAuxPOV() {return m_auxController.getPOV();}
   double POVToWinchSpeed() {
     return getAuxPOV() == 0 ? ShooterConstants.kWinchUpPower : (getAuxPOV() == 180 ? ShooterConstants.kWinchDownPower : 0);
