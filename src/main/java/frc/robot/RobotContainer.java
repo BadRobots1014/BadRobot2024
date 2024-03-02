@@ -64,7 +64,8 @@ public class RobotContainer {
             () -> getLeftY(),
             () -> getRightX(),
             DriveConstants.kFieldOriented,
-            this::getFastMode));
+            this::getFastMode,
+            this::getPOV));
     m_climberSubsystem.setDefaultCommand(new ClimbCommand(m_climberSubsystem, this::getAuxLeftY));
     m_shooterSubsystem.setDefaultCommand(new WinchCommand(m_shooterSubsystem, this::POVToWinchSpeed));
 
