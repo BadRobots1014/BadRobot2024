@@ -118,7 +118,7 @@ public class RobotContainer {
     new JoystickButton(m_auxController, XboxController.Button.kY.value) // Winch up preset
       .whileTrue(new WinchPresetCommand(m_shooterSubsystem, 0));
     new JoystickButton(m_auxController, XboxController.Button.kX.value) // Winch down preset
-      .whileTrue(new WinchPresetCommand(m_shooterSubsystem, -1.5));
+      .whileTrue(new WinchPresetCommand(m_shooterSubsystem, 1.5));
     new JoystickButton(m_auxController, XboxController.Button.kBack.value) // Drop climbers (they go up)
       .whileTrue(new ReleaseClimbersCommand(m_climberSubsystem));
     new JoystickButton(m_auxController, XboxController.Button.kRightBumper.value) // Switch to other thingy? Max said to do it

@@ -25,11 +25,11 @@ public class WinchPresetCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_subsystem.getWinchEncoder() > m_goal.get()) {
-      m_subsystem.winchUp();
-    }
-    else if (m_subsystem.getWinchEncoder() < m_goal.get()) {
+    if (m_subsystem.getWinchEncoder() < m_goal.get()) {
       m_subsystem.winchDown();
+    }
+    else if (m_subsystem.getWinchEncoder() > m_goal.get()) {
+      m_subsystem.winchUp();
     }
   }
 
