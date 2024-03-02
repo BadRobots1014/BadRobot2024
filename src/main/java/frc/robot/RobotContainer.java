@@ -16,7 +16,7 @@ import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.SwerveDriveCommand;
-import frc.robot.commands.UpdatePIDCommand;
+import frc.robot.commands.WinchCommand;
 import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.commands.auto.ShootAndDriveAutoCommand;
 import frc.robot.commands.auto.TurnAndShootAutoCommand;
@@ -57,11 +57,12 @@ public class RobotContainer {
   public RobotContainer() {
     m_robotDrive.setDefaultCommand(new SwerveDriveCommand(
             m_robotDrive,
-            () -> Math.pow(getLeftX(), 3),
-            () -> Math.pow(getLeftY(), 3),
-            () -> Math.pow(getRightX(), 3),
+            () -> getLeftX(),
+            () -> getLeftY(),
+            () -> getRightX(),
             DriveConstants.kFieldOriented,
             this::getFastMode));
+    m_climberSubsystem.setDefaultCommand(new ClimbCommand(m_climberSubsystem, this::getAuxLeftY));
 
     // Auto chooser setup
     m_tab = Shuffleboard.getTab("Auto");
@@ -95,12 +96,11 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     // Driver stuff
-    new JoystickButton(m_driverController, XboxController.Button.kBack.value) // Reset gyro
+    new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value) // Reset gyro
       .whileTrue(new ZeroHeadingCommand(m_robotDrive));
     // new JoystickButton(m_driverController, XboxController.Button.kY.value) // TODO Autoaim
       // .whileTrue(new UpdatePIDCommand(m_robotDrive));
-      //                                                       kRightBumper.value) // Toggle fastmode
-      //                                                       kStart.value) // Toggle field oriented
+      //                                                  kLeftBumper.value) // Toggle fastmode
 
     // Auxillary stuff
     new JoystickButton(m_auxController, XboxController.Button.kRightBumper.value) // Shoot
@@ -117,10 +117,14 @@ public class RobotContainer {
       .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberDownPower));
     new JoystickButton(m_auxController, XboxController.Button.kBack.value) // Drop climbers (they go up)
       .whileTrue(new ReleaseClimbersCommand(m_climberSubsystem));
+    new JoystickButton(m_auxController, XboxController.Button.kRightBumper.value) // Switch to other thingy? Max said to do it
+      .whileTrue(new ClimbCommand(m_climberSubsystem, this::getAuxLeftY, this::getAuxRightY));
+    new JoystickButton(m_auxController, XboxController.Button.kRightBumper.value)
+      .whileFalse(new WinchCommand(m_shooterSubsystem, this::getAuxRightY));
   }
 
   boolean getFastMode() {
-    if (m_driverController.getRightBumperPressed()) {
+    if (m_driverController.getLeftBumperPressed()) {
       fastMode = !fastMode;
     }
     return fastMode;
@@ -130,6 +134,9 @@ public class RobotContainer {
   double getLeftX() {return -m_driverController.getLeftX();}
   double getLeftY() {return -m_driverController.getLeftY();}
   double getPOV() {return m_driverController.getPOV();}
+
+  double getAuxRightY() {return m_auxController.getRightY();}
+  double getAuxLeftY() {return m_auxController.getLeftY();}
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
