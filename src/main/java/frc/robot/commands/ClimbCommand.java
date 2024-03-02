@@ -32,12 +32,14 @@ public class ClimbCommand extends Command {
     m_subsystem = subsystem;
     m_leftPower = () -> leftPower;
     m_rightPower = () -> rightPower;
+    addRequirements(subsystem);
   }
 
   public ClimbCommand(ClimberSubsystem subsystem, Supplier<Double> leftPower, Supplier<Double> rightPower) {
     m_subsystem = subsystem;
     m_leftPower = leftPower;
     m_rightPower = rightPower;
+    addRequirements(subsystem);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

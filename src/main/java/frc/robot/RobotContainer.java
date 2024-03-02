@@ -29,6 +29,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ReleaseClimbersCommand;
+import frc.robot.commands.ResetWinchCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ShooterCommand;
 
@@ -103,9 +104,10 @@ public class RobotContainer {
     // Driver stuff
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value) // Reset gyro
       .whileTrue(new ZeroHeadingCommand(m_robotDrive));
-    // new JoystickButton(m_driverController, XboxController.Button.kY.value) // TODO Autoaim
-      // .whileTrue(new UpdatePIDCommand(m_robotDrive));
-      //                                                  kLeftBumper.value) // Toggle fastmode
+      // Left bumper = Toggle fastmode
+      // POV = Nudge
+      // Right joystick = Move
+      // Left joystick = Turn
 
     // Auxillary stuff
     new JoystickButton(m_auxController, XboxController.Button.kRightBumper.value) // Shoot
@@ -120,12 +122,10 @@ public class RobotContainer {
       .whileTrue(new WinchPresetCommand(m_shooterSubsystem, ShooterConstants.kWinchUpPreset));
     new JoystickButton(m_auxController, XboxController.Button.kX.value) // Winch down preset
       .whileTrue(new WinchPresetCommand(m_shooterSubsystem, ShooterConstants.kWinchDownPreset));
-    new JoystickButton(m_auxController, XboxController.Button.kBack.value) // Drop climbers (they go up)
-      .whileTrue(new ReleaseClimbersCommand(m_climberSubsystem));
-    new JoystickButton(m_auxController, XboxController.Button.kRightBumper.value) // Switch to other thingy? Max said to do it
-      .whileTrue(new ClimbCommand(m_climberSubsystem, this::getAuxLeftY, this::getAuxRightY));
-    new JoystickButton(m_auxController, XboxController.Button.kRightBumper.value)
-      .whileFalse(new WinchCommand(m_shooterSubsystem, this::getAuxRightY));
+    new JoystickButton(m_auxController, XboxController.Button.kBack.value) // Reset winch encoder
+      .whileTrue(new ResetWinchCommand(m_shooterSubsystem));
+      // POV = Winch
+      // Joysticks = Manual climbers
   }
 
   boolean getFastMode() {
