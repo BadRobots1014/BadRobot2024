@@ -31,30 +31,5 @@ Once you have the necessary tools installed, follow these steps to run the code 
 
 5. **Drive the Robot!**: You're all set to drive the robot using the deployed code.
 
-## Code Formatting with Prettier
-
-We use Prettier to format our code, which helps keep it neat and organized. Here's how you can set up and use Prettier:
-
-### Pre-requirements
-
-- **Node.js**: Make sure you have Node.js version 10 or higher installed on your computer. You can download it from [here](https://nodejs.org/en/download).
-
-### Installation
-
-After cloning the project repository, follow these steps to install Prettier:
-
-1. Open a new terminal.
-
-2. Navigate to the project directory.
-
-3. Run the command `npm install` to install Prettier and its dependencies.
-
-### Code Formatting
-
-Once Prettier is installed, you can format the code easily:
-
-`npx prettier --write "**/*.java"`
-
-This command will format all Java files in your project directory.
 
 With these instructions, you should be able to get started with running, editing, and formatting the code for FRC Team 1014's _Bad Robots_ 2024 season. Happy coding!
