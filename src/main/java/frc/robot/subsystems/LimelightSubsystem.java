@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.function.DoubleSupplier;
 
 public class LimelightSubsystem extends SubsystemBase {
-
+  
     /** Creates a new ExampleSubsystem. */
     private final ShuffleboardTab m_tab = Shuffleboard.getTab("Limelight");
     GenericEntry customTagHeight;
@@ -24,6 +24,7 @@ public class LimelightSubsystem extends SubsystemBase {
     GenericEntry customCamAngle;
 
     public LimelightSubsystem() {
+      
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         table.getEntry("pipeline").setNumber(2);
         // NetworkTableEntry tx = table.getEntry("tx");
@@ -66,6 +67,7 @@ public class LimelightSubsystem extends SubsystemBase {
         // game field height
         double customHeight = customTagHeight.getDouble(0);
         if (customHeight != 0) return customHeight;
+      
         double id = getAprilTagID();
 
         if (id == 1 || id == 2 || id == 5 || id == 6 || id == 9 || id == 10) {
@@ -122,6 +124,7 @@ public class LimelightSubsystem extends SubsystemBase {
             .getTable("limelight")
             .getEntry("camerapose_targetspace")
             .getDoubleArray(camera3DPose);
+
         return camera3DPose;
         // I beleive Translation (X,Y,Z) Rotation(Roll,Pitch,Yaw)
     }
@@ -161,6 +164,7 @@ public class LimelightSubsystem extends SubsystemBase {
             .getTable("limelight")
             .getEntry("camerapose_targetspace")
             .getDoubleArray(camera3DPose)[3];
+
     }
 
     public double getCameraPosePitch() {
@@ -197,6 +201,7 @@ public class LimelightSubsystem extends SubsystemBase {
             .getTable("limelight")
             .getEntry("targetpose_cameraspace")
             .getDoubleArray(tag3DPose)[1];
+
     }
 
     public double getAprilTagPoseZ() {
@@ -234,6 +239,7 @@ public class LimelightSubsystem extends SubsystemBase {
     public double getAutoAimDriveDistanceZ() {
         double distance = 5; // distance Z from the april tag robot targets
         double delta = (distance - getAprilTagPoseZ()); // - getCameraPoseZ();
+
         return delta;
     }
 
@@ -256,3 +262,4 @@ public class LimelightSubsystem extends SubsystemBase {
         // This method will be called once per scheduler run during simulation
     }
 }
+
