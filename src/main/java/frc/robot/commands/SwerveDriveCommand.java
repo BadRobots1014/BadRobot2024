@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 public class SwerveDriveCommand extends Command {
 
   public final SwerveSubsystem swerveSubsystem;
-  public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
+  public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction, pov;
   public Supplier<Boolean> fastModeFunction;
   public final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
   public boolean fieldOrientedFunction;
@@ -29,7 +29,8 @@ public class SwerveDriveCommand extends Command {
     Supplier<Double> ySupplier,
     Supplier<Double> turnSupplier,
     boolean fieldOriented,
-    Supplier<Boolean> fastMode
+    Supplier<Boolean> fastMode,
+    Supplier<Double> povSupplier
   ) {
     swerveSubsystem = subsystem;
     xSpdFunction = xSupplier;
@@ -37,6 +38,7 @@ public class SwerveDriveCommand extends Command {
     turningSpdFunction = turnSupplier;
     fieldOrientedFunction = fieldOriented;
     fastModeFunction = fastMode;
+    pov = povSupplier;
     xLimiter = new SlewRateLimiter(DriveConstants.kXSlewRateLimit);
     yLimiter = new SlewRateLimiter(DriveConstants.kYSlewRateLimit);
     turningLimiter = new SlewRateLimiter(DriveConstants.kTurnSlewRateLimit);
@@ -49,16 +51,23 @@ public class SwerveDriveCommand extends Command {
   @Override
   public void execute() {
     // Get inputs
-    double xSpeed = xSpdFunction.get();
-    double ySpeed = ySpdFunction.get();
-    double turningSpeed = turningSpdFunction.get();
-    boolean fastMode = fastModeFunction.get();
+    double xSpeed = 0, ySpeed = 0, turningSpeed = 0;
+    boolean fastMode = false;
+    if (pov.get() == -1) {
+      xSpeed = xSpdFunction.get();
+      ySpeed = ySpdFunction.get();
+      turningSpeed = turningSpdFunction.get();
+      fastMode = fastModeFunction.get();
+    }
+    else {
+      xSpeed = pov.get() == 90 ? DriveConstants.kNudgeSpeed : (pov.get() == 270 ? -DriveConstants.kNudgeSpeed : 0);
+      ySpeed = pov.get() == 0 ? DriveConstants.kNudgeSpeed : (pov.get() == 180 ? -DriveConstants.kNudgeSpeed : 0);
+    }
 
     // Death
     xSpeed = Math.abs(xSpeed) > OIConstants.kDriveDeadband ? xSpeed : 0;
     ySpeed = Math.abs(ySpeed) > OIConstants.kDriveDeadband ? ySpeed : 0;
-    turningSpeed =
-      Math.abs(turningSpeed) > OIConstants.kDriveDeadband ? turningSpeed : 0;
+    turningSpeed = Math.abs(turningSpeed) > OIConstants.kDriveDeadband ? turningSpeed : 0;
 
     // Slew soup
     double maxDriveSpeed = fastMode ? DriveConstants.kFastTeleMaxMetersPerSec : DriveConstants.kTeleMaxMetersPerSec;
@@ -69,7 +78,7 @@ public class SwerveDriveCommand extends Command {
 
     // I am speed
     ChassisSpeeds chassisSpeeds;
-    if (shuffleFieldOriented.getBoolean(fieldOrientedFunction)) {
+    if (shuffleFieldOriented.getBoolean(fieldOrientedFunction) && pov.get() == -1) {
       // Field oriented
       chassisSpeeds =
         ChassisSpeeds.fromFieldRelativeSpeeds(
