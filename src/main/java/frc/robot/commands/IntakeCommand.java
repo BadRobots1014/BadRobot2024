@@ -8,28 +8,29 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class IntakeCommand extends Command {
-  private final ShooterSubsystem m_subsystem;
 
-  public IntakeCommand(ShooterSubsystem subsystem) {
-    m_subsystem = subsystem;
-    addRequirements(subsystem);
-  }
+    private final ShooterSubsystem m_subsystem;
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    m_subsystem.runIntake();
-  }
+    public IntakeCommand(ShooterSubsystem subsystem) {
+        m_subsystem = subsystem;
+        addRequirements(subsystem);
+    }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    m_subsystem.stopShooter();
-  }
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        m_subsystem.runIntake();
+    }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+        m_subsystem.stopShooter();
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }

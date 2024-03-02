@@ -1,2 +1,14 @@
 plugins:
   - prettier-plugin-java
+
+overrides:
+  - files: "*.java"
+    options:
+      tabWidth: 4                     # Set tab width to 4 spaces
+      useTabs: false                  # Use spaces instead of tabs
+      semi: true                      # Use semicolons at the end of statements
+      singleQuote: false              # Use double quotes for strings
+      trailingComma: "none"           # Avoid trailing commas
+      bracketSpacing: true            # Add spaces inside braces
+      arrowParens: "avoid"            # Omit parentheses when possible for arrow functions
+      printWidth: 110                 # Maximum line width

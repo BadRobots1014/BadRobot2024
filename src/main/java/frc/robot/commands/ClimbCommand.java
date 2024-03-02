@@ -4,58 +4,58 @@
 
 package frc.robot.commands;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ClimberSubsystem;
+import java.util.function.Supplier;
 
 public class ClimbCommand extends Command {
-  private final ClimberSubsystem m_subsystem;
-  private final Supplier<Double> m_leftPower;
-  private final Supplier<Double> m_rightPower;
 
-  public ClimbCommand(ClimberSubsystem subsystem, double power) {
-    m_subsystem = subsystem;
-    m_leftPower = () -> power;
-    m_rightPower = () -> power;
-    addRequirements(subsystem);
-  }
+    private final ClimberSubsystem m_subsystem;
+    private final Supplier<Double> m_leftPower;
+    private final Supplier<Double> m_rightPower;
 
-  public ClimbCommand(ClimberSubsystem subsystem, Supplier<Double> power) {
-    m_subsystem = subsystem;
-    m_leftPower = power;
-    m_rightPower = power;
-    addRequirements(subsystem);
-  }
+    public ClimbCommand(ClimberSubsystem subsystem, double power) {
+        m_subsystem = subsystem;
+        m_leftPower = () -> power;
+        m_rightPower = () -> power;
+        addRequirements(subsystem);
+    }
 
-  public ClimbCommand(ClimberSubsystem subsystem, double leftPower, double rightPower) {
-    m_subsystem = subsystem;
-    m_leftPower = () -> leftPower;
-    m_rightPower = () -> rightPower;
-  }
+    public ClimbCommand(ClimberSubsystem subsystem, Supplier<Double> power) {
+        m_subsystem = subsystem;
+        m_leftPower = power;
+        m_rightPower = power;
+        addRequirements(subsystem);
+    }
 
-  public ClimbCommand(ClimberSubsystem subsystem, Supplier<Double> leftPower, Supplier<Double> rightPower) {
-    m_subsystem = subsystem;
-    m_leftPower = leftPower;
-    m_rightPower = rightPower;
-  }
+    public ClimbCommand(ClimberSubsystem subsystem, double leftPower, double rightPower) {
+        m_subsystem = subsystem;
+        m_leftPower = () -> leftPower;
+        m_rightPower = () -> rightPower;
+    }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    m_subsystem.runClimber(false, m_leftPower.get());
-    m_subsystem.runClimber(true, m_rightPower.get());
-  }
+    public ClimbCommand(ClimberSubsystem subsystem, Supplier<Double> leftPower, Supplier<Double> rightPower) {
+        m_subsystem = subsystem;
+        m_leftPower = leftPower;
+        m_rightPower = rightPower;
+    }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    m_subsystem.stopClimbers();
-  }
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        m_subsystem.runClimber(false, m_leftPower.get());
+        m_subsystem.runClimber(true, m_rightPower.get());
+    }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+        m_subsystem.stopClimbers();
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }

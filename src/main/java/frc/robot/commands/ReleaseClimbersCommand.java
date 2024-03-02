@@ -5,33 +5,33 @@
 package frc.robot.commands;
 
 import com.revrobotics.CANSparkBase.IdleMode;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ClimberSubsystem;
 
 public class ReleaseClimbersCommand extends Command {
-  private final ClimberSubsystem m_subsystem;
 
-  public ReleaseClimbersCommand(ClimberSubsystem subsystem) {
-    m_subsystem = subsystem;
-    addRequirements(subsystem);
-  }
+    private final ClimberSubsystem m_subsystem;
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    m_subsystem.setClimberIdleMode(IdleMode.kCoast, IdleMode.kCoast);
-  }
+    public ReleaseClimbersCommand(ClimberSubsystem subsystem) {
+        m_subsystem = subsystem;
+        addRequirements(subsystem);
+    }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    m_subsystem.setClimberIdleMode(IdleMode.kBrake, IdleMode.kBrake);
-  }
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        m_subsystem.setClimberIdleMode(IdleMode.kCoast, IdleMode.kCoast);
+    }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+        m_subsystem.setClimberIdleMode(IdleMode.kBrake, IdleMode.kBrake);
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }
