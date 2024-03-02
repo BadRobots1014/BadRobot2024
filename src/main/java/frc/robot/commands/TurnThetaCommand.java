@@ -1,64 +1,76 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.Supplier;
 
-public class SwerveDriveCommand extends Command {
+public class TurnThetaCommand extends Command {
 
   public final SwerveSubsystem swerveSubsystem;
   public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
-  public Supplier<Boolean> fastModeFunction;
+  public final Supplier<Boolean> fieldOrientedFunction, fastModeFunction;
   public final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
-  public boolean fieldOrientedFunction;
-  private ShuffleboardTab m_tab;
-  private GenericEntry shuffleFieldOriented;
+  public final Supplier<Boolean> fieldOriented = ()-> false;
+  public final Supplier<Boolean> fastMode = ()-> false;
+  public final Supplier<Double> xSupplier = ()-> 0.0;
+  public final Supplier<Double> ySupplier = ()-> 0.0;
+  public final Supplier<Double> turnSupplier = ()-> 0.0;
+  private boolean isTurnFinished = false;
+  private double initial_heading;
+  private double targetTheta;
 
-  public SwerveDriveCommand(
-    SwerveSubsystem subsystem,
-    Supplier<Double> xSupplier,
-    Supplier<Double> ySupplier,
-    Supplier<Double> turnSupplier,
-    boolean fieldOriented,
-    Supplier<Boolean> fastMode
-  ) {
+  public TurnThetaCommand(SwerveSubsystem subsystem, double turnDegrees) {
     swerveSubsystem = subsystem;
     xSpdFunction = xSupplier;
     ySpdFunction = ySupplier;
     turningSpdFunction = turnSupplier;
     fieldOrientedFunction = fieldOriented;
     fastModeFunction = fastMode;
+    targetTheta = turnDegrees;
     xLimiter = new SlewRateLimiter(DriveConstants.kXSlewRateLimit);
     yLimiter = new SlewRateLimiter(DriveConstants.kYSlewRateLimit);
     turningLimiter = new SlewRateLimiter(DriveConstants.kTurnSlewRateLimit);
     addRequirements(swerveSubsystem);
+  }
 
-    m_tab = Shuffleboard.getTab("Swerve Instance" + this.toString());
-    shuffleFieldOriented = m_tab.add("Field Oriented", fieldOriented).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+  @Override
+  public void initialize(){
+    swerveSubsystem.zeroHeading();
+    initial_heading = swerveSubsystem.getHeading();
+    isTurnFinished = false;
   }
 
   @Override
   public void execute() {
+    //autoturny stuffs
+    double theta = targetTheta - swerveSubsystem.getHeading();
+    double speed = theta / 45;
+
+    if(Math.abs(speed) < 0.005){ //TODO may need to adjust how sensitive it is
+      isTurnFinished = true;
+    }
+
     // Get inputs
     double xSpeed = xSpdFunction.get();
     double ySpeed = ySpdFunction.get();
     double turningSpeed = turningSpdFunction.get();
     boolean fastMode = fastModeFunction.get();
 
+    //Hyjack joysticks
+    turningSpeed = MathUtil.clamp(speed, -1.0,1.0);
+    xSpeed = 0;
+    ySpeed = 0;
+
     // Death
     xSpeed = Math.abs(xSpeed) > OIConstants.kDriveDeadband ? xSpeed : 0;
     ySpeed = Math.abs(ySpeed) > OIConstants.kDriveDeadband ? ySpeed : 0;
-    turningSpeed =
-      Math.abs(turningSpeed) > OIConstants.kDriveDeadband ? turningSpeed : 0;
+    turningSpeed = Math.abs(turningSpeed) > OIConstants.kDriveDeadband ? turningSpeed : 0;
 
     // Slew soup
     double maxDriveSpeed = fastMode ? DriveConstants.kFastTeleMaxMetersPerSec : DriveConstants.kTeleMaxMetersPerSec;
@@ -69,22 +81,16 @@ public class SwerveDriveCommand extends Command {
 
     // I am speed
     ChassisSpeeds chassisSpeeds;
-    if (shuffleFieldOriented.getBoolean(fieldOrientedFunction)) {
+    if (fieldOrientedFunction.get()) {
       // Field oriented
-      chassisSpeeds =
-        ChassisSpeeds.fromFieldRelativeSpeeds(
-          xSpeed,
-          ySpeed,
-          turningSpeed,
-          swerveSubsystem.getRotation2d()
-        );
-    } else {
+      chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
+    }
+    else {
       chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
     }
 
     // Divide and conker
-    SwerveModuleState[] moduleStates =
-      DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+    SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
     // Actually do the thing
     swerveSubsystem.setModuleStates(moduleStates);
@@ -97,6 +103,6 @@ public class SwerveDriveCommand extends Command {
 
   @Override
   public boolean isFinished() {
-    return false;
+    return isTurnFinished;
   }
 }

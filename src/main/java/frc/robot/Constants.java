@@ -41,7 +41,7 @@ public final class Constants {
         new Translation2d(kWheelBase / 2, kTrackWidth / 2) // Back right
     );
 
-    // Using tall bot?
+    // TODO Using tall bot?
     public static final boolean tallBot = true;
 
     // Short bot offsets
@@ -50,11 +50,11 @@ public final class Constants {
     public static final double kBLOffset = -Math.PI / 2;
     public static final double kFLOffset = 0;
 
-    // Tall bot offsets TODO fix these offsets
-    public static final double kTallFROffset = -.097 * Math.PI * 2; // This one's good
-    public static final double kTallBROffset = .179 * Math.PI * 2; // This one needs work
-    public static final double kTallBLOffset = .314 * Math.PI * 2 + (Math.PI / 2); // This one's good
-    public static final double kTallFLOffset = .106 * Math.PI * 2; // This one needs work
+    // Tall bot offsets
+    public static final double kTallFROffset = -.097 * Math.PI * 2;
+    public static final double kTallBROffset = .179 * Math.PI * 2;
+    public static final double kTallBLOffset = .314 * Math.PI * 2 + (Math.PI / 2);
+    public static final double kTallFLOffset = .106 * Math.PI * 2;
 
     // Angular offsets of the modules relative to the chassis in radians
     public static final double kFrontRightChassisAngularOffset = (tallBot ? kTallFROffset : kFROffset);
@@ -106,7 +106,7 @@ public final class Constants {
 
     public static final double kTeleMaxRadiansPerSec = Math.PI / 2; // TODO adjust max teleop speeds
     public static final double kFastTeleMaxRadiansPerSec = Math.PI;
-    public static final double kTeleMaxMetersPerSec = 0.6;
+    public static final double kTeleMaxMetersPerSec = 0.3;
     public static final double kFastTeleMaxMetersPerSec = 0.9;
 
     public static final Button kTestMotorButton = Button.kLeftBumper;
@@ -129,8 +129,8 @@ public final class Constants {
   }
 
   public static final class OIConstants {
-
     public static final int kDriverControllerPort = 0;
+    public static final int kSecondControllerPort = 1;
     public static final double kDriveDeadband = 0.01;
   }
 
@@ -154,18 +154,25 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
-    public static final int kBackMotorCanId = 61;
-    public static final int kFrontMotorCanId = 62;
-    public static final int kIndexMotorCanId = 63;
-    public static final int kWinchMotorCanId = 64;
+    public static final int kBackMotorCanId = 51;
+    public static final int kFrontMotorCanId = 52;
+    public static final int kIndexMotorCanId = 53;
+    public static final int kWinchMotorCanId = 54;
 
     public static final double kFrontShootPower = 1.0;
     public static final double kBackShootPower = 0.8;
     public static final double kFrontIntakePower = -0.35;
     public static final double kBackIntakePower = -0.30;
-    public static final double kIndexPower = 0.35;
+    public static final double kIndexPower = -1.0;
     public static final double kWinchUpPower = 0.5;
-    public static final double kWinchDownPower = -0.5;
+    public static final double kWinchDownPower = -1;
+  }
+
+  public static final class ClimberConstants {
+    public static final int kLeftClimberCanId = 61;
+    public static final int kRightClimberCanId = 62;
+    public static final int kClimberUpPower = 1;
+    public static final int kClimberDownPower = -1;
   }
 
   public static final class LimelightConstants {

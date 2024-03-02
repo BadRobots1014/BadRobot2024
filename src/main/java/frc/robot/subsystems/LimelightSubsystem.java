@@ -6,14 +6,11 @@ package frc.robot.subsystems;
 
 import java.util.Map;
 import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
 
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.LimelightConstants;
