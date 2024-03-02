@@ -67,7 +67,7 @@ public class RobotContainer {
             DriveConstants.kFieldOriented,
             this::getFastMode,
             this::getPOV));
-    m_climberSubsystem.setDefaultCommand(new ClimbCommand(m_climberSubsystem, this::getAuxLeftY, this::getAuxRightY));
+    m_climberSubsystem.setDefaultCommand(new ClimbCommand(m_climberSubsystem, this::getAuxRightY, this::getAuxLeftY));
     m_shooterSubsystem.setDefaultCommand(new WinchCommand(m_shooterSubsystem, this::POVToWinchSpeed));
 
     // Auto chooser setup
