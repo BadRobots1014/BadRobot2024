@@ -89,7 +89,7 @@ public class SwerveSubsystem extends SubsystemBase {
     new Thread(() -> {
       try {
         Thread.sleep(DriveConstants.kBootupDelay);
-        zeroHeading();
+        resetPose();
       } catch (Exception e) {}
     }).start();
 
@@ -106,10 +106,10 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   // Gyro data shenanigans
-  public void zeroHeading() {gyro.reset();}
   public void resetPose() {
     gyro.reset();
     gyro.resetDisplacement();
+    setOffset(new Pose2d());
   }
   public void resetPose(Pose2d pose) {
     gyro.reset();

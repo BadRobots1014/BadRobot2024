@@ -41,7 +41,7 @@ public class TurnThetaCommand extends Command {
 
   @Override
   public void initialize(){
-    swerveSubsystem.zeroHeading();
+    swerveSubsystem.resetPose();
     initial_heading = swerveSubsystem.getHeading();
     isTurnFinished = false;
   }
