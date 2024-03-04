@@ -80,9 +80,9 @@ public class RobotContainer {
     m_chosenAuto.addOption("Shoot and drive from right",
       new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(-45))));
     m_chosenAuto.addOption("Drive, turn, and shoot from left",
-      new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), 40));
+      new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), 60));
     m_chosenAuto.addOption("Drive, turn, and shoot from right",
-      new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), -40));
+      new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), -60));
 
     m_tab.add(m_chosenAuto);
 
