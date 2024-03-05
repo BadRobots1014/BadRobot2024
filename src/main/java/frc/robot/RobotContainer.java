@@ -21,6 +21,7 @@ import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.WinchCommand;
 import frc.robot.commands.WinchPresetCommand;
 import frc.robot.commands.ZeroHeadingCommand;
+import frc.robot.commands.auto.DriveAutoCommand;
 import frc.robot.commands.auto.ShootAndDriveAutoCommand;
 import frc.robot.commands.auto.TurnAndShootAutoCommand;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -85,6 +86,9 @@ public class RobotContainer {
       new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), 55));
     m_chosenAuto.addOption("Drive, turn, and shoot from right",
       new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), -55));
+
+    m_chosenAuto.addOption("Drive back only",
+      new DriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0,0,Rotation2d.fromDegrees(0)))); //drive back only auto
 
     m_tab.add(m_chosenAuto);
 
