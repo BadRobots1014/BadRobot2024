@@ -32,6 +32,8 @@ import frc.robot.commands.ReleaseClimbersCommand;
 import frc.robot.commands.ResetWinchCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ShooterCommand;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -80,14 +82,19 @@ public class RobotContainer {
     m_chosenAuto.addOption("Shoot and drive from right",
       new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(-45))));
     m_chosenAuto.addOption("Drive, turn, and shoot from left",
-      new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), 60));
+      new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), 55));
     m_chosenAuto.addOption("Drive, turn, and shoot from right",
-      new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), -60));
+      new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), -55));
 
     m_tab.add(m_chosenAuto);
 
     // Configure the button bindings
     configureButtonBindings();
+  }
+
+  public void robotInit() {
+    DataLogManager.start();
+    DriverStation.startDataLog(DataLogManager.getLog());
   }
 
   /**
