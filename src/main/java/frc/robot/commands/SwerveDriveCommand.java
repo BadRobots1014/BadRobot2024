@@ -79,6 +79,7 @@ public class SwerveDriveCommand extends Command {
     // I am speed
     ChassisSpeeds chassisSpeeds;
     if (shuffleFieldOriented.getBoolean(fieldOrientedFunction) && pov.get() == -1) {
+      System.out.println("FIELD-ORIENTED");
       // Field oriented
       chassisSpeeds =
         ChassisSpeeds.fromFieldRelativeSpeeds(

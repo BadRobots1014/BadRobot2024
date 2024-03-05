@@ -76,7 +76,7 @@ public class RobotContainer {
     m_tab = Shuffleboard.getTab("Auto");
 
     m_chosenAuto.setDefaultOption("Shoot and drive from middle",
-      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d()));
+      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0,0,Rotation2d.fromDegrees(0)))); //used to be an empty Pose2D (should not change but maybe the empty pose has something to do with it)
     m_chosenAuto.addOption("Shoot and drive from left",
       new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(45))));
     m_chosenAuto.addOption("Shoot and drive from right",
