@@ -25,6 +25,7 @@ import frc.robot.commands.WinchPresetCommand;
 import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.commands.auto.DriveAutoCommand;
 import frc.robot.commands.auto.ShootAndDriveAutoCommand;
+import frc.robot.commands.auto.SlideAndShootAutoCommand;
 import frc.robot.commands.auto.TurnAndShootAutoCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -93,6 +94,12 @@ public class RobotContainer {
       new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), -55, m_delay.getDouble(0)));
     m_chosenAuto.addOption("Drive back only",
       new DriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0,0,Rotation2d.fromDegrees(0)), m_delay.getDouble(0))); //drive back only auto
+    m_chosenAuto.addOption("Shoot only", 
+      new ShootCommand(m_shooterSubsystem));
+    m_chosenAuto.addOption("Slide, shoot, slide back, and drive from left", 
+      new SlideAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), 0));
+    m_chosenAuto.addOption("Slide, shoot, slide back, and drive from right", 
+      new SlideAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), 1));
 
     m_tab.add(m_chosenAuto);
 
