@@ -3,8 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
- 
-import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -32,10 +30,8 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.ReleaseClimbersCommand;
 import frc.robot.commands.ResetWinchCommand;
 import frc.robot.commands.ShootCommand;
-import frc.robot.commands.ShooterCommand;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -55,6 +51,7 @@ public class RobotContainer {
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
   private final SwerveSubsystem m_robotDrive = new SwerveSubsystem();
   private boolean fastMode = false;
+  private boolean fasterMode = false;
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
 
   // Auto
@@ -73,6 +70,7 @@ public class RobotContainer {
             () -> getRightX(),
             DriveConstants.kFieldOriented,
             this::getFastMode,
+            this::getFasterMode,
             this::getPOV));
     m_climberSubsystem.setDefaultCommand(new ClimbCommand(m_climberSubsystem, this::getAuxRightY, this::getAuxLeftY));
     m_shooterSubsystem.setDefaultCommand(new WinchCommand(m_shooterSubsystem, this::POVToWinchSpeed));
@@ -157,6 +155,13 @@ public class RobotContainer {
     return fastMode;
   }
 
+  boolean getFasterMode() {
+    if (m_driverController.getRightTriggerAxis() > OIConstants.kTriggerDeadband) {
+      fasterMode = true;
+    }
+    else fasterMode = false;
+    return fasterMode;
+  }
   double getRightX() {
     System.out.println("DELAY: " + m_delay.getDouble(0));
     return m_driverController.getRightX();}

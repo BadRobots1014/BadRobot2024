@@ -17,7 +17,7 @@ public class SwerveDriveCommand extends Command {
 
   public final SwerveSubsystem swerveSubsystem;
   public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction, pov;
-  public Supplier<Boolean> fastModeFunction;
+  public Supplier<Boolean> fastModeFunction, fasterModeFunction;
   public final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
   public boolean fieldOrientedFunction;
   private ShuffleboardTab m_tab;
@@ -30,6 +30,7 @@ public class SwerveDriveCommand extends Command {
     Supplier<Double> turnSupplier,
     boolean fieldOriented,
     Supplier<Boolean> fastMode,
+    Supplier<Boolean> fasterMode,
     Supplier<Double> povSupplier
   ) {
     swerveSubsystem = subsystem;
@@ -38,6 +39,7 @@ public class SwerveDriveCommand extends Command {
     turningSpdFunction = turnSupplier;
     fieldOrientedFunction = fieldOriented;
     fastModeFunction = fastMode;
+    fasterModeFunction = fasterMode;
     pov = povSupplier;
     xLimiter = new SlewRateLimiter(DriveConstants.kXSlewRateLimit);
     yLimiter = new SlewRateLimiter(DriveConstants.kYSlewRateLimit);
@@ -52,12 +54,13 @@ public class SwerveDriveCommand extends Command {
   public void execute() {
     // Get inputs
     double xSpeed = 0, ySpeed = 0, turningSpeed = 0;
-    boolean fastMode = false;
+    boolean fastMode = false, fasterMode = false;
     if (pov.get() == -1) {
       xSpeed = xSpdFunction.get();
       ySpeed = ySpdFunction.get();
       turningSpeed = turningSpdFunction.get();
       fastMode = fastModeFunction.get();
+      fasterMode = fasterModeFunction.get();
     }
     else {
       xSpeed = pov.get() == 90 ? -DriveConstants.kNudgeSpeed : (pov.get() == 270 ? DriveConstants.kNudgeSpeed : 0);
@@ -70,8 +73,8 @@ public class SwerveDriveCommand extends Command {
     turningSpeed = Math.abs(turningSpeed) > OIConstants.kDriveDeadband ? turningSpeed : 0;
 
     // Slew soup
-    double maxDriveSpeed = fastMode ? DriveConstants.kFastTeleMaxMetersPerSec : DriveConstants.kTeleMaxMetersPerSec;
-    double maxTurnSpeed = fastMode ? DriveConstants.kFastTeleMaxRadiansPerSec : DriveConstants.kTeleMaxRadiansPerSec;
+    double maxDriveSpeed = fasterMode ? DriveConstants.kFasterTeleMaxMetersPerSec : (fastMode ? DriveConstants.kFastTeleMaxMetersPerSec : DriveConstants.kTeleMaxMetersPerSec);
+    double maxTurnSpeed = fasterMode ? DriveConstants.kFasterTeleMaxRadiansPerSec : (fastMode ? DriveConstants.kFastTeleMaxRadiansPerSec : DriveConstants.kTeleMaxRadiansPerSec);
     xSpeed = xLimiter.calculate(xSpeed) * maxDriveSpeed;
     ySpeed = yLimiter.calculate(ySpeed) * maxDriveSpeed;
     turningSpeed = turningLimiter.calculate(turningSpeed) * maxTurnSpeed;

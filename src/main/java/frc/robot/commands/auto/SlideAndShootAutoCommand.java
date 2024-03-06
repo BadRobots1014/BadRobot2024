@@ -28,6 +28,7 @@ public class SlideAndShootAutoCommand extends SequentialCommandGroup {
       new SwerveDriveCommand(swerve, supplyDouble(direction == 0 ? .3 : -.3), supplyDouble(0), supplyDouble(0), true, supplyBoolean(true), supplyDouble(0))
       .withTimeout(1),
       new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyDouble(0))
+      .withTimeout(3)
     );
   }
 
