@@ -118,6 +118,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value) // Reset gyro
       .whileTrue(new ZeroHeadingCommand(m_robotDrive));
       // Left bumper = Toggle fastmode
+      // Left trigger = Toggle fastermode
       // POV = Nudge
       // Right joystick = Move
       // Left joystick = Turn
@@ -149,7 +150,7 @@ public class RobotContainer {
   }
 
   boolean getFasterMode() {
-    if (m_driverController.getRightTriggerAxis() > OIConstants.kTriggerDeadband) {
+    if (m_driverController.getLeftTriggerAxis() > OIConstants.kTriggerDeadband) {
       fasterMode = true;
     }
     else fasterMode = false;
