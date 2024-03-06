@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.Map;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.networktables.GenericEntry;
