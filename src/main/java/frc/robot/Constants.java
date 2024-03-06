@@ -136,7 +136,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final int kSecondControllerPort = 1;
     public static final double kDriveDeadband = 0.02;
-    public static final double kTriggerDeadband = 0.5;
+    public static final double kTriggerDeadband = 0.75;
   }
 
   public static final class ShooterConstants {
