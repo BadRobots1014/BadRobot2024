@@ -106,8 +106,11 @@ public final class Constants {
 
     public static final double kTeleMaxRadiansPerSec = Math.PI / 2; // TODO adjust max teleop speeds
     public static final double kFastTeleMaxRadiansPerSec = Math.PI;
+    public static final double kFasterTeleMaxRadiansPerSec = Math.PI;
+
     public static final double kTeleMaxMetersPerSec = 0.3;
-    public static final double kFastTeleMaxMetersPerSec = 0.9; //TODO: Need to test on practice field
+    public static final double kFastTeleMaxMetersPerSec = 1.0;
+    public static final double kFasterTeleMaxMetersPerSec = 1.8;
     public static final double kNudgeSpeed = 0.5;
 
     public static final Button kTestMotorButton = Button.kLeftBumper;
@@ -133,25 +136,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final int kSecondControllerPort = 1;
     public static final double kDriveDeadband = 0.02;
-  }
-
-  // TODO These are old and should be removed
-  @Deprecated
-  public static final class AutoConstants {
-
-    public static final double kMaxSpeedMetersPerSecond = 3;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-    public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-    public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
-
-    public static final double kPXController = 1;
-    public static final double kPYController = 1;
-    public static final double kPThetaController = 1;
-
-    // Constraint for the motion profiled robot angle controller
-    public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
-        kMaxAngularSpeedRadiansPerSecond,
-        kMaxAngularSpeedRadiansPerSecondSquared);
+    public static final double kTriggerDeadband = 0.5;
   }
 
   public static final class ShooterConstants {

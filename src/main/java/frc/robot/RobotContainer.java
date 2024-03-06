@@ -51,6 +51,7 @@ public class RobotContainer {
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
   private final SwerveSubsystem m_robotDrive = new SwerveSubsystem();
   private boolean fastMode = false;
+  private boolean fasterMode = false;
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
 
   // Auto
@@ -68,6 +69,7 @@ public class RobotContainer {
             () -> getRightX(),
             DriveConstants.kFieldOriented,
             this::getFastMode,
+            this::getFasterMode,
             this::getPOV));
     m_climberSubsystem.setDefaultCommand(new ClimbCommand(m_climberSubsystem, this::getAuxRightY, this::getAuxLeftY));
     m_shooterSubsystem.setDefaultCommand(new WinchCommand(m_shooterSubsystem, this::POVToWinchSpeed));
@@ -140,6 +142,14 @@ public class RobotContainer {
       fastMode = !fastMode;
     }
     return fastMode;
+  }
+
+  boolean getFasterMode() {
+    if (m_driverController.getRightTriggerAxis() > OIConstants.kTriggerDeadband) {
+      fasterMode = true;
+    }
+    else fasterMode = false;
+    return fasterMode;
   }
 
   double getRightX() {return m_driverController.getRightX();}
