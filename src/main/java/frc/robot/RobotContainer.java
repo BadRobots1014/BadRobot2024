@@ -4,9 +4,11 @@
 
 package frc.robot;
  
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -57,6 +59,7 @@ public class RobotContainer {
   // Auto
   private final ShuffleboardTab m_tab;
   private SendableChooser<Command> m_chosenAuto = new SendableChooser<>();
+  private GenericEntry m_delay;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -76,19 +79,20 @@ public class RobotContainer {
     // Auto chooser setup
     m_tab = Shuffleboard.getTab("Auto");
 
-    m_chosenAuto.setDefaultOption("Shoot and drive from middle",
-      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0,0,Rotation2d.fromDegrees(0)))); //used to be an empty Pose2D (should not change but maybe the empty pose has something to do with it)
-    m_chosenAuto.addOption("Shoot and drive from left",
-      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(45))));
-    m_chosenAuto.addOption("Shoot and drive from right",
-      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(-45))));
-    m_chosenAuto.addOption("Drive, turn, and shoot from left",
-      new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), 55));
-    m_chosenAuto.addOption("Drive, turn, and shoot from right",
-      new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), -55));
+    m_delay = m_tab.add("Delay", 0).getEntry();
 
+    m_chosenAuto.setDefaultOption("Shoot and drive from middle",
+      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0,0,Rotation2d.fromDegrees(0)), m_delay.getDouble(0))); //used to be an empty Pose2D (should not change but maybe the empty pose has something to do with it)
+    m_chosenAuto.addOption("Shoot and drive from left",
+      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(55)), m_delay.getDouble(0)));
+    m_chosenAuto.addOption("Shoot and drive from right",
+      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(-55)), m_delay.getDouble(0)));
+    m_chosenAuto.addOption("Drive, turn, and shoot from left",
+      new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), 55, m_delay.getDouble(0)));
+    m_chosenAuto.addOption("Drive, turn, and shoot from right",
+      new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), -55, m_delay.getDouble(0)));
     m_chosenAuto.addOption("Drive back only",
-      new DriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0,0,Rotation2d.fromDegrees(0)))); //drive back only auto
+      new DriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0,0,Rotation2d.fromDegrees(0)), m_delay.getDouble(0))); //drive back only auto
 
     m_tab.add(m_chosenAuto);
 
@@ -146,7 +150,9 @@ public class RobotContainer {
     return fastMode;
   }
 
-  double getRightX() {return m_driverController.getRightX();}
+  double getRightX() {
+    System.out.println("DELAY: " + m_delay.getDouble(0));
+    return m_driverController.getRightX();}
   double getLeftX() {return -m_driverController.getLeftX();}
   double getLeftY() {return -m_driverController.getLeftY();}
   double getPOV() {return m_driverController.getPOV();}
