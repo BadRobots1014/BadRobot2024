@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController.Button;
 
@@ -110,8 +109,12 @@ public final class Constants {
 
     public static final double kTeleMaxRadiansPerSec = Math.PI / 2; // TODO adjust max teleop speeds
     public static final double kFastTeleMaxRadiansPerSec = Math.PI;
+    public static final double kFasterTeleMaxRadiansPerSec = Math.PI;
+
     public static final double kTeleMaxMetersPerSec = 0.3;
-    public static final double kFastTeleMaxMetersPerSec = 0.6;
+    public static final double kFastTeleMaxMetersPerSec = 1.0;
+    public static final double kFasterTeleMaxMetersPerSec = 1.8;
+    public static final double kNudgeSpeed = 0.5;
 
     public static final Button kTestMotorButton = Button.kLeftBumper;
   }
@@ -135,26 +138,8 @@ public final class Constants {
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kSecondControllerPort = 1;
-    public static final double kDriveDeadband = 0.01;
-  }
-
-  // TODO These are old and should be removed
-  @Deprecated
-  public static final class AutoConstants {
-
-    public static final double kMaxSpeedMetersPerSecond = 3;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-    public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-    public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
-
-    public static final double kPXController = 1;
-    public static final double kPYController = 1;
-    public static final double kPThetaController = 1;
-
-    // Constraint for the motion profiled robot angle controller
-    public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
-        kMaxAngularSpeedRadiansPerSecond,
-        kMaxAngularSpeedRadiansPerSecondSquared);
+    public static final double kDriveDeadband = 0.02;
+    public static final double kTriggerDeadband = 0.75;
   }
 
   public static final class ShooterConstants {
@@ -164,19 +149,25 @@ public final class Constants {
     public static final int kWinchMotorCanId = 54;
 
     public static final double kFrontShootPower = 1.0;
-    public static final double kBackShootPower = 0.8;
+    public static final double kBackShootPower = 1.0;
     public static final double kFrontIntakePower = -0.35;
     public static final double kBackIntakePower = -0.30;
-    public static final double kIndexPower = -0.35;
+    public static final double kIndexIntakePower = 0.1;
+    public static final double kIndexPower = -1.0;
     public static final double kWinchUpPower = 0.5;
-    public static final double kWinchDownPower = -1;
+    public static final double kWinchDownPower = -1.0;
+    
+    public static final double kWinchDeadBand = 0.05;
+    public static final double kWinchUpPreset = 0;
+    public static final double kWinchDownPreset = 1.5;
   }
 
   public static final class ClimberConstants {
     public static final int kLeftClimberCanId = 61;
     public static final int kRightClimberCanId = 62;
-    public static final int kClimberUpPower = 1;
-    public static final int kClimberDownPower = -1;
+    public static final int kClimberUpPower = -1;
+    public static final int kClimberDownPower = 1;
+    public static final int kClimberMaxAmps = 200000;
   }
 
   public static final class LimelightConstants {

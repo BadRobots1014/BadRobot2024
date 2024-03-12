@@ -5,6 +5,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,8 +17,8 @@ import java.util.function.Supplier;
 public class SwerveDriveCommand extends Command {
 
   public final SwerveSubsystem swerveSubsystem;
-  public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction, rightJoystickYAxis;
-  public Supplier<Boolean> fastModeFunction, degreeSnap;
+  public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction, rightJoystickYAxis, pov;
+  public Supplier<Boolean> fastModeFunction, degreeSnap, fasterModeFunction;
   public final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
   public boolean fieldOrientedFunction;
   private ShuffleboardTab m_tab;
@@ -31,7 +32,9 @@ public class SwerveDriveCommand extends Command {
     Supplier<Double> rightJoystickY,
     boolean fieldOriented,
     Supplier<Boolean> fastMode,
-    Supplier<Boolean> degSnap
+    Supplier<Boolean> fasterMode,
+    Supplier<Boolean> degSnap,
+    Supplier<Double> povSupplier
   ) {
     swerveSubsystem = subsystem;
     xSpdFunction = xSupplier;
@@ -41,13 +44,15 @@ public class SwerveDriveCommand extends Command {
     fastModeFunction = fastMode;
     degreeSnap = degSnap;
     rightJoystickYAxis = rightJoystickY;
+    fasterModeFunction = fasterMode;
+    pov = povSupplier;
     xLimiter = new SlewRateLimiter(DriveConstants.kXSlewRateLimit);
     yLimiter = new SlewRateLimiter(DriveConstants.kYSlewRateLimit);
     turningLimiter = new SlewRateLimiter(DriveConstants.kTurnSlewRateLimit);
     addRequirements(swerveSubsystem);
 
-    m_tab = Shuffleboard.getTab("Field Oriented" + this.toString());
-    shuffleFieldOriented = m_tab.add("Field Oriented" + this.toString(), fieldOriented).getEntry();
+    m_tab = Shuffleboard.getTab("Swerve Instance");
+    shuffleFieldOriented = m_tab.add("Field Oriented" + this.toString(), fieldOriented).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
     m_tab.addNumber("Joystick Angle", this::getJoystickAngle);
     m_tab.addNumber("Target theta", this::getTargetTheta);
   }
@@ -55,20 +60,14 @@ public class SwerveDriveCommand extends Command {
   @Override
   public void execute() {
     // Get inputs
-    double xSpeed = 0;
-    double ySpeed = 0;
-    double turningSpeed = 0;
-    if(!degreeSnap.get()){
-    xSpeed = xSpdFunction.get();
-    ySpeed = ySpdFunction.get();
-    turningSpeed = turningSpdFunction.get();
-    }
     
-    boolean fastMode = fastModeFunction.get();
+    //boolean fastMode = fastModeFunction.get();
     double rightJoystickAngle = getJoystickAngle();
     double currentHeading = swerveSubsystem.getHeading();
     double targetTheta = getTargetTheta(currentHeading);
-
+    double xSpeed = 0, ySpeed = 0, turningSpeed = 0;
+    boolean fastMode = false, fasterMode = false;
+    
     //Theta snap
     double deltaTheta = targetTheta - swerveSubsystem.getHeading();
     double thetaSpeed = deltaTheta * DriveConstants.kThetaMultiplier;
@@ -78,9 +77,21 @@ public class SwerveDriveCommand extends Command {
     if(degreeSnap.get()){
     System.out.println("SNIP SNIP YOUR SHINS ARE ABOUT TO BE  NIPPED");
     }
-    if(degreeSnap.get() && xSpeed != 0 && ySpeed != 0){
+    if(degreeSnap.get() && Math.abs(xSpeed) < OIConstants.kDriveDeadband && Math.abs(ySpeed) < OIConstants.kDriveDeadband){
       turningSpeed = MathUtil.clamp(thetaSpeed,-1.0,1.0);
-      System.out.println("SNIP SNIP YOUR SHINS ARE NIPPED");
+      System.out.println("SNIP SNIP YOUR SHINS HAVE BEEN NIPPED");
+    }
+    if(pov.get() != -1){
+      xSpeed = pov.get() == 90 ? -DriveConstants.kNudgeSpeed : (pov.get() == 270 ? DriveConstants.kNudgeSpeed : 0);
+      ySpeed = pov.get() == 0 ? DriveConstants.kNudgeSpeed : (pov.get() == 180 ? -DriveConstants.kNudgeSpeed : 0);
+    }
+
+    if(pov.get() == -1 && !degreeSnap.get()){
+      xSpeed = xSpdFunction.get();
+      ySpeed = ySpdFunction.get();
+      turningSpeed = turningSpdFunction.get();
+      fastMode = fastModeFunction.get();
+      fasterMode = fasterModeFunction.get();
     }
 
     // Death
@@ -90,8 +101,8 @@ public class SwerveDriveCommand extends Command {
     thetaSpeed = Math.abs(thetaSpeed) > DriveConstants.kThetaDeadband ? thetaSpeed : 0;
 
     // Slew soup
-    double maxDriveSpeed = fastMode ? DriveConstants.kFastTeleMaxMetersPerSec : DriveConstants.kTeleMaxMetersPerSec;
-    double maxTurnSpeed = fastMode ? DriveConstants.kFastTeleMaxRadiansPerSec : DriveConstants.kTeleMaxRadiansPerSec;
+    double maxDriveSpeed = fasterMode ? DriveConstants.kFasterTeleMaxMetersPerSec : (fastMode ? DriveConstants.kFastTeleMaxMetersPerSec : DriveConstants.kTeleMaxMetersPerSec);
+    double maxTurnSpeed = fasterMode ? DriveConstants.kFasterTeleMaxRadiansPerSec : (fastMode ? DriveConstants.kFastTeleMaxRadiansPerSec : DriveConstants.kTeleMaxRadiansPerSec);
     xSpeed = xLimiter.calculate(xSpeed) * maxDriveSpeed;
     ySpeed = yLimiter.calculate(ySpeed) * maxDriveSpeed;
     turningSpeed = turningLimiter.calculate(turningSpeed) * maxTurnSpeed;
@@ -99,7 +110,7 @@ public class SwerveDriveCommand extends Command {
     
     // I am speed
     ChassisSpeeds chassisSpeeds;
-    if (shuffleFieldOriented.getBoolean(fieldOrientedFunction)) {
+    if (shuffleFieldOriented.getBoolean(fieldOrientedFunction) && pov.get() == -1) {
       // Field oriented
       chassisSpeeds =
         ChassisSpeeds.fromFieldRelativeSpeeds(

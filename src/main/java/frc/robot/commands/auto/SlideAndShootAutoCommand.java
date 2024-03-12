@@ -14,22 +14,20 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.SetPoseCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.SwerveDriveCommand;
-import frc.robot.commands.TurnThetaCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class TurnAndShootAutoCommand extends SequentialCommandGroup {
-  public TurnAndShootAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve, Pose2d startingOffset, double turnDegrees, double delay) {
+public class SlideAndShootAutoCommand extends SequentialCommandGroup {
+  public SlideAndShootAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve, Pose2d startingOffset, int direction) {
     super(
-      new WaitCommand(delay),
+        new WaitCommand(4),
       new SetPoseCommand(swerve, startingOffset).withTimeout(0),
-      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyBoolean(false), supplyDouble(-1))
-      .withTimeout(1.9),
-      new TurnThetaCommand(swerve, turnDegrees).withTimeout(1),
-      new ShootCommand(shoot).withTimeout(4),
-      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyBoolean(false), supplyDouble(-1))
-
-      .withTimeout(2.8)
+      new SwerveDriveCommand(swerve, supplyDouble(direction == 0 ? -.3 : .3), supplyDouble(0), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(0))
+      .withTimeout(1),
+      new ShootCommand(shoot),
+      new SwerveDriveCommand(swerve, supplyDouble(direction == 0 ? .3 : -.3), supplyDouble(0), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(0))
+      .withTimeout(1),
+      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(0))
     );
   }
 

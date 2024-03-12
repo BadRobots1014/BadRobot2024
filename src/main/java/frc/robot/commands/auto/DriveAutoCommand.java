@@ -18,18 +18,14 @@ import frc.robot.commands.TurnThetaCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class TurnAndShootAutoCommand extends SequentialCommandGroup {
-  public TurnAndShootAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve, Pose2d startingOffset, double turnDegrees, double delay) {
+public class DriveAutoCommand extends SequentialCommandGroup {
+  public DriveAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve, Pose2d startingOffset, double delay) {
     super(
       new WaitCommand(delay),
       new SetPoseCommand(swerve, startingOffset).withTimeout(0),
-      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyBoolean(false), supplyDouble(-1))
-      .withTimeout(1.9),
-      new TurnThetaCommand(swerve, turnDegrees).withTimeout(1),
-      new ShootCommand(shoot).withTimeout(4),
-      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyBoolean(false), supplyDouble(-1))
-
-      .withTimeout(2.8)
+      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1))
+      .withTimeout(3),
+      new TurnThetaCommand(swerve, 0)
     );
   }
 

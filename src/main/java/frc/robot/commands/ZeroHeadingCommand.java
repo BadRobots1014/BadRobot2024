@@ -13,6 +13,6 @@ public class ZeroHeadingCommand extends Command {
 
   @Override
   public void execute() {
-    m_subsystem.zeroHeading();
+    m_subsystem.resetPose();
   }
 }
