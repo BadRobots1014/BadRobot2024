@@ -16,17 +16,17 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class DriveDistanceAutoCommand extends SequentialCommandGroup {
+public class DriveDistanceAtAngleAutoCommand extends SequentialCommandGroup {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
   //distance is distance from shin in need of breaking
   
-  public DriveDistanceAutoCommand(SwerveSubsystem swerve) {
+  public DriveDistanceAtAngleAutoCommand(SwerveSubsystem swerve) {
     
     
     super(
-      new SwerveDriveDistanceCommand(swerve,0.2,0)
-      );//move 0.2 meter forwards
+      new SwerveDriveDistanceCommand(swerve,0.2,45)//move 0.2 meter at a movement heading 45 degrees to the right
+    );
   }
   
 

@@ -17,6 +17,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.UpdatePIDCommand;
 import frc.robot.commands.ZeroHeadingCommand;
+import frc.robot.commands.auto.DriveDistanceAtAngleAutoCommand;
 import frc.robot.commands.auto.DriveDistanceAutoCommand;
 import frc.robot.commands.auto.ShootAndDriveAutoCommand;
 import frc.robot.commands.auto.TurnThetaAutoCommand;
@@ -72,7 +73,9 @@ public class RobotContainer {
     m_chosenAuto.addOption("Shoot and drive right",
       new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(-45))));
 
-    m_chosenAuto.addOption("Shinbreak 1 meter at 45 degrees right", 
+      m_chosenAuto.addOption("Shinbreak 0.2 meters forwards at 45 degree movement heading", 
+    new DriveDistanceAtAngleAutoCommand(m_robotDrive));
+    m_chosenAuto.addOption("Shinbreak 0.2 meters forwards", 
     new DriveDistanceAutoCommand(m_robotDrive));
     m_chosenAuto.addOption("Shinbreak 45 degrees left", 
     new TurnThetaAutoCommand(m_robotDrive));
