@@ -41,7 +41,8 @@ public class SwerveDriveTurnThetaCommand extends Command {
 
   @Override
   public void initialize(){
-    swerveSubsystem.zeroHeading();
+    //swerveSubsystem.zeroHeading();
+    swerveSubsystem.resetPose();
     initial_heading = swerveSubsystem.getHeading();
     isTurnFinished = false;
   }
