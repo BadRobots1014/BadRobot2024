@@ -145,9 +145,9 @@ public class RobotContainer {
     new JoystickButton(m_auxController, XboxController.Button.kBack.value) // Reset winch encoder
       .whileTrue(new ResetWinchCommand(m_shooterSubsystem));
 
-    new Trigger(isAuxRightTriggerActive())
-    .onTrue(new TurnThetaCommand(m_robotDrive, 0)); //Turn to heading of zero  (Straight ahead)
     new Trigger(isAuxLeftTriggerActive())
+    .onTrue(new TurnThetaCommand(m_robotDrive, 0)); //Turn to heading of zero  (Straight ahead)
+    new Trigger(isAuxRightTriggerActive())
     .onTrue(new TurnThetaCommand(m_robotDrive, 270)); //Turn to heading of 270 (Directly right)
     
 
