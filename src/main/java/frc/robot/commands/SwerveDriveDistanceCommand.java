@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Distance;
@@ -56,7 +57,7 @@ public class SwerveDriveDistanceCommand extends Command {
 
   @Override
   public void initialize(){
-    swerveSubsystem.resetPose();
+    swerveSubsystem.resetPose(new Pose2d());
     swerveSubsystem.setOffset(swerveSubsystem.getPose()); //sets the offset to this pose
     //initial_yaw = swerveSubsystem.getHeading();
     isDriveFinished = false;
@@ -70,17 +71,18 @@ public class SwerveDriveDistanceCommand extends Command {
   @Override
   public void execute() {
     //fix axes so not compuzzling
-  adjustedInitialX = initialX;      //so should now be +X is right and -X is left
-  adjustedInitialY = initialY * -1;  // so +Y should now be forwards and -Y should be back
+  adjustedInitialX = initialY * -1;      //so should now be +X is right and -X is left
+  adjustedInitialY = initialX * -1;  // so +Y should now be forwards and -Y should be back
 
   //also corrected to make sense
-    double currentX = swerveSubsystem.getX();
-    double currentY = swerveSubsystem.getY() * -1; //Y+ is actually back 
+    double currentY = swerveSubsystem.getX() * -1;// + x is actually right
+    double currentX = swerveSubsystem.getY() * -1; //Y+ is actually back 
 
+//offset initial values so they are zero
     
     //autodrivedistance stuffs
     double targetX = targetDistance*Math.sin(Math.toRadians(movementHeading)) + adjustedInitialX; 
-    double targetY = (targetDistance*Math.cos(Math.toRadians(movementHeading)) * -1 + adjustedInitialY); //adjust so Y+ is forwards intake
+    double targetY = (targetDistance*Math.cos(Math.toRadians(movementHeading)) + adjustedInitialY); //adjust so Y+ is forwards intake
     
     
     System.out.println("Initial X:" + adjustedInitialX);
@@ -89,9 +91,10 @@ public class SwerveDriveDistanceCommand extends Command {
     System.out.println("Current Y:" + currentY);
     System.out.println("targetX: " + targetX);  
     System.out.println("targetY: " + targetY);  
+    System.out.println("IsDriveFinished" + isDriveFinished);
 
-    double deltaX = (targetX - currentX);
-    double deltaY = (targetY - currentY);
+    double deltaX = (targetX - currentX) / 2;
+    double deltaY = -(targetY - currentY) / 2;
 
     // if(movementHeading == 0){
     //   deltaX = 0;

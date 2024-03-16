@@ -38,6 +38,8 @@ public class SwerveDriveCommand extends Command {
 
   @Override
   public void execute() {
+    System.out.println("CurrentX" + swerveSubsystem.getY() * -1);
+    System.out.println("CurrentY" + swerveSubsystem.getX() * -1);
     // Get inputs
     double xSpeed = xSpdFunction.get();
     double ySpeed = ySpdFunction.get();

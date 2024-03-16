@@ -6,9 +6,11 @@ package frc.robot.commands.auto;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.SetPoseCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.SwerveDriveDistanceCommand;
@@ -25,6 +27,7 @@ public class DriveDistanceAtAngleAutoCommand extends SequentialCommandGroup {
     
     
     super(
+      new SetPoseCommand(swerve, new Pose2d()).withTimeout(2),
       new SwerveDriveDistanceCommand(swerve,0.2,45)//move 0.2 meter at a movement heading 45 degrees to the right
     );
   }
