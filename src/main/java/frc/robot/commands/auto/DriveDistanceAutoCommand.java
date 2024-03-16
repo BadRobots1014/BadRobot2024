@@ -23,13 +23,13 @@ public class DriveDistanceAutoCommand extends SequentialCommandGroup {
 
   //distance is distance from shin in need of breaking
   
-  public DriveDistanceAutoCommand(SwerveSubsystem swerve) {
+  public DriveDistanceAutoCommand(SwerveSubsystem swerve, double distance) {
     
     
     super(
       new SetPoseCommand(swerve, new Pose2d()).withTimeout(2),
-      new SwerveDriveDistanceCommand(swerve,0.2,0)
-      );//move 0.2 meter forwards
+      new SwerveDriveDistanceCommand(swerve,distance,0)
+      );
   }
   
 

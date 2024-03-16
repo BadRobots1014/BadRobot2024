@@ -22,9 +22,12 @@ import frc.robot.commands.WinchCommand;
 import frc.robot.commands.WinchPresetCommand;
 import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.commands.auto.DriveAutoCommand;
+import frc.robot.commands.auto.DriveDistanceAtAngleAutoCommand;
+import frc.robot.commands.auto.DriveDistanceAutoCommand;
 import frc.robot.commands.auto.ShootAndDriveAutoCommand;
 import frc.robot.commands.auto.ShootAutoCommand;
 import frc.robot.commands.auto.TurnAndShootAutoCommand;
+import frc.robot.commands.auto.TurnThetaAutoCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -94,7 +97,12 @@ public class RobotContainer {
       new DriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0,0,Rotation2d.fromDegrees(0)), m_delay.getDouble(0))); //drive back only auto
     m_chosenAuto.addOption("Shoot only", 
       new ShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), m_delay.getDouble(0)).withTimeout(4));
-
+    m_chosenAuto.addOption("Shinbreak 0.2 meters forwards at 45 degree movement heading", 
+    new DriveDistanceAtAngleAutoCommand(m_robotDrive, 0.2, 45));//move 0.2 meter at a movement heading 45 degrees to the right
+    m_chosenAuto.addOption("Shinbreak 0.2 meters forwards", 
+    new DriveDistanceAutoCommand(m_robotDrive, 0.2));//move 0.2 meter forwards
+    m_chosenAuto.addOption("Shinbreak 45 degrees left", 
+    new TurnThetaAutoCommand(m_robotDrive, -45)); //turn robot 45 degrees to the left
     m_tab.add(m_chosenAuto);
 
     // Configure the button bindings

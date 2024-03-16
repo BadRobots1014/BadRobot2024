@@ -13,6 +13,7 @@ import frc.robot.commands.ShootCommand;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.SwerveDriveDistanceCommand;
 import frc.robot.commands.SwerveDriveTurnThetaCommand;
+import frc.robot.commands.TurnThetaCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -22,11 +23,11 @@ public class TurnThetaAutoCommand extends SequentialCommandGroup {
 
   //distance is distance from shin in need of breaking
   
-  public TurnThetaAutoCommand(SwerveSubsystem swerve) {
+  public TurnThetaAutoCommand(SwerveSubsystem swerve, double turnThetaAmount) {
     
     
     super(
-      new SwerveDriveTurnThetaCommand(swerve,-45)//turn robot 45 degrees to the left
+      new TurnThetaCommand(swerve,turnThetaAmount)
     );
   }
   
