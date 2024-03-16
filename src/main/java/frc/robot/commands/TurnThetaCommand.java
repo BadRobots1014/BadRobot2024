@@ -42,16 +42,26 @@ public class TurnThetaCommand extends Command {
   @Override
   public void initialize(){
     swerveSubsystem.resetPose();
-    initial_heading = swerveSubsystem.getHeading();
+    initial_heading = (swerveSubsystem.getHeading() + 360) % 360;
     isTurnFinished = false;
   }
 
   @Override
   public void execute() {
+    //Fix heading bc gyro goes from 0 to 180 and then -180 back to 0
+    double current_heading = (swerveSubsystem.getHeading() + 360) % 360;
+    //double heading_difference = (targetTheta - current_heading) - 180;
+
+
     //autoturny stuffs
-    double theta = targetTheta - swerveSubsystem.getHeading();
+    double theta = targetTheta - current_heading;
     double speed = theta / 45;
+
+    if(theta < 180){
+      speed *= -1;
+    }
     System.out.println("DeltaTheta:" + theta);
+    System.out.println("Speed:" + speed);
 
     if(Math.abs(speed) < 0.005){ //TODO may need to adjust how sensitive it is
       isTurnFinished = true;
