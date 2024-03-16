@@ -100,14 +100,14 @@ public class SwerveModule {
     turningPidController.reset();
 
     // Setup Shuffleboard
-    m_tab = Shuffleboard.getTab(driveMotorId + " Module");
-    m_tab.addDouble("Last angle", this::getLastStateAngle);
-    m_tab.addDouble("Last speed", this::getLastStateSpeed);
-    m_tab.addDouble("Last angle optimized", this::getLastStateAngleOptimized);
-    m_tab.addDouble("Last speed optimized", this::getLastStateSpeedOptimized);
-    m_tab.addDouble("Encoder angle", this::getAbsoluteEncoderRad);
-    m_tab.addDouble("Last PID Output", this::getLastPIDOutput);
-    m_tab.addDouble("Last error", this::getLastError);
+    m_tab = Shuffleboard.getTab("Swerve Modules");
+    m_tab.addDouble("Last angle " + driveMotorId, this::getLastStateAngle);
+    m_tab.addDouble("Last speed" + driveMotorId, this::getLastStateSpeed);
+    m_tab.addDouble("Last angle optimized" + driveMotorId, this::getLastStateAngleOptimized);
+    m_tab.addDouble("Last speed optimized" + driveMotorId, this::getLastStateSpeedOptimized);
+    m_tab.addDouble("Encoder angle" + driveMotorId, this::getAbsoluteEncoderRad);
+    m_tab.addDouble("Last PID Output" + driveMotorId, this::getLastPIDOutput);
+    m_tab.addDouble("Last error" + driveMotorId, this::getLastError);
 
     // Reset the encoders on start
     resetEncoders();

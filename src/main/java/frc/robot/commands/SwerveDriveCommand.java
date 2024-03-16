@@ -3,6 +3,10 @@ package frc.robot.commands;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -12,17 +16,22 @@ import java.util.function.Supplier;
 public class SwerveDriveCommand extends Command {
 
   public final SwerveSubsystem swerveSubsystem;
-  public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
-  public Supplier<Boolean> fieldOrientedFunction, fastModeFunction;
+  public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction, pov;
+  public Supplier<Boolean> fastModeFunction, fasterModeFunction;
   public final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
+  public boolean fieldOrientedFunction;
+  private ShuffleboardTab m_tab;
+  private GenericEntry shuffleFieldOriented;
 
   public SwerveDriveCommand(
     SwerveSubsystem subsystem,
     Supplier<Double> xSupplier,
     Supplier<Double> ySupplier,
     Supplier<Double> turnSupplier,
-    Supplier<Boolean> fieldOriented,
-    Supplier<Boolean> fastMode
+    boolean fieldOriented,
+    Supplier<Boolean> fastMode,
+    Supplier<Boolean> fasterMode,
+    Supplier<Double> povSupplier
   ) {
     swerveSubsystem = subsystem;
     xSpdFunction = xSupplier;
@@ -30,10 +39,15 @@ public class SwerveDriveCommand extends Command {
     turningSpdFunction = turnSupplier;
     fieldOrientedFunction = fieldOriented;
     fastModeFunction = fastMode;
+    fasterModeFunction = fasterMode;
+    pov = povSupplier;
     xLimiter = new SlewRateLimiter(DriveConstants.kXSlewRateLimit);
     yLimiter = new SlewRateLimiter(DriveConstants.kYSlewRateLimit);
     turningLimiter = new SlewRateLimiter(DriveConstants.kTurnSlewRateLimit);
     addRequirements(swerveSubsystem);
+
+    m_tab = Shuffleboard.getTab("Swerve Instance");
+    shuffleFieldOriented = m_tab.add("Field Oriented" + this.toString(), fieldOriented).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
   }
 
   @Override
@@ -41,29 +55,35 @@ public class SwerveDriveCommand extends Command {
     System.out.println("CurrentX" + swerveSubsystem.getY() * -1);
     System.out.println("CurrentY" + swerveSubsystem.getX() * -1);
     // Get inputs
-    double xSpeed = xSpdFunction.get();
-    double ySpeed = ySpdFunction.get();
-    double turningSpeed = turningSpdFunction.get();
-    boolean fastMode = fastModeFunction.get();
+    double xSpeed = 0, ySpeed = 0, turningSpeed = 0;
+    boolean fastMode = false, fasterMode = false;
+    if (pov.get() == -1) {
+      xSpeed = xSpdFunction.get();
+      ySpeed = ySpdFunction.get();
+      turningSpeed = turningSpdFunction.get();
+      fastMode = fastModeFunction.get();
+      fasterMode = fasterModeFunction.get();
+    }
+    else {
+      xSpeed = pov.get() == 90 ? -DriveConstants.kNudgeSpeed : (pov.get() == 270 ? DriveConstants.kNudgeSpeed : 0);
+      ySpeed = pov.get() == 0 ? DriveConstants.kNudgeSpeed : (pov.get() == 180 ? -DriveConstants.kNudgeSpeed : 0);
+    }
 
     // Death
     xSpeed = Math.abs(xSpeed) > OIConstants.kDriveDeadband ? xSpeed : 0;
     ySpeed = Math.abs(ySpeed) > OIConstants.kDriveDeadband ? ySpeed : 0;
-    turningSpeed =
-      Math.abs(turningSpeed) > OIConstants.kDriveDeadband ? turningSpeed : 0;
+    turningSpeed = Math.abs(turningSpeed) > OIConstants.kDriveDeadband ? turningSpeed : 0;
 
     // Slew soup
-    double maxDriveSpeed = fastMode ? DriveConstants.kFastTeleMaxMetersPerSec : DriveConstants.kTeleMaxMetersPerSec;
-    double maxTurnSpeed = fastMode ? DriveConstants.kFastTeleMaxRadiansPerSec : DriveConstants.kTeleMaxRadiansPerSec;
+    double maxDriveSpeed = fasterMode ? DriveConstants.kFasterTeleMaxMetersPerSec : (fastMode ? DriveConstants.kFastTeleMaxMetersPerSec : DriveConstants.kTeleMaxMetersPerSec);
+    double maxTurnSpeed = fasterMode ? DriveConstants.kFasterTeleMaxRadiansPerSec : (fastMode ? DriveConstants.kFastTeleMaxRadiansPerSec : DriveConstants.kTeleMaxRadiansPerSec);
     xSpeed = xLimiter.calculate(xSpeed) * maxDriveSpeed;
     ySpeed = yLimiter.calculate(ySpeed) * maxDriveSpeed;
-    turningSpeed =
-      turningLimiter.calculate(turningSpeed) *
-      maxTurnSpeed;
+    turningSpeed = turningLimiter.calculate(turningSpeed) * maxTurnSpeed;
 
     // I am speed
     ChassisSpeeds chassisSpeeds;
-    if (fieldOrientedFunction.get()) {
+    if (shuffleFieldOriented.getBoolean(fieldOrientedFunction) && pov.get() == -1) {
       // Field oriented
       chassisSpeeds =
         ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -82,15 +102,6 @@ public class SwerveDriveCommand extends Command {
 
     // Actually do the thing
     swerveSubsystem.setModuleStates(moduleStates);
-  }
-
-  public void toggleFieldOriented() {
-    fieldOrientedFunction = new Supplier<Boolean>(){
-      @Override
-      public Boolean get() {
-        return !fieldOrientedFunction.get();
-      }
-    };
   }
 
   @Override

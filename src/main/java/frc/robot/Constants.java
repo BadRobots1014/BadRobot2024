@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController.Button;
 
@@ -34,28 +33,27 @@ public final class Constants {
     // Distance between front and back wheels on robot
     public static final double kWheelBase = Units.inchesToMeters(24.75);
     // Positions of modules relative to the center of mass
-    public static final SwerveDriveKinematics kDriveKinematics =
-      new SwerveDriveKinematics(
+    public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2), // Front left
         new Translation2d(kWheelBase / 2, -kTrackWidth / 2), // Front right
         new Translation2d(-kWheelBase / 2, kTrackWidth / 2), // Back left
         new Translation2d(kWheelBase / 2, kTrackWidth / 2) // Back right
-      );
+    );
 
-    //Using tall bot?
+    // TODO Using tall bot?
     public static final boolean tallBot = true;
 
-    //Short bot offsets
+    // Short bot offsets
     public static final double kFROffset = Math.PI / 2 - 2;
     public static final double kBROffset = -Math.PI;
     public static final double kBLOffset = -Math.PI / 2;
     public static final double kFLOffset = 0;
 
-    //Tall bot offsets TODO fix these offsets
-    public static final double kTallFROffset = -.097 * Math.PI * 2; //This one's good
-    public static final double kTallBROffset = .179 * Math.PI * 2; //This one needs work
-    public static final double kTallBLOffset = .314 * Math.PI * 2 + (Math.PI / 2); //This one's good
-    public static final double kTallFLOffset = .106 * Math.PI * 2; //This one needs work
+    // Tall bot offsets
+    public static final double kTallFROffset = -.097 * Math.PI * 2;
+    public static final double kTallBROffset = .179 * Math.PI * 2;
+    public static final double kTallBLOffset = .314 * Math.PI * 2 + (Math.PI / 2);
+    public static final double kTallFLOffset = .106 * Math.PI * 2;
 
     // Angular offsets of the modules relative to the chassis in radians
     public static final double kFrontRightChassisAngularOffset = (tallBot ? kTallFROffset : kFROffset);
@@ -101,14 +99,18 @@ public final class Constants {
 
     public static final long kBootupDelay = 1000; // milliseconds of delay to allow the navx to start up
 
-    public static final double kXSlewRateLimit = 8; //TODO: adjust slew limits
+    public static final double kXSlewRateLimit = 8; // TODO: adjust slew limits
     public static final double kYSlewRateLimit = 8;
     public static final double kTurnSlewRateLimit = 10;
 
     public static final double kTeleMaxRadiansPerSec = Math.PI / 2; // TODO adjust max teleop speeds
     public static final double kFastTeleMaxRadiansPerSec = Math.PI;
-    public static final double kTeleMaxMetersPerSec = 0.6;
-    public static final double kFastTeleMaxMetersPerSec = 0.9;
+    public static final double kFasterTeleMaxRadiansPerSec = Math.PI;
+
+    public static final double kTeleMaxMetersPerSec = 0.3;
+    public static final double kFastTeleMaxMetersPerSec = 1.0;
+    public static final double kFasterTeleMaxMetersPerSec = 1.8;
+    public static final double kNudgeSpeed = 0.5;
 
     public static final Button kTestMotorButton = Button.kLeftBumper;
   }
@@ -118,14 +120,10 @@ public final class Constants {
     public static final double kWheelDiameterMeters = 0.0762;
     public static final double kDriveMotorGearRatio = 8.14;
     public static final double kTurningMotorGearRatio = 12.8;
-    public static final double kDriveEncoderRot2Meter =
-      kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
-    public static final double kTurningEncoderRot2Rad =
-      kTurningMotorGearRatio * 2 * Math.PI;
-    public static final double kDriveEncoderRPM2MeterPerSec =
-      kDriveEncoderRot2Meter / 60;
-    public static final double kTurningEncoderRPM2RadPerSec =
-      kTurningEncoderRot2Rad / 60;
+    public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
+    public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
+    public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
+    public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60;
     public static final double kModuleDeadband = 0.005;
     public static final double kTurningP = 1;
     public static final double kTurningI = 0.0;
@@ -134,45 +132,42 @@ public final class Constants {
   }
 
   public static final class OIConstants {
-
     public static final int kDriverControllerPort = 0;
-    public static final double kDriveDeadband = 0.01;
-  }
-
-  // TODO These are old and should be removed
-  @Deprecated
-  public static final class AutoConstants {
-
-    public static final double kMaxSpeedMetersPerSecond = 3;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-    public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-    public static final double kMaxAngularSpeedRadiansPerSecondSquared =
-      Math.PI;
-
-    public static final double kPXController = 1;
-    public static final double kPYController = 1;
-    public static final double kPThetaController = 1;
-
-    // Constraint for the motion profiled robot angle controller
-    public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
-      new TrapezoidProfile.Constraints(
-        kMaxAngularSpeedRadiansPerSecond,
-        kMaxAngularSpeedRadiansPerSecondSquared
-      );
+    public static final int kSecondControllerPort = 1;
+    public static final double kDriveDeadband = 0.02;
+    public static final double kTriggerDeadband = 0.75;
   }
 
   public static final class ShooterConstants {
-    public static final int kBackMotorCanId = 61;
-    public static final int kFrontMotorCanId = 62;
-    public static final int kIndexMotorCanId = 63;
-    public static final int kWinchMotorCanId = 64;
+    public static final int kBackMotorCanId = 51;
+    public static final int kFrontMotorCanId = 52;
+    public static final int kIndexMotorCanId = 53;
+    public static final int kWinchMotorCanId = 54;
 
     public static final double kFrontShootPower = 1.0;
-    public static final double kBackShootPower = 0.8;
+    public static final double kBackShootPower = 1.0;
     public static final double kFrontIntakePower = -0.35;
     public static final double kBackIntakePower = -0.30;
-    public static final double kIndexPower = 0.35;
+    public static final double kIndexIntakePower = 0.1;
+    public static final double kIndexPower = -1.0;
     public static final double kWinchUpPower = 0.5;
-    public static final double kWinchDownPower = -0.5;
+    public static final double kWinchDownPower = -1.0;
+    
+    public static final double kWinchDeadBand = 0.05;
+    public static final double kWinchUpPreset = 0;
+    public static final double kWinchDownPreset = 1.5;
+  }
+
+  public static final class ClimberConstants {
+    public static final int kLeftClimberCanId = 61;
+    public static final int kRightClimberCanId = 62;
+    public static final int kClimberUpPower = -1;
+    public static final int kClimberDownPower = 1;
+    public static final int kClimberMaxAmps = 200000;
+  }
+
+  public static final class LimelightConstants {
+    public static final double kCamHeight = 0; // Height of the limelight from the ground
+    public static final double kCamAngle = 0; // Pitch angle of direction the limelight is pointed in
   }
 }
