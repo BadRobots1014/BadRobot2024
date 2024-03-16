@@ -75,8 +75,8 @@ public class SwerveDriveDistanceCommand extends Command {
   adjustedInitialY = initialX * -1;  // so +Y should now be forwards and -Y should be back
 
   //also corrected to make sense
-    double currentY = swerveSubsystem.getX() * -1;// + x is actually right
-    double currentX = swerveSubsystem.getY() * -1; //Y+ is actually back 
+    double currentY = swerveSubsystem.getX();//Y+ is actually back 
+    double currentX = swerveSubsystem.getY() * -1;// + x is actually right
 
 //offset initial values so they are zero
     
@@ -94,7 +94,7 @@ public class SwerveDriveDistanceCommand extends Command {
     System.out.println("IsDriveFinished" + isDriveFinished);
 
     double deltaX = (targetX - currentX) / 2;
-    double deltaY = -(targetY - currentY) / 2;
+    double deltaY = (targetY - currentY) / 2;
 
     // if(movementHeading == 0){
     //   deltaX = 0;
