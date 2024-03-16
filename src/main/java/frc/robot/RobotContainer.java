@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,11 +14,13 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.commands.TurnThetaCommand;
 import frc.robot.commands.WinchCommand;
 import frc.robot.commands.WinchPresetCommand;
 import frc.robot.commands.ZeroHeadingCommand;
@@ -141,6 +144,14 @@ public class RobotContainer {
       .whileTrue(new WinchPresetCommand(m_shooterSubsystem, ShooterConstants.kWinchDownPreset));
     new JoystickButton(m_auxController, XboxController.Button.kBack.value) // Reset winch encoder
       .whileTrue(new ResetWinchCommand(m_shooterSubsystem));
+
+    new Trigger(isAuxRightTriggerActive())
+    .onTrue(new TurnThetaCommand(m_robotDrive, 0)); //Turn to heading of zero  (Straight ahead)
+    new Trigger(isAuxLeftTriggerActive())
+    .onTrue(new TurnThetaCommand(m_robotDrive, 270)); //Turn to heading of 270 (Directly right)
+    
+
+    
       // POV = Winch
       // Joysticks = Manual climbers
   }
@@ -170,6 +181,15 @@ public class RobotContainer {
   double getAuxPOV() {return m_auxController.getPOV();}
   double POVToWinchSpeed() {
     return getAuxPOV() == 0 ? ShooterConstants.kWinchUpPower : (getAuxPOV() == 180 ? ShooterConstants.kWinchDownPower : 0);
+  }
+  double getAuxRightTrigger(){
+    return m_auxController.getRightTriggerAxis();
+  }
+  BooleanSupplier isAuxRightTriggerActive(){
+    return () -> (m_auxController.getRightTriggerAxis() > 0.5);
+  }
+  BooleanSupplier isAuxLeftTriggerActive(){
+    return () -> (m_auxController.getLeftTriggerAxis() > 0.5);
   }
 
   /**

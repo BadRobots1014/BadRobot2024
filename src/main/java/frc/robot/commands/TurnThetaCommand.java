@@ -25,14 +25,14 @@ public class TurnThetaCommand extends Command {
   private double initial_heading;
   private double targetTheta;
 
-  public TurnThetaCommand(SwerveSubsystem subsystem, double turnDegrees) {
+  public TurnThetaCommand(SwerveSubsystem subsystem, double targetDegrees) {
     swerveSubsystem = subsystem;
     xSpdFunction = xSupplier;
     ySpdFunction = ySupplier;
     turningSpdFunction = turnSupplier;
     fieldOrientedFunction = fieldOriented;
     fastModeFunction = fastMode;
-    targetTheta = turnDegrees;
+    targetTheta = targetDegrees;
     xLimiter = new SlewRateLimiter(DriveConstants.kXSlewRateLimit);
     yLimiter = new SlewRateLimiter(DriveConstants.kYSlewRateLimit);
     turningLimiter = new SlewRateLimiter(DriveConstants.kTurnSlewRateLimit);
