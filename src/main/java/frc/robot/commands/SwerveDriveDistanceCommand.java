@@ -6,11 +6,14 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Distance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.Supplier;
+
 
 public class SwerveDriveDistanceCommand extends Command {
 
@@ -24,6 +27,7 @@ public class SwerveDriveDistanceCommand extends Command {
   public final Supplier<Double> xSupplier = ()-> 0.0;
   public final Supplier<Double> ySupplier = ()-> 0.0;
   public final Supplier<Double> turnSupplier = ()-> 0.0;
+  private ShuffleboardTab m_tab;
   private double initial_yaw;
   private double initialX;
   private double initialY;
@@ -53,6 +57,8 @@ public class SwerveDriveDistanceCommand extends Command {
     movementHeading = movHeadingDegrees;
     targetDistance = disMeters;
     addRequirements(swerveSubsystem);
+
+     //m_tab = Shuffleboard.getTab("AutoDriveDistance");
   }
 
   @Override
@@ -64,19 +70,19 @@ public class SwerveDriveDistanceCommand extends Command {
     
     //based on old photo of toecracker bot, it appears that -X is forwards, +X is backwards, +Y is right and -Y is left
     initialX = swerveSubsystem.getX(); //should be forwards/backwards
-    initialY = swerveSubsystem.getY(); //should be right/left based on this image : https://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaichttps://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaichttps://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaichttps://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaic
+    initialY = swerveSubsystem.getFrontLeftDriveDistanceMeters(); //should be right/left based on this image : https://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaichttps://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaichttps://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaichttps://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaic
     //displacement XY and Z are all in meters
   }
 
   @Override
   public void execute() {
     //fix axes so not compuzzling
-  adjustedInitialX = initialY * -1;      //so should now be +X is right and -X is left
-  adjustedInitialY = initialX * -1;  // so +Y should now be forwards and -Y should be back
+  adjustedInitialX = initialX;      //so should now be +X is right and -X is left
+  adjustedInitialY = initialY;  // so +Y should now be forwards and -Y should be back
 
   //also corrected to make sense
-    double currentY = swerveSubsystem.getX();//Y+ is actually back 
-    double currentX = swerveSubsystem.getY() * -1;// + x is actually right
+    double currentY = swerveSubsystem.getFrontLeftDriveDistanceMeters();//Y+ is actually back 
+    double currentX = swerveSubsystem.getX();// + x is actually right
 
 //offset initial values so they are zero
     
@@ -93,8 +99,10 @@ public class SwerveDriveDistanceCommand extends Command {
     System.out.println("targetY: " + targetY);  
     System.out.println("IsDriveFinished" + isDriveFinished);
 
-    double deltaX = (targetX - currentX) / 2;
-    double deltaY = (targetY - currentY) / 2;
+    double deltaX = (targetX - currentX);
+    double deltaY = (targetY - currentY) * 15; //because scale is so small
+
+    deltaX = 0;//TODO: DO this for now because I am not calculating horizontal movement
 
     // if(movementHeading == 0){
     //   deltaX = 0;
@@ -176,4 +184,6 @@ public class SwerveDriveDistanceCommand extends Command {
   public boolean isFinished() {
     return isDriveFinished; 
   }
+
+  
 }

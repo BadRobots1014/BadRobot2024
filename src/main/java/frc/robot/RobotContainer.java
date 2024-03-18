@@ -100,7 +100,7 @@ public class RobotContainer {
     m_chosenAuto.addOption("Shinbreak 0.2 meters forwards at 45 degree movement heading", 
     new DriveDistanceAtAngleAutoCommand(m_robotDrive, 0.2, 45));//move 0.2 meter at a movement heading 45 degrees to the right
     m_chosenAuto.addOption("Shinbreak 0.2 meters forwards", 
-    new DriveDistanceAutoCommand(m_robotDrive, 0.2));//move 0.2 meter forwards
+    new DriveDistanceAutoCommand(m_robotDrive, -0.05));//move 1 meter forwards
     m_chosenAuto.addOption("Shinbreak 45 degrees left", 
     new TurnThetaAutoCommand(m_robotDrive, -45)); //turn robot 45 degrees to the left
     m_tab.add(m_chosenAuto);

@@ -109,6 +109,9 @@ public class SwerveModule {
     m_tab.addDouble("Last PID Output" + driveMotorId, this::getLastPIDOutput);
     m_tab.addDouble("Last error" + driveMotorId, this::getLastError);
 
+    m_tab.addDouble("Get Drive Position (meters)" + driveMotorId, this::getDrivePosition);
+    m_tab.addDouble("Get Turning Position (degrees)" + driveMotorId, this::getTurningPositionDeg);
+
     // Reset the encoders on start
     resetEncoders();
   }
@@ -185,6 +188,10 @@ public class SwerveModule {
   public double getTurningPosition() {
     return turningEncoder.getPosition();
   } // Returns position of turning encoder in radians
+
+  public double getTurningPositionDeg() {
+    return Math.toDegrees(turningEncoder.getPosition());
+  } // Returns position of turning encoder in degrees
 
   public double getDriveVelocity() {
     return driveEncoder.getVelocity();

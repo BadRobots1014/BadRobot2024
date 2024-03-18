@@ -27,7 +27,7 @@ public class DriveDistanceAutoCommand extends SequentialCommandGroup {
     
     
     super(
-      new SetPoseCommand(swerve, new Pose2d()).withTimeout(2),
+      new SetPoseCommand(swerve, new Pose2d()).withTimeout(5),
       new SwerveDriveDistanceCommand(swerve,distance,0)
       );
   }

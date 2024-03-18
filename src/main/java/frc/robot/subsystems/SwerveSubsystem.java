@@ -105,6 +105,9 @@ public class SwerveSubsystem extends SubsystemBase {
     m_tab.addNumber("Y Offset", () -> offsetY);
     m_tab.addBoolean("NavX isConnected", gyro::isConnected);
     m_tab.addBoolean("NavX isCalibrating", gyro::isCalibrating);
+
+    m_tab.addDouble("Get Drive Position (meters)", this::getFrontLeftDriveDistanceMeters);
+    m_tab.addDouble("Get Turning Position (degrees)", this::getFrontLeftTurningPos);
   }
 
   // Gyro data shenanigans
@@ -134,6 +137,11 @@ public class SwerveSubsystem extends SubsystemBase {
   public double getYSpeed() {return gyro.getVelocityY();}
   public double getTurnSpeed() {return gyro.getRate();}
   public Pose2d getPose() {return new Pose2d(getX(), getY(), getRotation2d());}
+
+  //Swervy Encoder Stuffs
+    public double getFrontLeftDriveDistance(){return frontLeft.getDrivePosition();}
+    public double getFrontLeftTurningPos(){return frontLeft.getTurningPositionDeg();}
+    public double getFrontLeftDriveDistanceMeters(){return frontLeft.getDrivePosition() * 0.0009336;}// meters per encoder count
 
   public ChassisSpeeds getRobotRelativeSpeeds() {return new ChassisSpeeds(getXSpeed(), getYSpeed(), getTurnSpeed());}
   public void driveRobotRelative(ChassisSpeeds speeds) {
@@ -216,6 +224,8 @@ public class SwerveSubsystem extends SubsystemBase {
     frontRight.setDesiredState(new SwerveModuleState());
     backLeft.setDesiredState(new SwerveModuleState());
     backRight.setDesiredState(new SwerveModuleState());
+
+    
 
     module.setDesiredState(
       new SwerveModuleState(

@@ -52,8 +52,8 @@ public class SwerveDriveCommand extends Command {
 
   @Override
   public void execute() {
-    System.out.println("CurrentX" + swerveSubsystem.getY() * -1);
-    System.out.println("CurrentY" + swerveSubsystem.getX() * -1);
+    System.out.println("CurrentX" + swerveSubsystem.getX());
+    System.out.println("CurrentY" + swerveSubsystem.getY());
     // Get inputs
     double xSpeed = 0, ySpeed = 0, turningSpeed = 0;
     boolean fastMode = false, fasterMode = false;
