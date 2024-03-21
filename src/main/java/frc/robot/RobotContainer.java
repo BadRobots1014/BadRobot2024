@@ -86,9 +86,9 @@ public class RobotContainer {
     m_chosenAuto.setDefaultOption("Shoot and drive from middle",
       new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0,0,Rotation2d.fromDegrees(0)), m_delay.getDouble(0))); //used to be an empty Pose2D (should not change but maybe the empty pose has something to do with it)
     m_chosenAuto.addOption("Shoot and drive from left",
-      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(55)), m_delay.getDouble(0)));
+      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(55 + 180)), m_delay.getDouble(0)));
     m_chosenAuto.addOption("Shoot and drive from right",
-      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(-55)), m_delay.getDouble(0)));
+      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(-55 + 180)), m_delay.getDouble(0)));
     m_chosenAuto.addOption("Drive, turn, and shoot from left",
       new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), 55, m_delay.getDouble(0)));
     m_chosenAuto.addOption("Drive, turn, and shoot from right",
@@ -99,8 +99,8 @@ public class RobotContainer {
       new ShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), m_delay.getDouble(0)).withTimeout(4));
     m_chosenAuto.addOption("Shinbreak 0.2 meters forwards at 45 degree movement heading", 
     new DriveDistanceAtAngleAutoCommand(m_robotDrive, 0.2, 45));//move 0.2 meter at a movement heading 45 degrees to the right
-    m_chosenAuto.addOption("Shinbreak 0.2 meters forwards", 
-    new DriveDistanceAutoCommand(m_robotDrive, -0.05));//move 1 meter forwards
+    m_chosenAuto.addOption("Shinbreak 1 meter forwards", 
+    new DriveDistanceAutoCommand(m_robotDrive, -1));//move 1 meter forwards
     m_chosenAuto.addOption("Shinbreak 45 degrees left", 
     new TurnThetaAutoCommand(m_robotDrive, -45)); //turn robot 45 degrees to the left
     m_tab.add(m_chosenAuto);
@@ -168,7 +168,7 @@ public class RobotContainer {
     return fasterMode;
   }
   double getRightX() {
-    System.out.println("DELAY: " + m_delay.getDouble(0));
+    //System.out.println("DELAY: " + m_delay.getDouble(0));
     return m_driverController.getRightX();}
   double getLeftX() {return -m_driverController.getLeftX();}
   double getLeftY() {return -m_driverController.getLeftY();}

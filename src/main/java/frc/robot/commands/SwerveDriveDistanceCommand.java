@@ -55,7 +55,7 @@ public class SwerveDriveDistanceCommand extends Command {
     yLimiter = new SlewRateLimiter(DriveConstants.kYSlewRateLimit);
     turningLimiter = new SlewRateLimiter(DriveConstants.kTurnSlewRateLimit);
     movementHeading = movHeadingDegrees;
-    targetDistance = disMeters;
+    targetDistance = disMeters * 0.05;
     addRequirements(swerveSubsystem);
 
      //m_tab = Shuffleboard.getTab("AutoDriveDistance");
@@ -63,10 +63,11 @@ public class SwerveDriveDistanceCommand extends Command {
 
   @Override
   public void initialize(){
-    swerveSubsystem.resetPose(new Pose2d());
-    swerveSubsystem.setOffset(swerveSubsystem.getPose()); //sets the offset to this pose
+    //swerveSubsystem.resetPose(new Pose2d());
+    //swerveSubsystem.setOffset(swerveSubsystem.getPose()); //sets the offset to this pose
     //initial_yaw = swerveSubsystem.getHeading();
     isDriveFinished = false;
+    System.out.println("SWERVEDRIVEDISTANCEINIT");
     
     //based on old photo of toecracker bot, it appears that -X is forwards, +X is backwards, +Y is right and -Y is left
     initialX = swerveSubsystem.getX(); //should be forwards/backwards
@@ -87,7 +88,7 @@ public class SwerveDriveDistanceCommand extends Command {
 //offset initial values so they are zero
     
     //autodrivedistance stuffs
-    double targetX = targetDistance*Math.sin(Math.toRadians(movementHeading)) + adjustedInitialX; 
+    double targetX = (targetDistance*Math.sin(Math.toRadians(movementHeading)) + adjustedInitialX); 
     double targetY = (targetDistance*Math.cos(Math.toRadians(movementHeading)) + adjustedInitialY); //adjust so Y+ is forwards intake
     
     
@@ -100,7 +101,7 @@ public class SwerveDriveDistanceCommand extends Command {
     System.out.println("IsDriveFinished" + isDriveFinished);
 
     double deltaX = (targetX - currentX);
-    double deltaY = (targetY - currentY) * 15; //because scale is so small
+    double deltaY = (targetY - currentY) * 150; //because scale is so small
 
     deltaX = 0;//TODO: DO this for now because I am not calculating horizontal movement
 
@@ -108,15 +109,15 @@ public class SwerveDriveDistanceCommand extends Command {
     //   deltaX = 0;
     // }
 
-    if(Math.abs(deltaX) <= 0.005 && Math.abs(deltaY) <= 0.005){ //may need to adjust how sensitive it is
+    if(Math.abs(deltaY) <= 0.005){ //may need to adjust how sensitive it is  Math.abs(deltaX) <= 0.005 &&
       isDriveFinished = true;
     }
     
-    if((Math.abs(deltaY) >= (targetY - initialY) + 1) || (Math.abs(deltaX) >= (targetX - initialX) + 1)){
-      //prevent runoffs if the inversion of axes is wrong and robot runs more than a meter in the wrong direction
-      //can be removed later once confirmed it works
-      isDriveFinished = true;
-    }
+    // if((Math.abs(deltaY) >= (targetY - initialY) + 1) || (Math.abs(deltaX) >= (targetX - initialX) + 1)){
+    //   //prevent runoffs if the inversion of axes is wrong and robot runs more than a meter in the wrong direction
+    //   //can be removed later once confirmed it works
+    //   isDriveFinished = true;
+    // }
 
 
 
