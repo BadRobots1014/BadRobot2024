@@ -31,7 +31,8 @@ public class SwerveDriveCommand extends Command {
     boolean fieldOriented,
     Supplier<Boolean> fastMode,
     Supplier<Boolean> fasterMode,
-    Supplier<Double> povSupplier
+    Supplier<Double> povSupplier,
+    Supplier<Integer> getAutoAimMode
   ) {
     swerveSubsystem = subsystem;
     xSpdFunction = xSupplier;
