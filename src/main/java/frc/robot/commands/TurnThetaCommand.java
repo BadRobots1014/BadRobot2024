@@ -49,11 +49,12 @@ public class TurnThetaCommand extends Command {
   @Override
   public void execute() {
     //autoturny stuffs
-    double current_heading = (swerveSubsystem.getHeading() + 360) % 360;
+    double current_heading = swerveSubsystem.getHeading();
+    // double current_heading = (swerveSubsystem.getHeading() + 360) % 360;
     double theta = targetTheta - current_heading;
-    if(theta > 180){
-      theta -= 360; //go shortest distance
-    }
+    // if(theta > 180){
+    //   theta += 360; //go shortest distance
+    // }
     double speed = theta / 45;
     
     System.out.println("DeltaTheta:" + theta);

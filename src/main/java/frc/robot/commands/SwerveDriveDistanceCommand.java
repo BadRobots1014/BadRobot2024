@@ -70,7 +70,7 @@ public class SwerveDriveDistanceCommand extends Command {
     System.out.println("SWERVEDRIVEDISTANCEINIT");
     
     //based on old photo of toecracker bot, it appears that -X is forwards, +X is backwards, +Y is right and -Y is left
-    initialX = swerveSubsystem.getX(); //should be forwards/backwards
+    initialX = 0;//swerveSubsystem.getX(); //should be forwards/backwards
     initialY = swerveSubsystem.getFrontLeftDriveDistanceMeters(); //should be right/left based on this image : https://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaichttps://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaichttps://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaichttps://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaic
     //displacement XY and Z are all in meters
   }
@@ -81,9 +81,15 @@ public class SwerveDriveDistanceCommand extends Command {
   adjustedInitialX = initialX;      //so should now be +X is right and -X is left
   adjustedInitialY = initialY;  // so +Y should now be forwards and -Y should be back
 
+  double currentDistance = swerveSubsystem.getFrontLeftDriveDistanceMeters();
+
   //also corrected to make sense
     double currentY = swerveSubsystem.getFrontLeftDriveDistanceMeters();//Y+ is actually back 
-    double currentX = swerveSubsystem.getX();// + x is actually right
+    double currentX = 0;//swerveSubsystem.getX();// + x is actually right
+
+    //should calculate the distance it travels if wheels are at an angle
+    currentY = Math.toDegrees(Math.cos(Math.toRadians(swerveSubsystem.getFrontLeftTurningPos()))) * currentDistance;
+    currentX = Math.toDegrees(Math.sin(Math.toRadians(swerveSubsystem.getFrontLeftTurningPos()))) * currentDistance;
 
 //offset initial values so they are zero
     

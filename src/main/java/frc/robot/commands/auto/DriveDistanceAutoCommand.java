@@ -30,7 +30,6 @@ public class DriveDistanceAutoCommand extends SequentialCommandGroup {
       new SetPoseCommand(swerve, new Pose2d()).withTimeout(0),
       new SwerveDriveDistanceCommand(swerve,distance,0),
       new TurnThetaAutoCommand(swerve, 180)
-      
       );
   }
   
