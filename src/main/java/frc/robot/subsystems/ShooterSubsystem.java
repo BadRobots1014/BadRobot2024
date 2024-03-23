@@ -2,6 +2,10 @@
 // NEGATIVE CLOCKWISE
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -11,6 +15,7 @@ import com.revrobotics.SparkRelativeEncoder.Type;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,24 +35,27 @@ public class ShooterSubsystem extends SubsystemBase {
   private final GenericEntry m_winchUpPower;
   private final GenericEntry m_winchDownPower;
 
-  public final CANSparkFlex m_frontMotor;
-  public final CANSparkFlex m_backMotor;
+  public final TalonFX m_frontMotor;
+  public final TalonFX m_backMotor;
   public final CANSparkMax m_indexMotor;
   public final CANSparkMax m_winchMotor;
   public final RelativeEncoder m_winchEncoder;
 
   public ShooterSubsystem() {
+    
 
-    m_frontMotor = new CANSparkFlex(ShooterConstants.kFrontMotorCanId, MotorType.kBrushless);
-    m_backMotor = new CANSparkFlex(ShooterConstants.kBackMotorCanId, MotorType.kBrushless);
+    m_frontMotor = new TalonFX(ShooterConstants.kFrontMotorCanId);
+    m_backMotor = new TalonFX(ShooterConstants.kBackMotorCanId);
     m_indexMotor = new CANSparkMax(ShooterConstants.kIndexMotorCanId, MotorType.kBrushless);
     m_winchMotor = new CANSparkMax(ShooterConstants.kWinchMotorCanId, MotorType.kBrushed);
-    m_frontMotor.setIdleMode(IdleMode.kCoast);
-    m_backMotor.setIdleMode(IdleMode.kCoast);
+    m_frontMotor.setNeutralMode(NeutralModeValue.Coast);
+    m_backMotor.setNeutralMode(NeutralModeValue.Coast);
+    // m_frontMotor.setIdleMode(IdleMode.kCoast);
+    // m_backMotor.setIdleMode(IdleMode.kCoast);
     m_indexMotor.setIdleMode(IdleMode.kCoast);
     m_winchMotor.setIdleMode(IdleMode.kCoast);
     m_frontMotor.setInverted(false);
-    m_backMotor.setInverted(false);
+    m_backMotor.setInverted(true);//was set to false.  Set to true because assuming this will be the one on the right side
     m_indexMotor.setInverted(true);
     m_winchMotor.setInverted(false);
     m_winchEncoder = m_winchMotor.getEncoder(Type.kQuadrature, 8192);
