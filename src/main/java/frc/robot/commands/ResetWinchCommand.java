@@ -14,7 +14,7 @@ public class ResetWinchCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.resetWinchEncoder();
+    //m_subsystem.resetWinchEncoder();
   }
 
   // Returns true when the command should end.

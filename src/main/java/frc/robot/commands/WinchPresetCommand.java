@@ -25,23 +25,23 @@ public class WinchPresetCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_subsystem.getWinchEncoder() < m_goal.get()) {
-      m_subsystem.winchDown();
-    }
-    else if (m_subsystem.getWinchEncoder() > m_goal.get()) {
-      m_subsystem.winchUp();
-    }
+    // if (m_subsystem.getWinchEncoder() < m_goal.get()) {
+    //   m_subsystem.winchDown();
+    // }
+    // else if (m_subsystem.getWinchEncoder() > m_goal.get()) {
+    //   m_subsystem.winchUp();
+    // }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.stopWinch();
+    //m_subsystem.stopWinch();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(m_subsystem.getWinchEncoder() - m_goal.get()) < ShooterConstants.kWinchDeadBand;
+    return false;//Math.abs(m_subsystem.getWinchEncoder() - m_goal.get()) < ShooterConstants.kWinchDeadBand;
   }
 }

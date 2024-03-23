@@ -19,18 +19,18 @@ import frc.robot.Constants.ModuleConstants;
 public class SwerveModule {
 
   // All the things
-  private final CANSparkMax driveMotor;
-  private final CANSparkMax turningMotor;
+  // private final CANSparkMax driveMotor;
+  // private final CANSparkMax turningMotor;
 
-  private final RelativeEncoder driveEncoder;
-  private final RelativeEncoder turningEncoder;
+  // private final RelativeEncoder driveEncoder;
+  // private final RelativeEncoder turningEncoder;
 
   public PIDController turningPidController;
 
-  private final CANcoder absoluteEncoder;
-  private final boolean absoluteEncoderReversed;
-  private final double absoluteEncoderOffsetRad;
-  private final double absoluteEncoderOffsetRot;
+  // private final CANcoder absoluteEncoder;
+  // private final boolean absoluteEncoderReversed;
+  // private final double absoluteEncoderOffsetRad;
+  // private final double absoluteEncoderOffsetRot;
 
   private ShuffleboardTab m_tab;
   private SwerveModuleState m_lastState = new SwerveModuleState();
@@ -47,46 +47,46 @@ public class SwerveModule {
     boolean absoluteEncoderReversed
   ) {
     // Absolute encoder setup
-    this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
-    this.absoluteEncoderOffsetRot =
-      this.absoluteEncoderOffsetRad / (2 * Math.PI);
-    this.absoluteEncoderReversed = absoluteEncoderReversed;
-    absoluteEncoder = new CANcoder(absoluteEncoderId);
-    CANcoderConfigurator configer = absoluteEncoder.getConfigurator();
-    MagnetSensorConfigs config = new MagnetSensorConfigs();
-    config.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-    config.MagnetOffset = absoluteEncoderOffsetRot;
-    config.SensorDirection =
-      absoluteEncoderReversed
-        ? SensorDirectionValue.Clockwise_Positive
-        : SensorDirectionValue.CounterClockwise_Positive;
-    configer.apply(config);
+    // this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
+    // this.absoluteEncoderOffsetRot =
+    //   this.absoluteEncoderOffsetRad / (2 * Math.PI);
+    // this.absoluteEncoderReversed = absoluteEncoderReversed;
+    // absoluteEncoder = new CANcoder(absoluteEncoderId);
+    // CANcoderConfigurator configer = absoluteEncoder.getConfigurator();
+    // MagnetSensorConfigs config = new MagnetSensorConfigs();
+    // config.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+    // config.MagnetOffset = absoluteEncoderOffsetRot;
+    // config.SensorDirection =
+    //   absoluteEncoderReversed
+    //     ? SensorDirectionValue.Clockwise_Positive
+    //     : SensorDirectionValue.CounterClockwise_Positive;
+    // configer.apply(config);
 
     // Motor setup
-    driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
-    turningMotor = new CANSparkMax(turningMotorId, MotorType.kBrushless);
-    driveMotor.setInverted(driveMotorReversed);
-    turningMotor.setInverted(turningMotorReversed);
-    driveMotor.setIdleMode(IdleMode.kBrake);
-    turningMotor.setIdleMode(IdleMode.kBrake);
+    // driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
+    // turningMotor = new CANSparkMax(turningMotorId, MotorType.kBrushless);
+    // driveMotor.setInverted(driveMotorReversed);
+    // turningMotor.setInverted(turningMotorReversed);
+    // driveMotor.setIdleMode(IdleMode.kBrake);
+    // turningMotor.setIdleMode(IdleMode.kBrake);
 
     // Relative encoder setup
-    driveEncoder = driveMotor.getEncoder();
-    turningEncoder = turningMotor.getEncoder();
+    // driveEncoder = driveMotor.getEncoder();
+    // turningEncoder = turningMotor.getEncoder();
 
-    // Setup conversion factors
-    driveEncoder.setPositionConversionFactor(
-      ModuleConstants.kDriveEncoderRot2Meter
-    );
-    driveEncoder.setVelocityConversionFactor(
-      ModuleConstants.kDriveEncoderRPM2MeterPerSec
-    );
-    turningEncoder.setPositionConversionFactor(
-      ModuleConstants.kTurningEncoderRot2Rad
-    );
-    turningEncoder.setVelocityConversionFactor(
-      ModuleConstants.kTurningEncoderRPM2RadPerSec
-    );
+    // // Setup conversion factors
+    // driveEncoder.setPositionConversionFactor(
+    //   ModuleConstants.kDriveEncoderRot2Meter
+    // );
+    // driveEncoder.setVelocityConversionFactor(
+    //   ModuleConstants.kDriveEncoderRPM2MeterPerSec
+    // );
+    // turningEncoder.setPositionConversionFactor(
+    //   ModuleConstants.kTurningEncoderRot2Rad
+    // );
+    // turningEncoder.setVelocityConversionFactor(
+    //   ModuleConstants.kTurningEncoderRPM2RadPerSec
+    // );
 
     // Setup PID controllers
     turningPidController =
@@ -100,22 +100,22 @@ public class SwerveModule {
     turningPidController.reset();
 
     // Setup Shuffleboard
-    m_tab = Shuffleboard.getTab("Swerve Modules");
-    m_tab.addDouble("Last angle " + driveMotorId, this::getLastStateAngle);
-    m_tab.addDouble("Last speed" + driveMotorId, this::getLastStateSpeed);
-    m_tab.addDouble("Last angle optimized" + driveMotorId, this::getLastStateAngleOptimized);
-    m_tab.addDouble("Last speed optimized" + driveMotorId, this::getLastStateSpeedOptimized);
-    m_tab.addDouble("Encoder angle" + driveMotorId, this::getAbsoluteEncoderRad);
-    m_tab.addDouble("Last PID Output" + driveMotorId, this::getLastPIDOutput);
-    m_tab.addDouble("Last error" + driveMotorId, this::getLastError);
+    // m_tab = Shuffleboard.getTab("Swerve Modules");
+    // m_tab.addDouble("Last angle " + driveMotorId, this::getLastStateAngle);
+    // m_tab.addDouble("Last speed" + driveMotorId, this::getLastStateSpeed);
+    // m_tab.addDouble("Last angle optimized" + driveMotorId, this::getLastStateAngleOptimized);
+    // m_tab.addDouble("Last speed optimized" + driveMotorId, this::getLastStateSpeedOptimized);
+    // m_tab.addDouble("Encoder angle" + driveMotorId, this::getAbsoluteEncoderRad);
+    // m_tab.addDouble("Last PID Output" + driveMotorId, this::getLastPIDOutput);
+    // m_tab.addDouble("Last error" + driveMotorId, this::getLastError);
 
     // Reset the encoders on start
     resetEncoders();
   }
 
   public void resetEncoders() {
-    driveEncoder.setPosition(0);
-    turningEncoder.setPosition(getAbsoluteEncoderRad()); // This one gets reset to the actual position of the module
+    // driveEncoder.setPosition(0);
+    // turningEncoder.setPosition(getAbsoluteEncoderRad()); // This one gets reset to the actual position of the module
   }
 
   public void setDesiredState(SwerveModuleState state) {
@@ -129,16 +129,16 @@ public class SwerveModule {
     // TODO fix optimization
     state = optimize(state, getState().angle);
     m_lastStateOptimized = state;
-    driveMotor.set(
-      state.speedMetersPerSecond //* DriveConstants.kMaxSpeedMetersPerSecond
-    );
-    turningMotor.set(
-      m_lastPIDOutput =
-        turningPidController.calculate(
-          getAbsoluteEncoderRad(),
-          state.angle.getRadians()
-        )
-    );
+    // driveMotor.set(
+    //   state.speedMetersPerSecond //* DriveConstants.kMaxSpeedMetersPerSecond
+    // );
+    // turningMotor.set(
+    //   m_lastPIDOutput =
+    //     turningPidController.calculate(
+    //       getAbsoluteEncoderRad(),
+    //       state.angle.getRadians()
+    //     )
+    // );
   }
 
   public SwerveModuleState getLastState() {
@@ -174,28 +174,28 @@ public class SwerveModule {
   }
 
   public void stop() {
-    driveMotor.set(0);
-    turningMotor.set(0);
+    // driveMotor.set(0);
+    // turningMotor.set(0);
   }
 
   public double getDrivePosition() {
-    return driveEncoder.getPosition();
+    return 0; //driveEncoder.getPosition();
   } // Returns position of drive encoder in meters traveled
 
   public double getTurningPosition() {
-    return turningEncoder.getPosition();
+    return 0; //turningEncoder.getPosition();
   } // Returns position of turning encoder in radians
 
   public double getDriveVelocity() {
-    return driveEncoder.getVelocity();
+    return 0;// driveEncoder.getVelocity();
   } // Returns velocity of drive encoder in meters per second
 
   public double getTurningVelocity() {
-    return turningEncoder.getVelocity();
+    return 0; //turningEncoder.getVelocity();
   } // Returns velocity of drive encoder in radians per second
 
   public double getAbsoluteEncoderRot() {
-    return absoluteEncoder.getAbsolutePosition().getValue();
+    return 0; //absoluteEncoder.getAbsolutePosition().getValue();
   } // Returns position of absolute encoder in degrees
 
   public double getAbsoluteEncoderRad() {

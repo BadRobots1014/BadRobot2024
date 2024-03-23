@@ -23,10 +23,10 @@ public class UpdatePIDCommand extends Command {
     double p = m_subsystem.p.getDouble(ModuleConstants.kTurningP);
     double i = m_subsystem.i.getDouble(ModuleConstants.kTurningI);
     double d = m_subsystem.d.getDouble(ModuleConstants.kTurningD);
-    m_subsystem.frontLeft.turningPidController.setPID(p, i, d);
-    m_subsystem.frontRight.turningPidController.setPID(p, i, d);
-    m_subsystem.backLeft.turningPidController.setPID(p, i, d);
-    m_subsystem.backRight.turningPidController.setPID(p, i, d);
+    // m_subsystem.frontLeft.turningPidController.setPID(p, i, d);
+    // m_subsystem.frontRight.turningPidController.setPID(p, i, d);
+    // m_subsystem.backLeft.turningPidController.setPID(p, i, d);
+    // m_subsystem.backRight.turningPidController.setPID(p, i, d);
     System.out.println(p);
   }
 

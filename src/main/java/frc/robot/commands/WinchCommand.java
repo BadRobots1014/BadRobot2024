@@ -18,13 +18,13 @@ public class WinchCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.manualWinch(m_power.get());
+    //m_subsystem.manualWinch(m_power.get());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.stopWinch();
+    //m_subsystem.stopWinch();
   }
 
   // Returns true when the command should end.
