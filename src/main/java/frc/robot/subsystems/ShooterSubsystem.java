@@ -61,7 +61,7 @@ public final CANSparkFlex m_flippyMotor;
     m_indexMotor.setInverted(true);
     m_winchMotor.setInverted(false);
     m_winchEncoder = m_winchMotor.getEncoder(Type.kQuadrature, 8192);
-    m_flippyEncoder = m_flippyMotor.getEncoder(Type.kHallSensor, 0);//TODO: Change counts per rev and sensor type
+    m_flippyEncoder = m_flippyMotor.getEncoder(Type.kHallSensor, 42);
 
 
     // Displays whether or not the shooter is running
