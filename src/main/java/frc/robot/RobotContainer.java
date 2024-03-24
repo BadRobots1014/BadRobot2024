@@ -130,10 +130,12 @@ public class RobotContainer {
     new JoystickButton(m_driverController, XboxController.Button.kStart.value)
       .whileTrue(new ResetFlippyEncoderCommand(m_shooterSubsystem));//reset flippy encoder
       // Left bumper = Toggle fastmode
-      // Left trigger = Toggle fastermode
+      // Right trigger = Toggle fastermode
       // POV = Nudge
       // Right joystick = Move
       // Left joystick = Turn
+      // Left trigger = flippy flippy
+      // Start = reset flippy encoder
 
     // Auxillary stuff
     new JoystickButton(m_auxController, XboxController.Button.kRightBumper.value) // Shoot
