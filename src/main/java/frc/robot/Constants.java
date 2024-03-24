@@ -139,6 +139,9 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
+    public static final int kFlippyMotorCanId = 1;
+    public static final int kIntakeMotorCanId = 2;
+
     public static final int kBackMotorCanId = 51;
     public static final int kFrontMotorCanId = 52;
     public static final int kIndexMotorCanId = 53;

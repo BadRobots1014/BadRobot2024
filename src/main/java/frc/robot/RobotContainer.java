@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -29,11 +30,15 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.ClimbCommand;
+import frc.robot.commands.FlippyCommand;
+import frc.robot.commands.FlippyIntakeCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.ResetFlippyEncoderCommand;
 import frc.robot.commands.ResetWinchCommand;
 import frc.robot.commands.ShootCommand;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Joystick;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -120,6 +125,10 @@ public class RobotContainer {
     // Driver stuff
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value) // Reset gyro
       .whileTrue(new ZeroHeadingCommand(m_robotDrive));
+    new Trigger(this::getFlippyIntake)//The flippy flippy
+    .whileTrue(new FlippyCommand(m_shooterSubsystem, () -> m_driverController.getLeftTriggerAxis()));
+    new JoystickButton(m_driverController, XboxController.Button.kStart.value)
+      .whileTrue(new ResetFlippyEncoderCommand(m_shooterSubsystem));//reset flippy encoder
       // Left bumper = Toggle fastmode
       // Left trigger = Toggle fastermode
       // POV = Nudge
@@ -151,9 +160,15 @@ public class RobotContainer {
     }
     return fastMode;
   }
-
+  boolean getFlippyIntake() {
+    if (m_driverController.getLeftTriggerAxis() > 0.9) {
+      fasterMode = true;
+    }
+    else fasterMode = false;
+    return fasterMode;
+  }
   boolean getFasterMode() {
-    if (m_driverController.getLeftTriggerAxis() > OIConstants.kTriggerDeadband) {
+    if (m_driverController.getRightTriggerAxis() > OIConstants.kTriggerDeadband) {
       fasterMode = true;
     }
     else fasterMode = false;

@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 import java.util.Map;
+import java.util.concurrent.CancellationException;
 
 public class ShooterSubsystem extends SubsystemBase {
 
@@ -30,18 +31,27 @@ public class ShooterSubsystem extends SubsystemBase {
   private final GenericEntry m_winchUpPower;
   private final GenericEntry m_winchDownPower;
 
+public final CANSparkFlex m_flippyMotor;
+  public final CANSparkFlex m_intakeMotor;
   public final CANSparkFlex m_frontMotor;
   public final CANSparkFlex m_backMotor;
   public final CANSparkMax m_indexMotor;
   public final CANSparkMax m_winchMotor;
   public final RelativeEncoder m_winchEncoder;
+  public final RelativeEncoder m_flippyEncoder;
 
   public ShooterSubsystem() {
+    //Intake mechanism motors
+    m_flippyMotor = new CANSparkFlex(ShooterConstants.kFlippyMotorCanId, MotorType.kBrushless);
+    m_intakeMotor = new CANSparkFlex(ShooterConstants.kIntakeMotorCanId, MotorType.kBrushed);
 
+    //shooter and winch motors
     m_frontMotor = new CANSparkFlex(ShooterConstants.kFrontMotorCanId, MotorType.kBrushless);
     m_backMotor = new CANSparkFlex(ShooterConstants.kBackMotorCanId, MotorType.kBrushless);
     m_indexMotor = new CANSparkMax(ShooterConstants.kIndexMotorCanId, MotorType.kBrushless);
     m_winchMotor = new CANSparkMax(ShooterConstants.kWinchMotorCanId, MotorType.kBrushed);
+    m_flippyMotor.setIdleMode(IdleMode.kBrake);
+    m_intakeMotor.setIdleMode(IdleMode.kCoast);
     m_frontMotor.setIdleMode(IdleMode.kCoast);
     m_backMotor.setIdleMode(IdleMode.kCoast);
     m_indexMotor.setIdleMode(IdleMode.kCoast);
@@ -51,6 +61,8 @@ public class ShooterSubsystem extends SubsystemBase {
     m_indexMotor.setInverted(true);
     m_winchMotor.setInverted(false);
     m_winchEncoder = m_winchMotor.getEncoder(Type.kQuadrature, 8192);
+    m_flippyEncoder = m_flippyMotor.getEncoder(Type.kHallSensor, 0);//TODO: Change counts per rev and sensor type
+
 
     // Displays whether or not the shooter is running
     m_shuffleboardtab.addBoolean("Shooter Running", this::isShooterRunning);
@@ -75,6 +87,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // Winch encoder value
     m_shuffleboardtab.addNumber("Winch Encoder", this::getWinchEncoder);
+    //Flippy motor encoder value
+    m_shuffleboardtab.addNumber("Flippy Motor Encoder", this::getFlippyEncoder);
   }
 
   // Shooter stuff
@@ -103,6 +117,17 @@ public class ShooterSubsystem extends SubsystemBase {
     m_frontMotor.set(getIntakePowers()[0]);
     m_backMotor.set(getIntakePowers()[1]);
     m_indexMotor.set(getIntakePowers()[2]);
+  }
+  public void runFlippyIntake(double power){m_intakeMotor.set(clampPower(power));}
+  public void runFlippyMotor(double power){m_flippyMotor.set(clampPower(power));}
+  public double getFlippyEncoder(){return m_flippyEncoder.getPosition();}
+  public void setFlippyEncoder(double pos){m_flippyEncoder.setPosition(pos);}
+  public void resetFlippyEncoder(){m_flippyEncoder.setPosition(0);}
+  public void stopFlippyIntake(){
+    m_intakeMotor.stopMotor();
+  }
+  public void stopFlippyMotor(){
+    m_flippyMotor.stopMotor();
   }
   public void stopShooter() {
     m_frontMotor.stopMotor();
@@ -139,5 +164,11 @@ public class ShooterSubsystem extends SubsystemBase {
   // Function to clamp the power to a value between -1 and 1
   public static double clampPower(double power) {
     return MathUtil.clamp(power, -1, 1);
+  }
+
+  public void runToPosition(CANSparkFlex motor, RelativeEncoder encoder, double pos, double speed){
+    double distance = pos - encoder.getPosition();
+    double motorSpeed = clampPower(distance) * speed;
+    motor.set(clampPower(motorSpeed));
   }
 }
