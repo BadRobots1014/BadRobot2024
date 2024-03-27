@@ -167,9 +167,7 @@ public class RobotContainer {
     else fasterMode = false;
     return fasterMode;
   }
-  double getRightX() {
-    System.out.println("DELAY: " + m_delay.getDouble(0));
-    return m_driverController.getRightX();}
+  double getRightX() {return m_driverController.getRightX();}
   double getLeftX() {return -m_driverController.getLeftX();}
   double getLeftY() {return -m_driverController.getLeftY();}
   double getPOV() {return m_driverController.getPOV();}
