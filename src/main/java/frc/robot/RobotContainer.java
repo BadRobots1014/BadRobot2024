@@ -129,11 +129,12 @@ public class RobotContainer {
     new JoystickButton(m_driverController, XboxController.Button.kStart.value)
       .whileTrue(new ResetFlippyEncoderCommand(m_shooterSubsystem));//reset flippy encoder
       // Left bumper = Toggle fastmode
-      // Right trigger = Toggle fastermode
-      // POV = Nudge
-      // Left joystick = Move
-      // Left joystick = Turn
+      // Left trigger = Toggle fastermode
+      // Right bumper = Reset navx
       // Right trigger = flippy flippy
+      // POV = Nudge
+      // Right joystick = Move
+      // Left joystick = Turn
       // Start = reset flippy encoder
 
     // Auxillary stuff
@@ -168,9 +169,7 @@ public class RobotContainer {
     else fasterMode = false;
     return fasterMode;
   }
-  double getRightX() {
-    System.out.println("DELAY: " + m_delay.getDouble(0));
-    return m_driverController.getRightX();}
+  double getRightX() {return m_driverController.getRightX();}
   double getLeftX() {return -m_driverController.getLeftX();}
   double getLeftY() {return -m_driverController.getLeftY();}
   double getPOV() {return m_driverController.getPOV();}
