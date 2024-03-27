@@ -31,8 +31,8 @@ public class ShooterSubsystem extends SubsystemBase {
   private final GenericEntry m_winchUpPower;
   private final GenericEntry m_winchDownPower;
 
-public final CANSparkFlex m_flippyMotor;
-  public final CANSparkFlex m_intakeMotor;
+public final CANSparkMax m_flippyMotor;
+  public final CANSparkMax m_intakeMotor;
   public final CANSparkFlex m_frontMotor;
   public final CANSparkFlex m_backMotor;
   public final CANSparkMax m_indexMotor;
@@ -42,8 +42,8 @@ public final CANSparkFlex m_flippyMotor;
 
   public ShooterSubsystem() {
     //Intake mechanism motors
-    m_flippyMotor = new CANSparkFlex(ShooterConstants.kFlippyMotorCanId, MotorType.kBrushless);
-    m_intakeMotor = new CANSparkFlex(ShooterConstants.kIntakeMotorCanId, MotorType.kBrushed);
+    m_flippyMotor = new CANSparkMax(ShooterConstants.kFlippyMotorCanId, MotorType.kBrushless);
+    m_intakeMotor = new CANSparkMax(ShooterConstants.kIntakeMotorCanId, MotorType.kBrushed);
 
     //shooter and winch motors
     m_frontMotor = new CANSparkFlex(ShooterConstants.kFrontMotorCanId, MotorType.kBrushless);
