@@ -77,8 +77,9 @@ public class RobotContainer {
             this::getFastMode,
             this::getFasterMode,
             this::getPOV));
-    m_climberSubsystem.setDefaultCommand(new ClimbCommand(m_climberSubsystem, this::getAuxRightY, this::getAuxLeftY));
-    m_shooterSubsystem.setDefaultCommand(new WinchCommand(m_shooterSubsystem, this::POVToWinchSpeed));
+    // m_climberSubsystem.setDefaultCommand(new ClimbCommand(m_climberSubsystem, this::getAuxRightY, this::getAuxLeftY));
+    // m_shooterSubsystem.setDefaultCommand(new WinchCommand(m_shooterSubsystem, this::POVToWinchSpeed));
+    m_shooterSubsystem.setDefaultCommand(new FlippyCommand(m_shooterSubsystem, this::getAuxRightY));
 
     // Auto chooser setup
     m_tab = Shuffleboard.getTab("Auto");
