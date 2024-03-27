@@ -125,16 +125,14 @@ public class RobotContainer {
     // Driver stuff
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value) // Reset gyro
       .whileTrue(new ZeroHeadingCommand(m_robotDrive));
-    new Trigger(this::getFlippyIntake)//The flippy flippy
-    .whileTrue(new FlippyCommand(m_shooterSubsystem, () -> m_driverController.getLeftTriggerAxis()));
     new JoystickButton(m_driverController, XboxController.Button.kStart.value)
       .whileTrue(new ResetFlippyEncoderCommand(m_shooterSubsystem));//reset flippy encoder
       // Left bumper = Toggle fastmode
       // Right trigger = Toggle fastermode
       // POV = Nudge
-      // Right joystick = Move
+      // Left joystick = Move
       // Left joystick = Turn
-      // Left trigger = flippy flippy
+      // Right trigger = flippy flippy
       // Start = reset flippy encoder
 
     // Auxillary stuff
@@ -161,14 +159,7 @@ public class RobotContainer {
       fastMode = !fastMode;
     }
     return fastMode;
-  }
-  boolean getFlippyIntake() {
-    if (m_driverController.getLeftTriggerAxis() > 0.9) {
-      fasterMode = true;
-    }
-    else fasterMode = false;
-    return fasterMode;
-  }
+  }  
   boolean getFasterMode() {
     if (m_driverController.getRightTriggerAxis() > OIConstants.kTriggerDeadband) {
       fasterMode = true;
