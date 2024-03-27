@@ -89,7 +89,7 @@ public class SwerveSubsystem extends SubsystemBase {
     new Thread(() -> {
       try {
         Thread.sleep(DriveConstants.kBootupDelay);
-        zeroHeading();
+        resetPose();
       } catch (Exception e) {}
     }).start();
 
@@ -103,13 +103,15 @@ public class SwerveSubsystem extends SubsystemBase {
     m_tab.addNumber("Y", this::getY);
     m_tab.addNumber("X Offset", () -> offsetX);
     m_tab.addNumber("Y Offset", () -> offsetY);
+    m_tab.addBoolean("NavX isConnected", gyro::isConnected);
+    m_tab.addBoolean("NavX isCalibrating", gyro::isCalibrating);
   }
 
   // Gyro data shenanigans
-  public void zeroHeading() {gyro.reset();}
   public void resetPose() {
     gyro.reset();
     gyro.resetDisplacement();
+    setOffset(new Pose2d());
   }
   public void resetPose(Pose2d pose) {
     gyro.reset();

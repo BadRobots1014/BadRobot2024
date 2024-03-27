@@ -11,8 +11,6 @@ import com.revrobotics.SparkRelativeEncoder.Type;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -48,6 +46,10 @@ public class ShooterSubsystem extends SubsystemBase {
     m_backMotor.setIdleMode(IdleMode.kCoast);
     m_indexMotor.setIdleMode(IdleMode.kCoast);
     m_winchMotor.setIdleMode(IdleMode.kCoast);
+    m_frontMotor.setInverted(false);
+    m_backMotor.setInverted(false);
+    m_indexMotor.setInverted(true);
+    m_winchMotor.setInverted(false);
     m_winchEncoder = m_winchMotor.getEncoder(Type.kQuadrature, 8192);
 
     // Displays whether or not the shooter is running

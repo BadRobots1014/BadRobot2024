@@ -41,7 +41,7 @@ public class TurnThetaCommand extends Command {
 
   @Override
   public void initialize(){
-    swerveSubsystem.zeroHeading();
+    swerveSubsystem.resetPose();
     initial_heading = swerveSubsystem.getHeading();
     isTurnFinished = false;
   }
@@ -51,6 +51,7 @@ public class TurnThetaCommand extends Command {
     //autoturny stuffs
     double theta = targetTheta - swerveSubsystem.getHeading();
     double speed = theta / 45;
+    System.out.println("DeltaTheta:" + theta);
 
     if(Math.abs(speed) < 0.005){ //TODO may need to adjust how sensitive it is
       isTurnFinished = true;
@@ -66,6 +67,7 @@ public class TurnThetaCommand extends Command {
     turningSpeed = MathUtil.clamp(speed, -1.0,1.0);
     xSpeed = 0;
     ySpeed = 0;
+    System.out.println("TurningSpeed:" + turningSpeed);
 
     // Death
     xSpeed = Math.abs(xSpeed) > OIConstants.kDriveDeadband ? xSpeed : 0;
