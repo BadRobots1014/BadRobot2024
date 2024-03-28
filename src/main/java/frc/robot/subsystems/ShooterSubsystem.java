@@ -39,31 +39,31 @@ public class ShooterSubsystem extends SubsystemBase {
   // private final GenericEntry m_winchUpPower;
   // private final GenericEntry m_winchDownPower;
 
-  public final TalonFX m_frontMotor;
-  public final TalonFX m_backMotor;
+  public final CANSparkFlex m_frontMotor;
+  public final CANSparkFlex m_backMotor;
   // public final CANSparkMax m_indexMotor;
   // public final CANSparkMax m_winchMotor;
   // public final RelativeEncoder m_winchEncoder;
 
-  private final SuppliedValueWidget m_frontMotorVelocity;
-  private final SuppliedValueWidget m_backMotorVelocity;
+  // private final SuppliedValueWidget m_frontMotorVelocity;
+  // private final SuppliedValueWidget m_backMotorVelocity;
 
 
   public ShooterSubsystem() {
     
 
-    m_frontMotor = new TalonFX(ShooterConstants.kFrontMotorCanId);
-    m_backMotor = new TalonFX(ShooterConstants.kBackMotorCanId);
+    m_frontMotor = new CANSparkFlex(ShooterConstants.kFrontMotorCanId,MotorType.kBrushless);
+    m_backMotor = new CANSparkFlex(ShooterConstants.kBackMotorCanId,MotorType.kBrushless);
     // m_indexMotor = new CANSparkMax(ShooterConstants.kIndexMotorCanId, MotorType.kBrushless);
     // m_winchMotor = new CANSparkMax(ShooterConstants.kWinchMotorCanId, MotorType.kBrushed);
-    m_frontMotor.setNeutralMode(NeutralModeValue.Coast);
-    m_backMotor.setNeutralMode(NeutralModeValue.Coast);
+    m_frontMotor.setIdleMode(IdleMode.kCoast);
+    m_backMotor.setIdleMode(IdleMode.kCoast);
     // m_frontMotor.setIdleMode(IdleMode.kCoast);
     // m_backMotor.setIdleMode(IdleMode.kCoast);
     // m_indexMotor.setIdleMode(IdleMode.kCoast);
     // m_winchMotor.setIdleMode(IdleMode.kCoast);
-    m_frontMotor.setInverted(true);//was false
-    m_backMotor.setInverted(false);//was set to false.  Set to true because assuming this will be the one on the right side
+    m_frontMotor.setInverted(false);//was false
+    m_backMotor.setInverted(true);//was set to false.  Set to true because assuming this will be the one on the right side
     // m_indexMotor.setInverted(true);
     // m_winchMotor.setInverted(false);
     // m_winchEncoder = m_winchMotor.getEncoder(Type.kQuadrature, 8192);
@@ -75,16 +75,16 @@ public class ShooterSubsystem extends SubsystemBase {
     slot0Configs.kI = 0;
     slot0Configs.kD = 0;
 
-    m_frontMotor.getConfigurator().apply(slot0Configs);
-    m_backMotor.getConfigurator().apply(slot0Configs);
+    // m_frontMotor.getConfigurator().apply(slot0Configs);
+    // m_backMotor.getConfigurator().apply(slot0Configs);
 
 
     // Displays whether or not the shooter is running
     m_shuffleboardtab.addBoolean("Shooter Running", this::isShooterRunning);
 
     // Shuffleboard numbers for various motor powers
-    m_frontMotorVelocity = m_shuffleboardtab.addDouble("L shooter rpm", () -> m_frontMotor.getRotorVelocity().getValueAsDouble());
-    m_backMotorVelocity = m_shuffleboardtab.addDouble("R shooter rpm", () -> m_backMotor.getRotorVelocity().getValueAsDouble());
+    // m_frontMotorVelocity = m_shuffleboardtab.addDouble("L shooter rpm", () -> m_frontMotor.getRotorVelocity().getValueAsDouble());
+    // m_backMotorVelocity = m_shuffleboardtab.addDouble("R shooter rpm", () -> m_backMotor.getRotorVelocity().getValueAsDouble());
 
     m_frontMotorPower = m_shuffleboardtab.add("Front Motor Power", ShooterConstants.kFrontShootPower)
       .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
@@ -123,10 +123,10 @@ public class ShooterSubsystem extends SubsystemBase {
   }
   public void runShooter() {
     final VelocityVoltage m_request = new VelocityVoltage(0).withSlot(0);
-    m_frontMotor.setControl(m_request.withVelocity(90).withFeedForward(0.5));
-    m_backMotor.setControl(m_request.withVelocity(90).withFeedForward(0.5));
-    // m_frontMotor.set(getShooterPowers()[0]);
-    // m_backMotor.set(getShooterPowers()[1]);
+    // m_frontMotor.setControl(m_request.withVelocity(90).withFeedForward(0.5));
+    // m_backMotor.setControl(m_request.withVelocity(90).withFeedForward(0.5));
+    m_frontMotor.set(getShooterPowers()[0]);
+    m_backMotor.set(getShooterPowers()[1]);
   }
   public void runShooter(double rearPower) {
     m_frontMotor.set(getShooterPowers()[0]);
