@@ -159,6 +159,8 @@ public final class Constants {
     public static final double kWinchDeadBand = 0.05;
     public static final double kWinchUpPreset = 0;
     public static final double kWinchDownPreset = 1.5;
+
+    public static final double kIntakeCurrentLimit = 10;
   }
 
   public static final class ClimberConstants {

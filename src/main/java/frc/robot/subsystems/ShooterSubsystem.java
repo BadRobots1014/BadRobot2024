@@ -121,17 +121,6 @@ public final CANSparkMax m_flippyMotor;
     m_backMotor.set(getIntakePowers()[1]);
     m_indexMotor.set(getIntakePowers()[2]);
   }
-  public void runFlippyIntake(double power){m_intakeMotor.set(clampPower(power));}
-  public void runFlippyMotor(double power){m_flippyMotor.set(clampPower(power));}
-  public double getFlippyEncoder(){return m_flippyEncoder.getPosition();}
-  public void setFlippyEncoder(double pos){m_flippyEncoder.setPosition(pos);}
-  public void resetFlippyEncoder(){m_flippyEncoder.setPosition(0);}
-  public void stopFlippyIntake(){
-    m_intakeMotor.stopMotor();
-  }
-  public void stopFlippyMotor(){
-    m_flippyMotor.stopMotor();
-  }
   public void stopShooter() {
     m_frontMotor.stopMotor();
     m_backMotor.stopMotor();
@@ -164,6 +153,19 @@ public final CANSparkMax m_flippyMotor;
   public double getWinchEncoder() {return m_winchEncoder.getPosition();}
   public void resetWinchEncoder() {m_winchEncoder.setPosition(0);}
 
+  // Ground intake stuff
+  public void runFlippyIntake(double power){
+    if (getIntakeCurrent() < ShooterConstants.kIntakeCurrentLimit) m_intakeMotor.set(clampPower(power));
+  }
+  public void runFlippyMotor(double power){m_flippyMotor.set(clampPower(power));}
+  public double getFlippyEncoder(){return m_flippyEncoder.getPosition();}
+  public void setFlippyEncoder(double pos){m_flippyEncoder.setPosition(pos);}
+  public void resetFlippyEncoder(){m_flippyEncoder.setPosition(0);}
+  public void stopFlippyIntake(){m_intakeMotor.stopMotor();}
+  public void stopFlippyMotor(){m_flippyMotor.stopMotor();}
+  public double getFlippyCurrent() {return m_flippyMotor.getOutputCurrent();}
+  public double getIntakeCurrent() {return m_intakeMotor.getOutputCurrent();}
+
   // Function to clamp the power to a value between -1 and 1
   public static double clampPower(double power) {
     return MathUtil.clamp(power, -1, 1);
@@ -174,8 +176,4 @@ public final CANSparkMax m_flippyMotor;
     double motorSpeed = clampPower(distance) * speed;
     motor.set(clampPower(motorSpeed));
   }
-
-  public double getFlippyCurrent() {return m_flippyMotor.getOutputCurrent();}
-  public double getIntakeCurrent() {return m_intakeMotor.getOutputCurrent();}
-
 }
