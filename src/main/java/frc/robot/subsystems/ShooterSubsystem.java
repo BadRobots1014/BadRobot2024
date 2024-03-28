@@ -89,6 +89,9 @@ public final CANSparkMax m_flippyMotor;
     m_shuffleboardtab.addNumber("Winch Encoder", this::getWinchEncoder);
     //Flippy motor encoder value
     m_shuffleboardtab.addNumber("Flippy Motor Encoder", this::getFlippyEncoder);
+
+    m_shuffleboardtab.addNumber("Flippy Motor Amps", this::getFlippyCurrent);
+    m_shuffleboardtab.addNumber("Intake Motor Amps", this::getIntakeCurrent);
   }
 
   // Shooter stuff
@@ -171,4 +174,8 @@ public final CANSparkMax m_flippyMotor;
     double motorSpeed = clampPower(distance) * speed;
     motor.set(clampPower(motorSpeed));
   }
+
+  public double getFlippyCurrent() {return m_flippyMotor.getOutputCurrent();}
+  public double getIntakeCurrent() {return m_intakeMotor.getOutputCurrent();}
+
 }

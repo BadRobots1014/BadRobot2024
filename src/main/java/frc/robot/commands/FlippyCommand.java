@@ -7,6 +7,7 @@ package frc.robot.commands;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -23,8 +24,11 @@ public class FlippyCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {//should run both motors but run the flippy motor at the power of the trigger
+    if(triggerVal.get() > OIConstants.kDriveDeadband){
     m_subsystem.runFlippyIntake(ShooterConstants.kFrontIntakePower);//can change later
-    m_subsystem.runFlippyMotor(triggerVal.get());//will need to change to runtoposition once we figure out the encoder counts
+    m_subsystem.runFlippyMotor(triggerVal.get());
+    }
+    
   }
 
   // Called once the command ends or is interrupted.

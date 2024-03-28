@@ -154,6 +154,8 @@ public class RobotContainer {
       .whileTrue(new ResetWinchCommand(m_shooterSubsystem));
       // POV = Winch
       // Joysticks = Manual climbers
+    new JoystickButton(m_auxController, XboxController.Button.kStart.value)
+    .whileTrue(new FlippyIntakeCommand(m_shooterSubsystem));// intake
   }
 
   boolean getFastMode() {
