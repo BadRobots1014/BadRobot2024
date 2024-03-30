@@ -170,4 +170,10 @@ public final class Constants {
     public static final double kCamHeight = 0; // Height of the limelight from the ground
     public static final double kCamAngle = 0; // Pitch angle of direction the limelight is pointed in
   }
+
+  public static final class IntakeConstants {
+    public static final int kFlippyCanId = 1;
+    public static final int kGroundIntakeCanId = 2;
+    public static final int kIntakeMaxCurrent = 10;
+  }
 }
