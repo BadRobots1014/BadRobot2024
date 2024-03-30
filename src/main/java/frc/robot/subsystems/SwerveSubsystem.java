@@ -108,6 +108,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
     m_tab.addDouble("Get Drive Position (meters)", this::getFrontLeftDriveDistanceMeters);
     m_tab.addDouble("Get Turning Position (degrees)", this::getFrontLeftTurningPos);
+    m_tab.addDouble("Get Turning Position (degrees 0 to 360)", this::getFrontLeftTurningPosDegree);
+    m_tab.addDouble("Get Turning Abs Position", this::getFrontLeftAbsTurningPos);
   }
 
   // Gyro data shenanigans
@@ -141,6 +143,8 @@ public class SwerveSubsystem extends SubsystemBase {
   //Swervy Encoder Stuffs
     public double getFrontLeftDriveDistance(){return frontLeft.getDrivePosition();}
     public double getFrontLeftTurningPos(){return frontLeft.getTurningPositionDeg();}
+    public double getFrontLeftTurningPosDegree(){return frontLeft.getTurningPositionDeg() % 360;}
+    public double getFrontLeftAbsTurningPos(){return frontLeft.getTurningPosition();}
     public double getFrontLeftDriveDistanceMeters(){return frontLeft.getDrivePosition() * 0.0009336;}// meters per encoder count
 
   public ChassisSpeeds getRobotRelativeSpeeds() {return new ChassisSpeeds(getXSpeed(), getYSpeed(), getTurnSpeed());}

@@ -187,10 +187,10 @@ public class SwerveModule {
 
   public double getTurningPosition() {
     return turningEncoder.getPosition();
-  } // Returns position of turning encoder in radians
+  } // Returns position of turning encoder in rotations
 
   public double getTurningPositionDeg() {
-    return Math.toDegrees(turningEncoder.getPosition());
+    return turningEncoder.getPosition() * 360;
   } // Returns position of turning encoder in degrees
 
   public double getDriveVelocity() {

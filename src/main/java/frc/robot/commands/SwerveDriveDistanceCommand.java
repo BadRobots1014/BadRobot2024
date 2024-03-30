@@ -84,7 +84,7 @@ public class SwerveDriveDistanceCommand extends Command {
   double currentDistance = swerveSubsystem.getFrontLeftDriveDistanceMeters();
 
   //also corrected to make sense
-    double currentY = -1 * swerveSubsystem.getFrontLeftDriveDistanceMeters();//Y+ is actually back 
+    double currentY = swerveSubsystem.getFrontLeftDriveDistanceMeters();//Y+ is actually back 
     double currentX = 0;//swerveSubsystem.getX();// + x is actually right
 
     //should calculate the distance it travels if wheels are at an angle
