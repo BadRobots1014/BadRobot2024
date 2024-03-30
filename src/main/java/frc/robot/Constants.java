@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
@@ -172,6 +176,14 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    
+    //Auto setup
+    public static final HolonomicPathFollowerConfig kAutoConfig = new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+            DriveConstants.kFastTeleMaxMetersPerSec, // Max module speed, in m/s
+            // Drive base radius in meters. Distance from robot center to furthest module. a^2 + b^2 = c^2
+            Math.sqrt(Math.pow(DriveConstants.kTrackWidth / 2, 2) + Math.pow(DriveConstants.kWheelBase / 2, 2)),
+            new ReplanningConfig() // Default path replanning config. See the API for the options here
+    );
   }
 }
