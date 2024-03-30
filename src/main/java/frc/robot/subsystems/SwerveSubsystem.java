@@ -7,6 +7,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -84,6 +86,11 @@ public class SwerveSubsystem extends SubsystemBase {
   // The gyro
   private final AHRS gyro = new AHRS(SPI.Port.kMXP);
 
+  // The odometry
+  private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(
+        DriveConstants.kDriveKinematics, getRotation2d(),
+        getSwerveModulePosition());
+
   // Shuffleboard
   private final ShuffleboardTab m_tab;
 
@@ -131,11 +138,6 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   // Gyro data shenanigans
-  public void resetPose(Pose2d pose) {
-    gyro.reset();
-    gyro.resetDisplacement();
-    setOffset(pose);
-  }
   public void setOffset(Pose2d pose) {
     gyro.setAngleAdjustment(pose.getRotation().getDegrees());
     offsetX = pose.getX();
@@ -154,7 +156,11 @@ public class SwerveSubsystem extends SubsystemBase {
   public double getXSpeed() {return gyro.getVelocityX();}
   public double getYSpeed() {return gyro.getVelocityY();}
   public double getTurnSpeed() {return gyro.getRate();}
-  public Pose2d getPose() {return new Pose2d(getX(), getY(), getRotation2d());}
+
+  public Pose2d getPose() {return odometer.getPoseMeters();}
+  public void resetPose(Pose2d pose) {
+    odometer.resetPosition(new Rotation2d(Math.toRadians(gyro.getYaw())), getSwerveModulePosition(), pose);
+  }
 
   public ChassisSpeeds getRobotRelativeSpeeds() {return new ChassisSpeeds(getXSpeed(), getYSpeed(), getTurnSpeed());}
   public void driveRobotRelative(ChassisSpeeds speeds) {
@@ -182,6 +188,19 @@ public class SwerveSubsystem extends SubsystemBase {
     frontRight.setDesiredState(desiredStates[1]);
     backLeft.setDesiredState(desiredStates[2]);
     backRight.setDesiredState(desiredStates[3]);
+  }
+
+  public SwerveModulePosition[] getSwerveModulePosition() {
+    return new SwerveModulePosition[] {
+        new SwerveModulePosition(frontLeft.getDrivePosition(), new Rotation2d(frontLeft.getTurningPosition())),
+        new SwerveModulePosition(frontRight.getDrivePosition(), new Rotation2d(frontRight.getTurningPosition())),
+        new SwerveModulePosition(backLeft.getDrivePosition(), new Rotation2d(backLeft.getTurningPosition())),
+        new SwerveModulePosition(backRight.getDrivePosition(), new Rotation2d(backRight.getTurningPosition())),
+    };
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    odometer.resetPosition(getRotation2d(), getSwerveModulePosition(), pose);
   }
 
   public void testMotor() {
