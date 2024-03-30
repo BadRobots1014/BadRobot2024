@@ -31,7 +31,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private final GenericEntry m_winchUpPower;
   private final GenericEntry m_winchDownPower;
 
-public final CANSparkMax m_flippyMotor;
+  public final CANSparkMax m_flippyMotor;
   public final CANSparkMax m_intakeMotor;
   public final CANSparkFlex m_frontMotor;
   public final CANSparkFlex m_backMotor;
