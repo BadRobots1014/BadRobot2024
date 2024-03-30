@@ -156,6 +156,7 @@ public final CANSparkMax m_flippyMotor;
   // Ground intake stuff
   public void runFlippyIntake(double power){
     if (getIntakeCurrent() < ShooterConstants.kIntakeCurrentLimit) m_intakeMotor.set(clampPower(power));
+    else stopFlippyIntake();
   }
   public void runFlippyMotor(double power){m_flippyMotor.set(clampPower(power));}
   public double getFlippyEncoder(){return m_flippyEncoder.getPosition();}
