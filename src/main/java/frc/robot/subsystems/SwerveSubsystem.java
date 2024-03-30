@@ -88,8 +88,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   // The odometry
   private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(
-        DriveConstants.kDriveKinematics, getRotation2d(),
-        getSwerveModulePosition());
+    DriveConstants.kDriveKinematics, getRotation2d(), getSwerveModulePosition());
 
   // Shuffleboard
   private final ShuffleboardTab m_tab;
@@ -117,6 +116,7 @@ public class SwerveSubsystem extends SubsystemBase {
     m_tab.addBoolean("NavX isCalibrating", gyro::isCalibrating);
     m_tab.addNumber("Pose X", this::getPoseX);
     m_tab.addNumber("Pose Y", this::getPoseY);
+    m_tab.addNumber("Pose Theta", this::getPoseTheta);
 
     AutoBuilder.configureHolonomic(
             this::getPose, // Robot pose supplier
@@ -139,6 +139,11 @@ public class SwerveSubsystem extends SubsystemBase {
       );
   }
 
+  public void periodic() {
+    // Update odo
+    odometer.update(getRotation2d(), getSwerveModulePosition());
+  }
+
   // Gyro data shenanigans
   public void setOffset(Pose2d pose) {
     gyro.setAngleAdjustment(pose.getRotation().getDegrees());
@@ -159,7 +164,9 @@ public class SwerveSubsystem extends SubsystemBase {
   public double getYSpeed() {return gyro.getVelocityY();}
   public double getTurnSpeed() {return gyro.getRate();}
 
-  public Pose2d getPose() {return odometer.getPoseMeters();}
+  public Pose2d getPose() {
+    return odometer.getPoseMeters();
+  }
   public void resetPose(Pose2d pose) {
     gyro.reset();
     gyro.resetDisplacement();
@@ -168,6 +175,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
   public double getPoseX() {return getPose().getX();}
   public double getPoseY() {return getPose().getY();}
+  public double getPoseTheta() {return getPose().getRotation().getDegrees();}
 
   public ChassisSpeeds getRobotRelativeSpeeds() {return new ChassisSpeeds(getXSpeed(), getYSpeed(), getTurnSpeed());}
   public void driveRobotRelative(ChassisSpeeds speeds) {
@@ -199,10 +207,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public SwerveModulePosition[] getSwerveModulePosition() {
     return new SwerveModulePosition[] {
-        new SwerveModulePosition(frontLeft.getDrivePosition(), new Rotation2d(frontLeft.getTurningPosition())),
-        new SwerveModulePosition(frontRight.getDrivePosition(), new Rotation2d(frontRight.getTurningPosition())),
-        new SwerveModulePosition(backLeft.getDrivePosition(), new Rotation2d(backLeft.getTurningPosition())),
-        new SwerveModulePosition(backRight.getDrivePosition(), new Rotation2d(backRight.getTurningPosition())),
+        new SwerveModulePosition(frontLeft.getDrivePosition(), new Rotation2d(frontLeft.getAbsoluteEncoderRad())),
+        new SwerveModulePosition(frontRight.getDrivePosition(), new Rotation2d(frontRight.getAbsoluteEncoderRad())),
+        new SwerveModulePosition(backLeft.getDrivePosition(), new Rotation2d(backLeft.getAbsoluteEncoderRad())),
+        new SwerveModulePosition(backRight.getDrivePosition(), new Rotation2d(backRight.getAbsoluteEncoderRad())),
     };
   }
 

@@ -178,7 +178,7 @@ public final class Constants {
   public static final class AutoConstants {
     //Auto setup
     public static final HolonomicPathFollowerConfig kAutoConfig = new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(9.0, 0.0, 0.0), // Translation PID constants
             new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
             DriveConstants.kTeleMaxMetersPerSec, // Max module speed, in m/s
             // Drive base radius in meters. Distance from robot center to furthest module. a^2 + b^2 = c^2
