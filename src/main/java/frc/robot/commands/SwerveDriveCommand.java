@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -10,14 +11,32 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.ShooterConstants;
+import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.Supplier;
 
 public class SwerveDriveCommand extends Command {
 
   public final SwerveSubsystem swerveSubsystem;
+  public final LimelightSubsystem m_LimelightSubsystem;
+  public final ShooterSubsystem m_ShooterSubsystem;
+
   public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction, pov;
   public Supplier<Boolean> fastModeFunction, fasterModeFunction;
+  Supplier<Integer> autoAimMode;
+
+    private double AprilTagCurrentID = -1;
+    private double currentTargetYaw = 0;
+    private double currentYaw = 0;
+    private double currentTx = 0;
+    private double currentTargetX = 0;
+    private double currentTargetZ = 0;
+    Supplier<Double> winchPosSupplier = ()-> 0.0;
+    WinchPresetCommand m_WinchRunToPosition;
+    
+
   public final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
   public boolean fieldOrientedFunction;
   private ShuffleboardTab m_tab;
@@ -25,6 +44,8 @@ public class SwerveDriveCommand extends Command {
 
   public SwerveDriveCommand(
     SwerveSubsystem subsystem,
+    LimelightSubsystem limelight,
+    ShooterSubsystem shooter,
     Supplier<Double> xSupplier,
     Supplier<Double> ySupplier,
     Supplier<Double> turnSupplier,
@@ -35,6 +56,8 @@ public class SwerveDriveCommand extends Command {
     Supplier<Integer> getAutoAimMode
   ) {
     swerveSubsystem = subsystem;
+    m_LimelightSubsystem = limelight;
+    m_ShooterSubsystem = shooter;
     xSpdFunction = xSupplier;
     ySpdFunction = ySupplier;
     turningSpdFunction = turnSupplier;
@@ -42,10 +65,13 @@ public class SwerveDriveCommand extends Command {
     fastModeFunction = fastMode;
     fasterModeFunction = fasterMode;
     pov = povSupplier;
+    autoAimMode = getAutoAimMode;
     xLimiter = new SlewRateLimiter(DriveConstants.kXSlewRateLimit);
     yLimiter = new SlewRateLimiter(DriveConstants.kYSlewRateLimit);
     turningLimiter = new SlewRateLimiter(DriveConstants.kTurnSlewRateLimit);
     addRequirements(swerveSubsystem);
+
+    m_WinchRunToPosition = new WinchPresetCommand(m_ShooterSubsystem, winchPosSupplier);
 
     m_tab = Shuffleboard.getTab("Swerve Instance");
     shuffleFieldOriented = m_tab.add("Field Oriented" + this.toString(), fieldOriented).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
@@ -56,12 +82,46 @@ public class SwerveDriveCommand extends Command {
     // Get inputs
     double xSpeed = 0, ySpeed = 0, turningSpeed = 0;
     boolean fastMode = false, fasterMode = false;
-    if (pov.get() == -1) {
+    AprilTagCurrentID = m_LimelightSubsystem.getAprilTagID();
+    //currentYaw = m_GyroSubsystem.getYaw();
+    currentTx = m_LimelightSubsystem.getTx();
+    currentTargetX = m_LimelightSubsystem.getCameraPoseX();
+    currentTargetZ = m_LimelightSubsystem.getCameraPoseZ();
+
+    if (pov.get() == -1 && autoAimMode.get() == DriveConstants.kAutoAimInactive) {
       xSpeed = xSpdFunction.get();
       ySpeed = ySpdFunction.get();
       turningSpeed = turningSpdFunction.get();
       fastMode = fastModeFunction.get();
       fasterMode = fasterModeFunction.get();
+    }else if(autoAimMode.get() == DriveConstants.kFlexibleAutoAim){
+        //Flexible autoaim will allow the driver to move around the field while button is held while locking the rotation and shooter alignments to point towards the speaker
+            
+            m_LimelightSubsystem.setPriorityID(3);
+            currentTx = m_LimelightSubsystem.getTx();
+                //currentTargetYaw = m_LimelightSubsystem.getCameraPoseYaw();//set turningspeed while it sees tag
+                //need to potentially add something to clear previous yaw if hasent seen tag in a while
+            turningSpeed = MathUtil.clamp((0 - currentTx)/80, -1.0, 1.0); //rotate robot to face tag
+
+            double shooterTargetTheta = m_LimelightSubsystem.getAutoAimShooterAngle();
+            //when winch is at pos 0 the angle will be about 60
+            double shooterLength = 0;
+            double winchPos = m_ShooterSubsystem.getWinchEncoder();
+            double winchZeroHeight = 0;
+            double winchLowestPosHeightDisplacement = 0;
+            double winchCurrentHeight = winchZeroHeight - winchPos * (winchLowestPosHeightDisplacement/ShooterConstants.kWinchDownPreset);
+            
+            double shooterSetAngle = Math.toDegrees(Math.asin(winchCurrentHeight/shooterLength));
+            
+            double winchSetPos = MathUtil.clamp(shooterSetAngle, ShooterConstants.kWinchUpPreset, ShooterConstants.kWinchDownPreset);
+
+            winchPosSupplier = () -> winchSetPos;
+
+            //Insert set shooter angle here
+            
+            m_WinchRunToPosition.schedule();
+
+            m_LimelightSubsystem.resetPriorityID();
     }
     else {
       xSpeed = pov.get() == 90 ? -DriveConstants.kNudgeSpeed : (pov.get() == 270 ? DriveConstants.kNudgeSpeed : 0);
@@ -101,6 +161,11 @@ public class SwerveDriveCommand extends Command {
 
     // Actually do the thing
     swerveSubsystem.setModuleStates(moduleStates);
+  }
+
+  private void WinchPresetCommand() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'WinchPresetCommand'");
   }
 
   @Override

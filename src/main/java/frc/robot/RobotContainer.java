@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -26,6 +27,7 @@ import frc.robot.commands.auto.ShootAndDriveAutoCommand;
 import frc.robot.commands.auto.ShootAutoCommand;
 import frc.robot.commands.auto.TurnAndShootAutoCommand;
 import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.ClimbCommand;
@@ -49,6 +51,8 @@ public class RobotContainer {
 
   // Subsystems
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
+  //Limelight subsystem
+  private final LimelightSubsystem m_LimelightSubsystem = new LimelightSubsystem();
   private final SwerveSubsystem m_robotDrive = new SwerveSubsystem();
   private boolean fastMode = false;
   private boolean fasterMode = false;
@@ -59,19 +63,51 @@ public class RobotContainer {
   private SendableChooser<Command> m_chosenAuto = new SendableChooser<>();
   private GenericEntry m_delay;
 
+
+  //AutoAim Commands
+  private final SwerveDriveCommand m_FlexibleAutoAimCommand = new SwerveDriveCommand(
+            m_robotDrive,
+            m_LimelightSubsystem,
+            m_shooterSubsystem,
+            () -> getLeftX(),
+            () -> getLeftY(),
+            () -> getRightX(),
+            DriveConstants.kFieldOriented,
+            () -> false,
+            () -> false,
+            () -> -1.0,
+            () -> DriveConstants.kFlexibleAutoAim);
+
+  private final SwerveDriveCommand m_RigidAutoAimCommand = new SwerveDriveCommand(
+            m_robotDrive,
+            m_LimelightSubsystem,
+            m_shooterSubsystem,
+            () -> getLeftX(),
+            () -> getLeftY(),
+            () -> getRightX(),
+            DriveConstants.kFieldOriented,
+            () -> false,
+            () -> false,
+            () -> -1.0,
+            () -> DriveConstants.kFlexibleAutoAim);
+
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     m_robotDrive.setDefaultCommand(new SwerveDriveCommand(
             m_robotDrive,
+            m_LimelightSubsystem,
+            m_shooterSubsystem,
             () -> getLeftX(),
             () -> getLeftY(),
             () -> getRightX(),
             DriveConstants.kFieldOriented,
             this::getFastMode,
             this::getFasterMode,
-            this::getPOV));
+            this::getPOV,
+            this::isFlexibleAutoAim));
     m_climberSubsystem.setDefaultCommand(new ClimbCommand(m_climberSubsystem, this::getAuxRightY, this::getAuxLeftY));
     m_shooterSubsystem.setDefaultCommand(new WinchCommand(m_shooterSubsystem, this::POVToWinchSpeed));
 
@@ -126,6 +162,8 @@ public class RobotContainer {
       // Right joystick = Move
       // Left joystick = Turn
 
+      
+
     // Auxillary stuff
     new JoystickButton(m_auxController, XboxController.Button.kRightBumper.value) // Shoot
       .whileTrue(new ShootCommand(m_shooterSubsystem));
@@ -171,6 +209,12 @@ public class RobotContainer {
   double POVToWinchSpeed() {
     return getAuxPOV() == 0 ? ShooterConstants.kWinchUpPower : (getAuxPOV() == 180 ? ShooterConstants.kWinchDownPower : 0);
   }
+  Integer isFlexibleAutoAim(){
+    if(Math.abs(m_auxController.getRightTriggerAxis()) > OIConstants.kDriveDeadband){
+      return DriveConstants.kFlexibleAutoAim;
+    }
+    else return DriveConstants.kAutoAimInactive;
+  };
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

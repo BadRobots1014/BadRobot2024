@@ -24,6 +24,10 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 public final class Constants {
 
   public static final class DriveConstants {
+    //auto aim constants
+    public static final Integer kAutoAimInactive = 0;
+    public static final Integer kFlexibleAutoAim = 1;
+    public static final Integer kRigidAutoAim = 2;
 
     // TODO turn field oriented on or off
     public static final boolean kFieldOriented = true;
