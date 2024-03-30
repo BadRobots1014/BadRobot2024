@@ -4,6 +4,9 @@
 
 package frc.robot;
 import java.util.function.Supplier;
+
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.GenericEntry;
@@ -94,6 +97,8 @@ public class RobotContainer {
       new DriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0,0,Rotation2d.fromDegrees(0)), m_delay.getDouble(0))); //drive back only auto
     m_chosenAuto.addOption("Shoot only", 
       new ShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), m_delay.getDouble(0)).withTimeout(4));
+    m_chosenAuto.addOption("Pathplanner auto",
+      new PathPlannerAuto("Drive Short Auto"));
 
     m_tab.add(m_chosenAuto);
 
