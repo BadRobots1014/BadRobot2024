@@ -24,9 +24,13 @@ public class FlippyCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {//should run both motors but run the flippy motor at the power of the trigger
-    if(triggerVal.get() > OIConstants.kDriveDeadband){
-    m_subsystem.runFlippyIntake(ShooterConstants.kFrontIntakePower);//can change later
-    m_subsystem.runFlippyMotor(triggerVal.get());
+    if(Math.abs(triggerVal.get()) > OIConstants.kDriveDeadband){
+      m_subsystem.runFlippyIntake(ShooterConstants.kFrontIntakePower);//can change later
+      m_subsystem.runFlippyMotor(triggerVal.get());
+    }
+    else {
+      m_subsystem.stopFlippyIntake();
+      m_subsystem.stopFlippyMotor();
     }
     
   }
@@ -35,6 +39,8 @@ public class FlippyCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     m_subsystem.stopFlippyIntake();
+    m_subsystem.stopFlippyMotor();
+
   }
 
   // Returns true when the command should end.
