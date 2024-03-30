@@ -6,9 +6,9 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Drive Short Path"
+            "name": null
           }
         }
       ]

@@ -140,6 +140,7 @@ public class SwerveSubsystem extends SubsystemBase {
     gyro.setAngleAdjustment(pose.getRotation().getDegrees());
     offsetX = pose.getX();
     offsetY = pose.getY();
+    System.out.print(offsetX);
   }
   public double getHeading() {return Math.IEEEremainder(gyro.getAngle(), 360);}
   public Rotation2d getRotation2d() {return Rotation2d.fromDegrees(getHeading());}
