@@ -115,6 +115,8 @@ public class SwerveSubsystem extends SubsystemBase {
     m_tab.addNumber("Y Offset", this::getOffsetY);
     m_tab.addBoolean("NavX isConnected", gyro::isConnected);
     m_tab.addBoolean("NavX isCalibrating", gyro::isCalibrating);
+    m_tab.addNumber("Pose X", this::getPoseX);
+    m_tab.addNumber("Pose Y", this::getPoseY);
 
     AutoBuilder.configureHolonomic(
             this::getPose, // Robot pose supplier
@@ -159,8 +161,13 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public Pose2d getPose() {return odometer.getPoseMeters();}
   public void resetPose(Pose2d pose) {
+    gyro.reset();
+    gyro.resetDisplacement();
+    setOffset(pose);
     odometer.resetPosition(new Rotation2d(Math.toRadians(gyro.getYaw())), getSwerveModulePosition(), pose);
   }
+  public double getPoseX() {return getPose().getX();}
+  public double getPoseY() {return getPose().getY();}
 
   public ChassisSpeeds getRobotRelativeSpeeds() {return new ChassisSpeeds(getXSpeed(), getYSpeed(), getTurnSpeed());}
   public void driveRobotRelative(ChassisSpeeds speeds) {
