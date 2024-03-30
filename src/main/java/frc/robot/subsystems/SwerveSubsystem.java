@@ -92,7 +92,7 @@ public class SwerveSubsystem extends SubsystemBase {
     new Thread(() -> {
       try {
         Thread.sleep(DriveConstants.kBootupDelay);
-        resetPose();
+        resetPose(new Pose2d());
       } catch (Exception e) {}
     }).start();
 
@@ -104,8 +104,8 @@ public class SwerveSubsystem extends SubsystemBase {
     m_tab.addNumber("Pitch", this::getPitch);
     m_tab.addNumber("X", this::getX);
     m_tab.addNumber("Y", this::getY);
-    m_tab.addNumber("X Offset", () -> offsetX);
-    m_tab.addNumber("Y Offset", () -> offsetY);
+    m_tab.addNumber("X Offset", this::getOffsetX);
+    m_tab.addNumber("Y Offset", this::getOffsetY);
     m_tab.addBoolean("NavX isConnected", gyro::isConnected);
     m_tab.addBoolean("NavX isCalibrating", gyro::isCalibrating);
 
@@ -131,11 +131,6 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   // Gyro data shenanigans
-  public void resetPose() {
-    gyro.reset();
-    gyro.resetDisplacement();
-    setOffset(new Pose2d());
-  }
   public void resetPose(Pose2d pose) {
     gyro.reset();
     gyro.resetDisplacement();
@@ -153,6 +148,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public double getPitch() {return Math.IEEEremainder(gyro.getPitch(), 360);}
   public double getX() {return gyro.getDisplacementX() + offsetX;}
   public double getY() {return gyro.getDisplacementY() + offsetY;}
+  public double getOffsetX() {return offsetX;}
+  public double getOffsetY() {return offsetY;}
   public double getXSpeed() {return gyro.getVelocityX();}
   public double getYSpeed() {return gyro.getVelocityY();}
   public double getTurnSpeed() {return gyro.getRate();}
