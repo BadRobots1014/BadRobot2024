@@ -170,4 +170,8 @@ public final class Constants {
     public static final double kCamHeight = 0; // Height of the limelight from the ground
     public static final double kCamAngle = 0; // Pitch angle of direction the limelight is pointed in
   }
+
+  public static final class AutoConstants {
+    
+  }
 }
