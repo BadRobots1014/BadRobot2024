@@ -175,5 +175,6 @@ public final class Constants {
     public static final int kFlippyCanId = 1;
     public static final int kGroundIntakeCanId = 2;
     public static final int kIntakeMaxCurrent = 10;
+    public static final double kFlipperGearRatio = 45;
   }
 }

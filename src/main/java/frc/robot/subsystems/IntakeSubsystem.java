@@ -48,18 +48,18 @@ public class IntakeSubsystem extends SubsystemBase {
 
   //Combo
   public void intakeFromGround() {
-    if (m_flippyEncoder.getPosition() < .3 /* To be changed */) flip(.5);
+    if (m_flippyEncoder.getPosition() < .3 * IntakeConstants.kFlipperGearRatio) flip(.5);
     else intakeCurrentSensitive(1);
   }
   public void retractIntake() {
-    if (m_flippyEncoder.getPosition() > .1) flip(-.5);
+    if (m_flippyEncoder.getPosition() > .1 * IntakeConstants.kFlipperGearRatio) flip(-.5);
   }
   public void expelRing() {
     intake(-1);
   }
   public void feedShooter() {
     retractIntake();
-    if (m_flippyEncoder.getPosition() < .05) expelRing();
+    if (m_flippyEncoder.getPosition() < .05 * IntakeConstants.kFlipperGearRatio) expelRing();
   }
   public void stopEverything() {
     stopFlipper();
