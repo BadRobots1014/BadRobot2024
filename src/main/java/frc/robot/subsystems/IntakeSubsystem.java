@@ -44,6 +44,7 @@ public class IntakeSubsystem extends SubsystemBase {
     // Moves to the goal encoder angle
     flip(MathUtil.clamp(pos - m_flippyEncoder.getPosition(), -1, 1));
   }
+  public void resetFlipperEncoder() {m_flippyEncoder.setPosition(0);}
 
   //Combo
   public void intakeFromGround() {
@@ -58,7 +59,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
   public void feedShooter() {
     retractIntake();
-    expelRing();
+    if (m_flippyEncoder.getPosition() < .05) expelRing();
   }
   public void stopEverything() {
     stopFlipper();

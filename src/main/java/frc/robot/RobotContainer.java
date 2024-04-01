@@ -30,6 +30,8 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.ClimbCommand;
+import frc.robot.commands.ExpelRingCommand;
+import frc.robot.commands.FeedShooterCommand;
 import frc.robot.commands.GroundIntakeCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ResetWinchCommand;
@@ -125,6 +127,12 @@ public class RobotContainer {
     // Driver stuff
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value) // Reset gyro
       .whileTrue(new ZeroHeadingCommand(m_robotDrive));
+    new JoystickButton(m_driverController, XboxController.Button.kA.value)
+      .whileTrue(new GroundIntakeCommand(m_intakeSubsystem));
+    new JoystickButton(m_driverController, XboxController.Button.kB.value)
+      .whileTrue(new ExpelRingCommand(m_intakeSubsystem));
+    new JoystickButton(m_driverController, XboxController.Button.kX.value)
+      .whileTrue(new FeedShooterCommand(m_intakeSubsystem));
       // Left bumper = Toggle fastmode
       // Left trigger = Toggle fastermode
       // POV = Nudge
