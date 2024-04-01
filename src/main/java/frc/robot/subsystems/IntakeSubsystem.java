@@ -30,8 +30,10 @@ public class IntakeSubsystem extends SubsystemBase {
   //Intake
   public void intake(double power) {m_intakeMotor.set(power);}
   public void stopIntake() {m_intakeMotor.stopMotor();}
+  public double getIntakeCurrent() {return m_intakeMotor.getOutputCurrent();}
+  public boolean intakeCurrentSpike() {return getIntakeCurrent() >= IntakeConstants.kIntakeMaxCurrent;}
   public void intakeCurrentSensitive(double power) {
-    if (m_intakeMotor.getOutputCurrent() < IntakeConstants.kIntakeMaxCurrent) intake(power);
+    if (!intakeCurrentSpike()) intake(power);
     else stopIntake();
   }
 
@@ -45,15 +47,11 @@ public class IntakeSubsystem extends SubsystemBase {
 
   //Combo
   public void intakeFromGround() {
-    if (m_flippyEncoder.getPosition() < 1 /* To be changed */) {
-      flip(.5);
-    }
-    else {
-      intake(1);
-    }
+    if (m_flippyEncoder.getPosition() < .3 /* To be changed */) flip(.5);
+    else intakeCurrentSensitive(1);
   }
   public void retractIntake() {
-    flip(-.5);
+    if (m_flippyEncoder.getPosition() > .1) flip(-.5);
   }
   public void expelRing() {
     intake(-1);

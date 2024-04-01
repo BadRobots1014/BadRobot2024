@@ -26,9 +26,11 @@ import frc.robot.commands.auto.ShootAndDriveAutoCommand;
 import frc.robot.commands.auto.ShootAutoCommand;
 import frc.robot.commands.auto.TurnAndShootAutoCommand;
 import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.ClimbCommand;
+import frc.robot.commands.GroundIntakeCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ResetWinchCommand;
 import frc.robot.commands.ShootCommand;
@@ -53,6 +55,7 @@ public class RobotContainer {
   private boolean fastMode = false;
   private boolean fasterMode = false;
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
+  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
 
   // Auto
   private final ShuffleboardTab m_tab;
@@ -74,6 +77,7 @@ public class RobotContainer {
             this::getPOV));
     m_climberSubsystem.setDefaultCommand(new ClimbCommand(m_climberSubsystem, this::getAuxRightY, this::getAuxLeftY));
     m_shooterSubsystem.setDefaultCommand(new WinchCommand(m_shooterSubsystem, this::POVToWinchSpeed));
+    m_intakeSubsystem.setDefaultCommand(new GroundIntakeCommand(m_intakeSubsystem));
 
     // Auto chooser setup
     m_tab = Shuffleboard.getTab("Auto");
@@ -92,7 +96,7 @@ public class RobotContainer {
       new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), -55, m_delay.getDouble(0)));
     m_chosenAuto.addOption("Drive back only",
       new DriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0,0,Rotation2d.fromDegrees(0)), m_delay.getDouble(0))); //drive back only auto
-    m_chosenAuto.addOption("Shoot only", 
+    m_chosenAuto.addOption("Shoot only",
       new ShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), m_delay.getDouble(0)).withTimeout(4));
 
     m_tab.add(m_chosenAuto);
