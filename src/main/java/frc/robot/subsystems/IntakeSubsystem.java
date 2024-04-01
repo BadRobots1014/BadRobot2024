@@ -33,6 +33,7 @@ public class IntakeSubsystem extends SubsystemBase {
     m_tab = Shuffleboard.getTab("Intake");
     m_tab.addNumber("Intake Current", this::getIntakeCurrent);
     m_tab.addNumber("Flipper Position", this::getFlipperEncoder);
+    m_tab.addNumber("Flipper Amps", this::getFlipperAmps);
 
     resetFlipperEncoder();
   }
@@ -56,6 +57,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
   public double getFlipperEncoder() {return -m_flippyEncoder.getPosition() / IntakeConstants.kFlipperGearRatio;}
   public void resetFlipperEncoder() {m_flippyEncoder.setPosition(0);}
+  public double getFlipperAmps(){return m_flippyMotor.getOutputCurrent();}
 
   //Combo
   public void intakeFromGround() {
@@ -84,5 +86,6 @@ public class IntakeSubsystem extends SubsystemBase {
     stopFlipper();
     stopIntake();
   }
+  
 
 }
