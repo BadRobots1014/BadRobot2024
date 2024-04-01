@@ -7,6 +7,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
@@ -15,6 +17,8 @@ public class IntakeSubsystem extends SubsystemBase {
   public final CANSparkMax m_flippyMotor;
   public final CANSparkMax m_intakeMotor;
   public final RelativeEncoder m_flippyEncoder;
+
+  public final ShuffleboardTab m_tab;
 
   public IntakeSubsystem() {
 
@@ -25,6 +29,12 @@ public class IntakeSubsystem extends SubsystemBase {
 
     m_flippyMotor.setIdleMode(IdleMode.kBrake);
     m_intakeMotor.setIdleMode(IdleMode.kCoast);
+
+    m_tab = Shuffleboard.getTab("Intake");
+    m_tab.addNumber("Intake Current", this::getIntakeCurrent);
+    m_tab.addNumber("Flipper Position", this::getFlipperEncoder);
+
+    resetFlipperEncoder();
   }
 
   //Intake
@@ -38,28 +48,37 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   //Flipper
-  public void flip(double power) {m_flippyMotor.set(power);}
+  public void flip(double power) {m_flippyMotor.set(-power);}
   public void stopFlipper() {m_flippyMotor.stopMotor();}
   public void flipToPosition(double pos) {
     // Moves to the goal encoder angle
     flip(MathUtil.clamp(pos - m_flippyEncoder.getPosition(), -1, 1));
   }
+  public double getFlipperEncoder() {return -m_flippyEncoder.getPosition() / IntakeConstants.kFlipperGearRatio;}
   public void resetFlipperEncoder() {m_flippyEncoder.setPosition(0);}
 
   //Combo
   public void intakeFromGround() {
-    if (m_flippyEncoder.getPosition() < .3 * IntakeConstants.kFlipperGearRatio) flip(.5);
-    else intakeCurrentSensitive(1);
+    if (getFlipperEncoder() < .3) {
+      flip(.3);
+      stopIntake();
+    }
+    else {
+      intakeCurrentSensitive(1);
+      stopFlipper();
+    }
   }
   public void retractIntake() {
-    if (m_flippyEncoder.getPosition() > .1 * IntakeConstants.kFlipperGearRatio) flip(-.5);
+    if (getFlipperEncoder() > .1) flip(-.3);
+    else stopFlipper();
   }
   public void expelRing() {
     intake(-1);
   }
   public void feedShooter() {
     retractIntake();
-    if (m_flippyEncoder.getPosition() < .05 * IntakeConstants.kFlipperGearRatio) expelRing();
+    if (getFlipperEncoder() < .1) expelRing();
+    else stopFlipper();
   }
   public void stopEverything() {
     stopFlipper();
