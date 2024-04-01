@@ -7,10 +7,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
 
-public class GroundIntakeCommand extends Command {
+public class FeedShooterCommand extends Command {
   private final IntakeSubsystem m_subsystem;
 
-  public GroundIntakeCommand(IntakeSubsystem subsystem) {
+  public FeedShooterCommand(IntakeSubsystem subsystem) {
     m_subsystem = subsystem;
     addRequirements(subsystem);
   }
@@ -18,7 +18,7 @@ public class GroundIntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.intakeFromGround();
+    m_subsystem.feedShooter();
   }
 
   // Called once the command ends or is interrupted.

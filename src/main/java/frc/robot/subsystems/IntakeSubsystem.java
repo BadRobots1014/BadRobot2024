@@ -60,5 +60,9 @@ public class IntakeSubsystem extends SubsystemBase {
     retractIntake();
     expelRing();
   }
+  public void stopEverything() {
+    stopFlipper();
+    stopIntake();
+  }
 
 }

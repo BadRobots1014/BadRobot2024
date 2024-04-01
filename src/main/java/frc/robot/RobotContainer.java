@@ -33,6 +33,7 @@ import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.GroundIntakeCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ResetWinchCommand;
+import frc.robot.commands.RetractIntakeCommand;
 import frc.robot.commands.ShootCommand;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -77,7 +78,7 @@ public class RobotContainer {
             this::getPOV));
     m_climberSubsystem.setDefaultCommand(new ClimbCommand(m_climberSubsystem, this::getAuxRightY, this::getAuxLeftY));
     m_shooterSubsystem.setDefaultCommand(new WinchCommand(m_shooterSubsystem, this::POVToWinchSpeed));
-    m_intakeSubsystem.setDefaultCommand(new GroundIntakeCommand(m_intakeSubsystem));
+    m_intakeSubsystem.setDefaultCommand(new RetractIntakeCommand(m_intakeSubsystem));
 
     // Auto chooser setup
     m_tab = Shuffleboard.getTab("Auto");
