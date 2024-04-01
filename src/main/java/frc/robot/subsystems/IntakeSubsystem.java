@@ -33,7 +33,7 @@ public class IntakeSubsystem extends SubsystemBase {
     m_tab = Shuffleboard.getTab("Intake");
     m_tab.addNumber("Intake Current", this::getIntakeCurrent);
     m_tab.addNumber("Flipper Position", this::getFlipperEncoder);
-    m_tab.addNumber("Flipper Amps", this::getFlipperAmps);
+    m_tab.addNumber("Flipper Current", this::getFlipperAmps);
 
     resetFlipperEncoder();
   }
