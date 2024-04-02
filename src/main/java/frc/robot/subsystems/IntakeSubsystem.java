@@ -27,8 +27,8 @@ public class IntakeSubsystem extends SubsystemBase {
     m_intakeMotor = new CANSparkMax(IntakeConstants.kGroundIntakeCanId, MotorType.kBrushed);
     m_flippyEncoder = m_flippyMotor.getEncoder(Type.kHallSensor, 42);
 
-    m_flippyMotor.setIdleMode(IdleMode.kBrake);
-    m_intakeMotor.setIdleMode(IdleMode.kCoast);
+    m_flippyMotor.setIdleMode(IdleMode.kCoast);
+    m_intakeMotor.setIdleMode(IdleMode.kBrake);
 
     m_tab = Shuffleboard.getTab("Intake");
     m_tab.addNumber("Intake Current", this::getIntakeCurrent);
@@ -39,7 +39,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   //Intake
-  public void intake(double power) {m_intakeMotor.set(power);}
+  public void intake(double power) {m_intakeMotor.set(-power);}
   public void stopIntake() {m_intakeMotor.stopMotor();}
   public double getIntakeCurrent() {return m_intakeMotor.getOutputCurrent();}
   public boolean intakeCurrentSpike() {return getIntakeCurrent() >= IntakeConstants.kIntakeMaxCurrent;}
@@ -66,7 +66,7 @@ public class IntakeSubsystem extends SubsystemBase {
       stopIntake();
     }
     else {
-      intakeCurrentSensitive(1);
+      intake(1);
       stopFlipper();
     }
   }
