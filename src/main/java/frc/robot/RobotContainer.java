@@ -29,6 +29,7 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.commands.AirIntakeCommand;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.ExpelRingCommand;
 import frc.robot.commands.FeedShooterCommand;
@@ -133,6 +134,8 @@ public class RobotContainer {
       .whileTrue(new ExpelRingCommand(m_intakeSubsystem));
     new JoystickButton(m_driverController, XboxController.Button.kX.value)
       .whileTrue(new FeedShooterCommand(m_intakeSubsystem));
+    new JoystickButton(m_driverController, XboxController.Button.kY.value)
+      .whileTrue(new AirIntakeCommand(m_intakeSubsystem));
       // Left bumper = Toggle fastmode
       // Left trigger = Toggle fastermode
       // POV = Nudge
@@ -172,8 +175,7 @@ public class RobotContainer {
     else fasterMode = false;
     return fasterMode;
   }
-  double getRightX() {
-    return m_driverController.getRightX();}
+  double getRightX() {return m_driverController.getRightX();}
   double getLeftX() {return -m_driverController.getLeftX();}
   double getLeftY() {return -m_driverController.getLeftY();}
   double getPOV() {return m_driverController.getPOV();}
