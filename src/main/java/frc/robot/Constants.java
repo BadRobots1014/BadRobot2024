@@ -145,7 +145,7 @@ public final class Constants {
     public static final int kWinchMotorCanId = 54;
 
     public static final double kFrontShootPower = 1.0;
-    public static final double kBackShootPower = 1.0;
+    public static final double kBackShootPower = -1.0;
     public static final double kFrontIntakePower = -0.35;
     public static final double kBackIntakePower = -0.30;
     public static final double kIndexIntakePower = 0.1;
@@ -169,5 +169,12 @@ public final class Constants {
   public static final class LimelightConstants {
     public static final double kCamHeight = 0; // Height of the limelight from the ground
     public static final double kCamAngle = 0; // Pitch angle of direction the limelight is pointed in
+  }
+
+  public static final class IntakeConstants {
+    public static final int kFlippyCanId = 1;
+    public static final int kGroundIntakeCanId = 2;
+    public static final int kIntakeMaxCurrent = 10;
+    public static final double kFlipperGearRatio = 45;
   }
 }
