@@ -137,8 +137,6 @@ public class RobotContainer {
       .whileTrue(new ExpelRingCommand(m_intakeSubsystem));
     new JoystickButton(m_driverController, XboxController.Button.kX.value)
       .whileTrue(new FeedShooterCommand(m_intakeSubsystem));
-    new JoystickButton(m_driverController, XboxController.Button.kY.value)
-      .whileTrue(new AirIntakeCommand(m_intakeSubsystem));
       // Left bumper = Toggle fastmode
       // Left trigger = Toggle fastermode
       // POV = Nudge
@@ -149,7 +147,8 @@ public class RobotContainer {
     new JoystickButton(m_auxController, XboxController.Button.kRightBumper.value) // Shoot
       .whileTrue(new ShootCommand(m_shooterSubsystem));
     new JoystickButton(m_auxController, XboxController.Button.kLeftBumper.value) // Intake
-      .whileTrue(new IntakeCommand(m_shooterSubsystem));
+      .whileTrue(new IntakeCommand(m_shooterSubsystem))
+      .whileTrue(new AirIntakeCommand(m_intakeSubsystem));
     new JoystickButton(m_auxController, XboxController.Button.kB.value) // Climber up
       .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberUpPower));
     new JoystickButton(m_auxController, XboxController.Button.kA.value) // Climber down

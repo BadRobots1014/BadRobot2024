@@ -25,14 +25,14 @@ public class ShooterSubsystem extends SubsystemBase {
   private final GenericEntry m_backMotorPower;
   private final GenericEntry m_frontIntakePower;
   private final GenericEntry m_backIntakePower;
-  private final GenericEntry m_indexPower;
-  private final GenericEntry m_indexIntakePower;
+  // private final GenericEntry m_indexPower;
+  // private final GenericEntry m_indexIntakePower;
   private final GenericEntry m_winchUpPower;
   private final GenericEntry m_winchDownPower;
 
   public final CANSparkFlex m_frontMotor;
   public final CANSparkFlex m_backMotor;
-  public final CANSparkMax m_indexMotor;
+  // public final CANSparkMax m_indexMotor;
   public final CANSparkMax m_winchMotor;
   public final RelativeEncoder m_winchEncoder;
 
@@ -40,15 +40,15 @@ public class ShooterSubsystem extends SubsystemBase {
 
     m_frontMotor = new CANSparkFlex(ShooterConstants.kFrontMotorCanId, MotorType.kBrushless);
     m_backMotor = new CANSparkFlex(ShooterConstants.kBackMotorCanId, MotorType.kBrushless);
-    m_indexMotor = new CANSparkMax(ShooterConstants.kIndexMotorCanId, MotorType.kBrushless);
+    // m_indexMotor = new CANSparkMax(ShooterConstants.kIndexMotorCanId, MotorType.kBrushless);
     m_winchMotor = new CANSparkMax(ShooterConstants.kWinchMotorCanId, MotorType.kBrushed);
     m_frontMotor.setIdleMode(IdleMode.kCoast);
     m_backMotor.setIdleMode(IdleMode.kCoast);
-    m_indexMotor.setIdleMode(IdleMode.kCoast);
+    // m_indexMotor.setIdleMode(IdleMode.kCoast);
     m_winchMotor.setIdleMode(IdleMode.kCoast);
     m_frontMotor.setInverted(false);
     m_backMotor.setInverted(false);
-    m_indexMotor.setInverted(true);
+    // m_indexMotor.setInverted(true);
     m_winchMotor.setInverted(false);
     m_winchEncoder = m_winchMotor.getEncoder(Type.kQuadrature, 8192);
 
@@ -64,10 +64,10 @@ public class ShooterSubsystem extends SubsystemBase {
       .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
     m_backIntakePower = m_shuffleboardtab.add("Back Intake Power", ShooterConstants.kBackIntakePower)
       .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
-    m_indexPower = m_shuffleboardtab.add("Index Power", ShooterConstants.kIndexPower)
-      .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
-    m_indexIntakePower = m_shuffleboardtab.add("Index Intake Power", ShooterConstants.kIndexIntakePower)
-      .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
+    // m_indexPower = m_shuffleboardtab.add("Index Power", ShooterConstants.kIndexPower)
+      // .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
+    // m_indexIntakePower = m_shuffleboardtab.add("Index Intake Power", ShooterConstants.kIndexIntakePower)
+      // .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
     m_winchUpPower = m_shuffleboardtab.add("Winch Up Power", ShooterConstants.kWinchUpPower)
       .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
     m_winchDownPower = m_shuffleboardtab.add("Winch Down Power", ShooterConstants.kWinchDownPower)
@@ -88,7 +88,7 @@ public class ShooterSubsystem extends SubsystemBase {
     return new double[] {
       clampPower(m_frontIntakePower.getDouble(ShooterConstants.kFrontIntakePower)),
       clampPower(m_backIntakePower.getDouble(ShooterConstants.kBackIntakePower)),
-      clampPower(m_indexIntakePower.getDouble(ShooterConstants.kIndexIntakePower))
+      // clampPower(m_indexIntakePower.getDouble(ShooterConstants.kIndexIntakePower))
     };
   }
   public void runShooter() {
@@ -102,12 +102,12 @@ public class ShooterSubsystem extends SubsystemBase {
   public void runIntake() {
     m_frontMotor.set(getIntakePowers()[0]);
     m_backMotor.set(getIntakePowers()[1]);
-    m_indexMotor.set(getIntakePowers()[2]);
+    // m_indexMotor.set(getIntakePowers()[2]);
   }
   public void stopShooter() {
     m_frontMotor.stopMotor();
     m_backMotor.stopMotor();
-    m_indexMotor.stopMotor();
+    // m_indexMotor.stopMotor();
   }
   public boolean isShooterRunning() {
     if (m_frontMotor.get() == 0 && m_backMotor.get() == 0) { //Check if both motors are stopped
@@ -118,9 +118,9 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   // Indexer stuff
-  public double getIndexPower() {return clampPower(m_indexPower.getDouble(ShooterConstants.kIndexPower));}
-  public void runIndex() {m_indexMotor.set(getIndexPower());}
-  public void stopIndex() {m_indexMotor.stopMotor();}
+  // public double getIndexPower() {return clampPower(m_indexPower.getDouble(ShooterConstants.kIndexPower));}
+  // public void runIndex() {m_indexMotor.set(getIndexPower());}
+  // public void stopIndex() {m_indexMotor.stopMotor();}
 
   // Winch stuff
   public double[] getWinchPowers() {
