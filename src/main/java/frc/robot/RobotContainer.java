@@ -129,9 +129,9 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     // Driver stuff
-    new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value) // Reset gyro
+    new JoystickButton(m_driverController, XboxController.Button.kStart.value) // Reset gyro
       .whileTrue(new ZeroHeadingCommand(m_robotDrive));
-    new JoystickButton(m_driverController, XboxController.Button.kA.value)
+    new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
       .whileTrue(new GroundIntakeCommand(m_intakeSubsystem));
     new JoystickButton(m_driverController, XboxController.Button.kB.value)
       .whileTrue(new ExpelRingCommand(m_intakeSubsystem));

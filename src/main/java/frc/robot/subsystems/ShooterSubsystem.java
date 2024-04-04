@@ -45,7 +45,7 @@ public class ShooterSubsystem extends SubsystemBase {
     m_frontMotor.setIdleMode(IdleMode.kCoast);
     m_backMotor.setIdleMode(IdleMode.kCoast);
     // m_indexMotor.setIdleMode(IdleMode.kCoast);
-    m_winchMotor.setIdleMode(IdleMode.kCoast);
+    m_winchMotor.setIdleMode(IdleMode.kBrake);
     m_frontMotor.setInverted(false);
     m_backMotor.setInverted(false);
     // m_indexMotor.setInverted(true);

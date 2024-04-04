@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.GroundIntakeCommand;
+import frc.robot.commands.RetractIntakeCommand;
 import frc.robot.commands.SetPoseCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.SwerveDriveCommand;
@@ -28,7 +29,10 @@ public class TwoRingAutoCommand extends SequentialCommandGroup {
         new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1)),
         new GroundIntakeCommand(intake)
       ).withTimeout(3),
-      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1))
+      new ParallelCommandGroup(
+        new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1)),
+        new RetractIntakeCommand(intake)
+      )
       .withTimeout(3.2),
       new ShootCommand(shoot, intake).withTimeout(4)
     );
