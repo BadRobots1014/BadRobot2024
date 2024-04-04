@@ -25,6 +25,7 @@ import frc.robot.commands.auto.DriveAutoCommand;
 import frc.robot.commands.auto.ShootAndDriveAutoCommand;
 import frc.robot.commands.auto.ShootAutoCommand;
 import frc.robot.commands.auto.TurnAndShootAutoCommand;
+import frc.robot.commands.auto.TwoRingAutoCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -89,7 +90,7 @@ public class RobotContainer {
     m_delay = m_tab.add("Delay", 0).getEntry();
 
     m_chosenAuto.setDefaultOption("Shoot and drive from middle",
-      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0,0,Rotation2d.fromDegrees(0)), m_delay.getDouble(0))); //used to be an empty Pose2D (should not change but maybe the empty pose has something to do with it)
+      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), m_delay.getDouble(0)));
     m_chosenAuto.addOption("Shoot and drive from left",
       new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0, 0, Rotation2d.fromDegrees(55)), m_delay.getDouble(0)));
     m_chosenAuto.addOption("Shoot and drive from right",
@@ -99,9 +100,11 @@ public class RobotContainer {
     m_chosenAuto.addOption("Drive, turn, and shoot from right",
       new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), -55, m_delay.getDouble(0)));
     m_chosenAuto.addOption("Drive back only",
-      new DriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0,0,Rotation2d.fromDegrees(0)), m_delay.getDouble(0))); //drive back only auto
+      new DriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0,0,Rotation2d.fromDegrees(0)), m_delay.getDouble(0)));
     m_chosenAuto.addOption("Shoot only",
       new ShootAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(), m_delay.getDouble(0)).withTimeout(4));
+    m_chosenAuto.addOption("2 rings",
+      new TwoRingAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(), m_delay.getDouble(0)));
 
     m_tab.add(m_chosenAuto);
 
