@@ -22,7 +22,7 @@ public class TwoRingAutoCommand extends SequentialCommandGroup {
   public TwoRingAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve, IntakeSubsystem intake, Pose2d startingOffset, double delay) {
     super(
       new WaitCommand(delay),
-      new ShootCommand(shoot).withTimeout(4),
+      new ShootCommand(shoot, intake).withTimeout(4),
       new SetPoseCommand(swerve, startingOffset).withTimeout(0),
       new ParallelCommandGroup(
         new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1)),
@@ -30,7 +30,7 @@ public class TwoRingAutoCommand extends SequentialCommandGroup {
       ).withTimeout(3),
       new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1))
       .withTimeout(3.2),
-      new ShootCommand(shoot).withTimeout(4)
+      new ShootCommand(shoot, intake).withTimeout(4)
     );
   }
 
