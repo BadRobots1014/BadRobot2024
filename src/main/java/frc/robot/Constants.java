@@ -147,7 +147,7 @@ public final class Constants {
     public static final double kFrontShootPower = 1.0;
     public static final double kBackShootPower = -1.0;
     public static final double kFrontIntakePower = -0.35;
-    public static final double kBackIntakePower = -0.30;
+    public static final double kBackIntakePower = 0.35;
     public static final double kIndexIntakePower = 0.1;
     public static final double kIndexPower = -1.0;
     public static final double kWinchUpPower = 0.5;
