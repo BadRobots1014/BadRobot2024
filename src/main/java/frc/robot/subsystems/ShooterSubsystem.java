@@ -136,6 +136,12 @@ public class ShooterSubsystem extends SubsystemBase {
   public double getWinchEncoder() {return m_winchEncoder.getPosition();}
   public void resetWinchEncoder() {m_winchEncoder.setPosition(0);}
 
+  public double angleToEncoderCounts(double theta){
+    double slope = (ShooterConstants.kHighHeightCount - ShooterConstants.kLowHeightCount) / (ShooterConstants.kHighHeightAngle - ShooterConstants.kLowHeightAngle);
+    double encoderCounts = (ShooterConstants.kLowHeightCount + slope * (theta - ShooterConstants.kLowHeightAngle));
+    return encoderCounts;
+  }
+
   // Function to clamp the power to a value between -1 and 1
   public static double clampPower(double power) {
     return MathUtil.clamp(power, -1, 1);

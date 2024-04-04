@@ -160,6 +160,11 @@ public final class Constants {
     public static final double kWinchDeadBand = 0.05;
     public static final double kWinchUpPreset = 0;
     public static final double kWinchDownPreset = 1.5;
+    //Winch Angle Constants
+    public static final double kHighHeightCount = 0;
+    public static final double kLowHeightCount = 0;
+    public static final double kHighHeightAngle = 0;
+    public static final double kLowHeightAngle = 0;
   }
 
   public static final class ClimberConstants {

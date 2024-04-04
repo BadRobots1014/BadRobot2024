@@ -103,16 +103,8 @@ public class SwerveDriveCommand extends Command {
                 //need to potentially add something to clear previous yaw if hasent seen tag in a while
             turningSpeed = MathUtil.clamp((0 - currentTx)/80, -1.0, 1.0); //rotate robot to face tag
 
-            double shooterTargetTheta = m_LimelightSubsystem.getAutoAimShooterAngle();
-            //when winch is at pos 0 the angle will be about 60
-            double shooterLength = 0;
-            double winchPos = m_ShooterSubsystem.getWinchEncoder();
-            double winchZeroHeight = 0;
-            double winchLowestPosHeightDisplacement = 0;
-            double winchCurrentHeight = winchZeroHeight - winchPos * (winchLowestPosHeightDisplacement/ShooterConstants.kWinchDownPreset);
             
-            double shooterSetAngle = Math.toDegrees(Math.asin(winchCurrentHeight/shooterLength));
-            
+            double shooterSetAngle = m_ShooterSubsystem.angleToEncoderCounts(m_LimelightSubsystem.getAutoAimShooterAngle());
             double winchSetPos = MathUtil.clamp(shooterSetAngle, ShooterConstants.kWinchUpPreset, ShooterConstants.kWinchDownPreset);
 
             winchPosSupplier = () -> winchSetPos;
