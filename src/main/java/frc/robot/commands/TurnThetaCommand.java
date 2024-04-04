@@ -22,7 +22,6 @@ public class TurnThetaCommand extends Command {
   public final Supplier<Double> ySupplier = ()-> 0.0;
   public final Supplier<Double> turnSupplier = ()-> 0.0;
   private boolean isTurnFinished = false;
-  private double initial_heading;
   private double targetTheta;
 
   public TurnThetaCommand(SwerveSubsystem subsystem, double turnDegrees) {
@@ -42,7 +41,6 @@ public class TurnThetaCommand extends Command {
   @Override
   public void initialize(){
     swerveSubsystem.resetPose();
-    initial_heading = swerveSubsystem.getHeading();
     isTurnFinished = false;
   }
 
