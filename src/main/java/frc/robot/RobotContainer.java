@@ -127,21 +127,21 @@ public class RobotContainer {
     m_delay = m_tab.add("Delay", 0).getEntry();
 
     m_chosenAuto.setDefaultOption("Shoot and drive from middle",
-      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(), m_delay.getDouble(0)));
+      new ShootAndDriveAutoCommand(m_LimelightSubsystem, m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(), m_delay.getDouble(0)));
     m_chosenAuto.addOption("Shoot and drive from left",
-      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(0, 0, Rotation2d.fromDegrees(55)), m_delay.getDouble(0)));
+      new ShootAndDriveAutoCommand(m_LimelightSubsystem, m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(0, 0, Rotation2d.fromDegrees(55)), m_delay.getDouble(0)));
     m_chosenAuto.addOption("Shoot and drive from right",
-      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(0, 0, Rotation2d.fromDegrees(-55)), m_delay.getDouble(0)));
+      new ShootAndDriveAutoCommand(m_LimelightSubsystem, m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(0, 0, Rotation2d.fromDegrees(-55)), m_delay.getDouble(0)));
     m_chosenAuto.addOption("Drive, turn, and shoot from left",
-      new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(), 55, m_delay.getDouble(0)));
+      new TurnAndShootAutoCommand(m_LimelightSubsystem, m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(), 55, m_delay.getDouble(0)));
     m_chosenAuto.addOption("Drive, turn, and shoot from right",
-      new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(), -55, m_delay.getDouble(0)));
+      new TurnAndShootAutoCommand(m_LimelightSubsystem, m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(), -55, m_delay.getDouble(0)));
     m_chosenAuto.addOption("Drive back only",
-      new DriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0,0,Rotation2d.fromDegrees(0)), m_delay.getDouble(0)));
+      new DriveAutoCommand(m_LimelightSubsystem, m_shooterSubsystem, m_robotDrive, new Pose2d(0,0,Rotation2d.fromDegrees(0)), m_delay.getDouble(0)));
     m_chosenAuto.addOption("Shoot only",
       new ShootAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(), m_delay.getDouble(0)).withTimeout(4));
     m_chosenAuto.addOption("2 rings",
-      new TwoRingAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(), m_delay.getDouble(0)));
+      new TwoRingAutoCommand(m_LimelightSubsystem, m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(), m_delay.getDouble(0)));
 
     m_tab.add(m_chosenAuto);
 
