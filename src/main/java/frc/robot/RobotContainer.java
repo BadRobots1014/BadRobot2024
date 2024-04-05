@@ -52,7 +52,8 @@ public class RobotContainer {
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  XboxController m_auxController = new XboxController(OIConstants.kSecondControllerPort);
+  XboxController 
+  m_auxController = new XboxController(OIConstants.kSecondControllerPort);
 
   // Subsystems
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();

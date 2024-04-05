@@ -7,8 +7,9 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class ShootCommand extends SequentialCommandGroup {
     public ShootCommand (ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSubsystem) {
         addCommands(
-            new ShooterCommand(shooterSubsystem, "both").withTimeout(1.75),
-            new ParallelCommandGroup(
+                new AirIntakeCommand(intakeSubsystem).withTimeout(0.2),
+                new ShooterCommand(shooterSubsystem, "both").withTimeout(1.75),
+                new ParallelCommandGroup(
                 new ShooterCommand(shooterSubsystem, "both"),
                 new FeedShooterCommand(intakeSubsystem)
             )
