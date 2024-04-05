@@ -7,8 +7,11 @@ package frc.robot.commands.auto;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.GroundIntakeCommand;
+import frc.robot.commands.RetractIntakeCommand;
 import frc.robot.commands.SetPoseCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.SwerveDriveCommand;
@@ -16,17 +19,22 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class SlideAndShootAutoCommand extends SequentialCommandGroup {
-  public SlideAndShootAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve, IntakeSubsystem intake, Pose2d startingOffset, int direction) {
+public class TwoRingAutoCommand extends SequentialCommandGroup {
+  public TwoRingAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve, IntakeSubsystem intake, Pose2d startingOffset, double delay) {
     super(
-        new WaitCommand(4),
+      new WaitCommand(delay),
+      new ShootCommand(shoot, intake).withTimeout(4),
       new SetPoseCommand(swerve, startingOffset).withTimeout(0),
-      new SwerveDriveCommand(swerve, supplyDouble(direction == 0 ? -.3 : .3), supplyDouble(0), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(0))
-      .withTimeout(1),
-      new ShootCommand(shoot, intake),
-      new SwerveDriveCommand(swerve, supplyDouble(direction == 0 ? .3 : -.3), supplyDouble(0), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(0))
-      .withTimeout(1),
-      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(0))
+      new ParallelCommandGroup(
+        new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1)),
+        new GroundIntakeCommand(intake)
+      ).withTimeout(3),
+      new ParallelCommandGroup(
+        new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1)),
+        new RetractIntakeCommand(intake)
+      )
+      .withTimeout(3.2),
+      new ShootCommand(shoot, intake).withTimeout(4)
     );
   }
 

@@ -114,7 +114,7 @@ public final class Constants {
     public static final double kTeleMaxMetersPerSec = 0.3;
     public static final double kFastTeleMaxMetersPerSec = 1.0;
     public static final double kFasterTeleMaxMetersPerSec = 1.8;
-    public static final double kNudgeSpeed = 0.5;
+    public static final double kNudgeSpeed = 0.8;
 
     public static final Button kTestMotorButton = Button.kLeftBumper;
   }
@@ -149,9 +149,9 @@ public final class Constants {
     public static final int kWinchMotorCanId = 54;
 
     public static final double kFrontShootPower = 1.0;
-    public static final double kBackShootPower = 1.0;
+    public static final double kBackShootPower = -1.0;
     public static final double kFrontIntakePower = -0.35;
-    public static final double kBackIntakePower = -0.30;
+    public static final double kBackIntakePower = 0.35;
     public static final double kIndexIntakePower = 0.1;
     public static final double kIndexPower = -1.0;
     public static final double kWinchUpPower = 0.5;
@@ -159,8 +159,7 @@ public final class Constants {
     
     public static final double kWinchDeadBand = 0.05;
     public static final double kWinchUpPreset = 0;
-    public static final double kWinchDownPreset = 1.5;
-    //Winch Angle Constants
+    public static final double kWinchDownPreset = 1.75;//was 1.5    //Winch Angle Constants
     public static final double kHighHeightCount = 0;
     public static final double kLowHeightCount = 0;
     public static final double kHighHeightAngle = 0;
@@ -178,5 +177,12 @@ public final class Constants {
   public static final class LimelightConstants {
     public static final double kCamHeight = 0; // Height of the limelight from the ground
     public static final double kCamAngle = 0; // Pitch angle of direction the limelight is pointed in
+  }
+
+  public static final class IntakeConstants {
+    public static final int kFlippyCanId = 1;
+    public static final int kGroundIntakeCanId = 2;
+    public static final int kIntakeMaxCurrent = 10;
+    public static final double kFlipperGearRatio = 45;
   }
 }
