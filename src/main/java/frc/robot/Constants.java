@@ -24,6 +24,13 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 public final class Constants {
 
   public static final class DriveConstants {
+    //auto aim constants
+    public static final Integer kAutoAimInactive = 0;
+    public static final Integer kFlexibleAutoAim = 1;
+    public static final Integer kRigidAutoAim = 2;
+    public static final Double kAutoAimZOffset = 2.0;//Offset how far forwards the robot will try to move
+    public static final Double kAutoAimXOffset = -0.2;//unsure how much to the left limelight is 
+    public static final Double kAutoAimSourceXOffset = 0.0;//Offset for source
 
     // TODO turn field oriented on or off
     public static final boolean kFieldOriented = true;
@@ -110,7 +117,7 @@ public final class Constants {
     public static final double kTeleMaxMetersPerSec = 0.3;
     public static final double kFastTeleMaxMetersPerSec = 1.0;
     public static final double kFasterTeleMaxMetersPerSec = 1.8;
-    public static final double kNudgeSpeed = 0.5;
+    public static final double kNudgeSpeed = 0.8;
 
     public static final Button kTestMotorButton = Button.kLeftBumper;
   }
@@ -147,7 +154,7 @@ public final class Constants {
     public static final double kFrontShootPower = 1.0;
     public static final double kBackShootPower = -1.0;
     public static final double kFrontIntakePower = -0.35;
-    public static final double kBackIntakePower = -0.30;
+    public static final double kBackIntakePower = 0.35;
     public static final double kIndexIntakePower = 0.1;
     public static final double kIndexPower = -1.0;
     public static final double kWinchUpPower = 0.5;
@@ -155,7 +162,11 @@ public final class Constants {
     
     public static final double kWinchDeadBand = 0.05;
     public static final double kWinchUpPreset = 0;
-    public static final double kWinchDownPreset = 1.5;
+    public static final double kWinchDownPreset = 1.75;//was 1.5    //Winch Angle Constants
+    public static final double kHighHeightCount = 0;
+    public static final double kLowHeightCount = 0;
+    public static final double kHighHeightAngle = 0;
+    public static final double kLowHeightAngle = 0;
   }
 
   public static final class ClimberConstants {

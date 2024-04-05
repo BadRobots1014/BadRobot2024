@@ -184,8 +184,12 @@ public class LimelightSubsystem extends SubsystemBase {
     }
 
     public double getAutoAimShooterAngle() {
+        //199.39 cm from floor to bottom of speaker
+        //april tag is 132 cm from floor
+        double speakerHeight = 199.39 / 100;//meters
+        double aprilTagHeight = 132 / 100;//meters no freedom units here
         double posX = getAprilTagPoseX();
-        double posY = getAprilTagPoseY(); // height
+        double posY = getAprilTagPoseY() + (speakerHeight - aprilTagHeight); // height
         double posZ = getAprilTagPoseZ(); // distance from robot
         double theta = Math.atan((posY / posZ));
         return theta;
