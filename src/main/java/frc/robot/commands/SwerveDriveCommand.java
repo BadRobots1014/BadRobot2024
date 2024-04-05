@@ -96,8 +96,15 @@ public class SwerveDriveCommand extends Command {
       fasterMode = fasterModeFunction.get();
     }else if(autoAimMode.get() == DriveConstants.kFlexibleAutoAim){
         //Flexible autoaim will allow the driver to move around the field while button is held while locking the rotation and shooter alignments to point towards the speaker
+            if(AprilTagCurrentID == 3){
+              m_LimelightSubsystem.setPriorityID(3);//ID 3 and 7
+            }
+            if(AprilTagCurrentID ==7){
+              m_LimelightSubsystem.setPriorityID(7);//ID 3 and 7
+            }
+
             
-            m_LimelightSubsystem.setPriorityID(3);
+            m_LimelightSubsystem.setPriorityID(3);//ID 3 and 7
             currentTx = m_LimelightSubsystem.getTx();
                 //currentTargetYaw = m_LimelightSubsystem.getCameraPoseYaw();//set turningspeed while it sees tag
                 //need to potentially add something to clear previous yaw if hasent seen tag in a while
@@ -112,6 +119,25 @@ public class SwerveDriveCommand extends Command {
             //Insert set shooter angle here
             
             m_WinchRunToPosition.schedule();
+
+            m_LimelightSubsystem.resetPriorityID();
+    }else if(autoAimMode.get() == DriveConstants.kRigidAutoAim){//This will now be for source autoaim
+            if(AprilTagCurrentID == 1){
+              m_LimelightSubsystem.setPriorityID(1);//ID 1 and 9
+            }
+            if(AprilTagCurrentID ==9){
+              m_LimelightSubsystem.setPriorityID(9);//ID 1 and 9
+            }
+            currentTx = m_LimelightSubsystem.getTx();
+            currentTargetX = m_LimelightSubsystem.getCameraPoseX();
+            currentTargetZ = m_LimelightSubsystem.getCameraPoseZ();
+
+            
+            xSpeed = MathUtil.clamp((currentTargetX + DriveConstants.kAutoAimXOffset)/8, -0.3, 0.3); //clamped to 0.5 speed max
+            ySpeed = MathUtil.clamp((currentTargetZ + DriveConstants.kAutoAimZOffset)/8,-0.3,0.3);
+            turningSpeed = MathUtil.clamp((0 - currentTx)/80, -1.0, 1.0); //rotate robot to face tag
+
+            //Winch will be manual for now
 
             m_LimelightSubsystem.resetPriorityID();
     }

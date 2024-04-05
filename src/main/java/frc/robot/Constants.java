@@ -28,6 +28,9 @@ public final class Constants {
     public static final Integer kAutoAimInactive = 0;
     public static final Integer kFlexibleAutoAim = 1;
     public static final Integer kRigidAutoAim = 2;
+    public static final Double kAutoAimZOffset = 2.0;//Offset how far forwards the robot will try to move
+    public static final Double kAutoAimXOffset = -0.2;//unsure how much to the left limelight is 
+    public static final Double kAutoAimSourceXOffset = 0.0;//Offset for source
 
     // TODO turn field oriented on or off
     public static final boolean kFieldOriented = true;
