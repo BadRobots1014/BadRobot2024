@@ -137,8 +137,7 @@ public class RobotContainer {
       .whileTrue(new GroundIntakeCommand(m_intakeSubsystem));
     new JoystickButton(m_driverController, XboxController.Button.kB.value)
       .whileTrue(new ExpelRingCommand(m_intakeSubsystem));
-    new JoystickButton(m_driverController, XboxController.Button.kX.value)
-      .whileTrue(new FeedShooterCommand(m_intakeSubsystem));
+    
       // Left bumper = Toggle fastmode
       // Left trigger = Toggle fastermode
       // POV = Nudge
@@ -153,7 +152,7 @@ public class RobotContainer {
       .whileTrue(new AirIntakeCommand(m_intakeSubsystem));
     // new JoystickButton(m_auxController, XboxController.Button.kB.value) // Climber up
     //   .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberUpPower));
-    // new JoystickButton(m_auxController, XboxController.Button.kA.value) // Climber down
+    // new JoystickButton(m_auxControllser, XboxController.Button.kA.value) // Climber down
     // .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberDownPower));
     new JoystickButton(m_auxController, XboxController.Button.kY.value) // Winch up preset
       .whileTrue(new WinchPresetCommand(m_shooterSubsystem, ShooterConstants.kWinchUpPreset));
@@ -161,10 +160,11 @@ public class RobotContainer {
       .whileTrue(new WinchPresetCommand(m_shooterSubsystem, ShooterConstants.kWinchDownPreset));
     new JoystickButton(m_auxController, XboxController.Button.kBack.value) // Reset winch encoder
       .whileTrue(new ResetWinchCommand(m_shooterSubsystem));
-    new JoystickButton(m_auxController, XboxController.Button.kA.value) // Manually spin up shooter
-      .whileTrue(new ShooterCommand(m_shooterSubsystem, "both"));
-    new JoystickButton(m_auxController, XboxController.Button.kB.value) // Manually Feed Ring to shooter
-      .whileTrue(new ExpelRingCommand(m_intakeSubsystem));
+
+    new JoystickButton(m_auxController, XboxController.Button.kA.value)
+      .whileTrue(new FeedShooterCommand(m_intakeSubsystem));
+    new JoystickButton(m_auxController, XboxController.Button.kB.value)
+      .whileTrue(new ShooterCommand(m_shooterSubsystem));
       // POV = Winch
       // Joysticks = Manual climbers
   }
