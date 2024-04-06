@@ -21,7 +21,7 @@ public class DriveAutoCommand extends SequentialCommandGroup {
       new WaitCommand(delay),
       new SetPoseCommand(swerve, startingOffset).withTimeout(0),
       new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1))
-      .withTimeout(3),
+      .withTimeout(7),
       new TurnThetaCommand(swerve, 0)
     );
   }
