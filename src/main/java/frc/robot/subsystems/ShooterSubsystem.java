@@ -80,14 +80,14 @@ public class ShooterSubsystem extends SubsystemBase {
   // Shooter stuff
   public double[] getShooterPowers() { // Function to get the motor powers from shuffleboard and clamp them to a value between -1 and 1
     return new double[] {
-      clampPower(m_frontMotorPower.getDouble(ShooterConstants.kFrontShootPower)*ShooterConstants.kVortexFreeSpeed),
-      clampPower(m_backMotorPower.getDouble(ShooterConstants.kBackShootPower)*ShooterConstants.kVortexFreeSpeed)
+      clampPower(m_frontMotorPower.getDouble(ShooterConstants.kFrontShootPower)*ShooterConstants.kShooterMaxSpeed),
+      clampPower(m_backMotorPower.getDouble(ShooterConstants.kBackShootPower)*ShooterConstants.kShooterMaxSpeed)
     };
   }
   public double[] getIntakePowers() {
     return new double[] {
-      clampPower(m_frontIntakePower.getDouble(ShooterConstants.kFrontIntakePower)*ShooterConstants.kVortexFreeSpeed),
-      clampPower(m_backIntakePower.getDouble(ShooterConstants.kBackIntakePower)*ShooterConstants.kVortexFreeSpeed)
+      clampPower(m_frontIntakePower.getDouble(ShooterConstants.kFrontIntakePower)*ShooterConstants.kShooterMaxSpeed),
+      clampPower(m_backIntakePower.getDouble(ShooterConstants.kBackIntakePower)*ShooterConstants.kShooterMaxSpeed)
       // clampPower(m_indexIntakePower.getDouble(ShooterConstants.kIndexIntakePower))
     };
   }
@@ -97,7 +97,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
   public void runShooter(double rearPower) {
     m_frontMotor.set(getShooterPowers()[0]);
-    m_backMotor.set(rearPower*ShooterConstants.kVortexFreeSpeed);
+    m_backMotor.set(rearPower*ShooterConstants.kShooterMaxSpeed);
   }
   public void runIntake() {
     m_frontMotor.set(getIntakePowers()[0]);
@@ -123,8 +123,8 @@ public class ShooterSubsystem extends SubsystemBase {
     return m_backMotor.getEncoder().getVelocity();
   }
   public boolean getSpunUp() {
-    return Math.abs(m_frontMotor.getEncoder().getVelocity()) >= ShooterConstants.kVortexFreeSpeed
-        && Math.abs(m_backMotor.getEncoder().getVelocity()) >= ShooterConstants.kVortexFreeSpeed;
+    return Math.abs(m_frontMotor.getEncoder().getVelocity()) >= 6000
+        && Math.abs(m_backMotor.getEncoder().getVelocity()) >= 6000;
   }
 
   // Indexer stuff
