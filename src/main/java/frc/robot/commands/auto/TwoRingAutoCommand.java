@@ -20,9 +20,9 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class TwoRingAutoCommand extends SequentialCommandGroup {
-  public TwoRingAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve, IntakeSubsystem intake, Pose2d startingOffset, double delay) {
+  public TwoRingAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve, IntakeSubsystem intake, Pose2d startingOffset, Supplier<Double> delay) {
     super(
-      new WaitCommand(delay),
+      new WaitCommand(delay.get()),
       new ShootCommand(shoot, intake).withTimeout(4),
       new SetPoseCommand(swerve, startingOffset).withTimeout(0),
       new ParallelCommandGroup(
