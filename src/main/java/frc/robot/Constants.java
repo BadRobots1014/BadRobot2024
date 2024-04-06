@@ -27,6 +27,10 @@ public final class Constants {
 
     // TODO turn field oriented on or off
     public static final boolean kFieldOriented = true;
+    
+    //Turn theta 
+    public static final double kTurnThetaMaxSpeed = 0.9;
+    public static final double kTurnThetaShutoffSensitivity = 0.005;
 
     // Distance between centers of right and left wheels on robot
     public static final double kTrackWidth = Units.inchesToMeters(24.75);

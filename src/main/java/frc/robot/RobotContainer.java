@@ -39,6 +39,7 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ResetWinchCommand;
 import frc.robot.commands.RetractIntakeCommand;
 import frc.robot.commands.ShootCommand;
+import frc.robot.commands.ShooterCommand;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -150,16 +151,20 @@ public class RobotContainer {
     new JoystickButton(m_auxController, XboxController.Button.kLeftBumper.value) // Intake
       .whileTrue(new IntakeCommand(m_shooterSubsystem))
       .whileTrue(new AirIntakeCommand(m_intakeSubsystem));
-    new JoystickButton(m_auxController, XboxController.Button.kB.value) // Climber up
-      .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberUpPower));
-    new JoystickButton(m_auxController, XboxController.Button.kA.value) // Climber down
-      .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberDownPower));
+    // new JoystickButton(m_auxController, XboxController.Button.kB.value) // Climber up
+    //   .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberUpPower));
+    // new JoystickButton(m_auxController, XboxController.Button.kA.value) // Climber down
+    // .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberDownPower));
     new JoystickButton(m_auxController, XboxController.Button.kY.value) // Winch up preset
       .whileTrue(new WinchPresetCommand(m_shooterSubsystem, ShooterConstants.kWinchUpPreset));
     new JoystickButton(m_auxController, XboxController.Button.kX.value) // Winch down preset
       .whileTrue(new WinchPresetCommand(m_shooterSubsystem, ShooterConstants.kWinchDownPreset));
     new JoystickButton(m_auxController, XboxController.Button.kBack.value) // Reset winch encoder
       .whileTrue(new ResetWinchCommand(m_shooterSubsystem));
+    new JoystickButton(m_auxController, XboxController.Button.kA.value) // Manually spin up shooter
+      .whileTrue(new ShooterCommand(m_shooterSubsystem, "both"));
+    new JoystickButton(m_auxController, XboxController.Button.kB.value) // Manually Feed Ring to shooter
+      .whileTrue(new ExpelRingCommand(m_intakeSubsystem));
       // POV = Winch
       // Joysticks = Manual climbers
   }
