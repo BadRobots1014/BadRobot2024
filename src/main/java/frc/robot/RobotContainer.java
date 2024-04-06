@@ -108,7 +108,7 @@ public class RobotContainer {
     m_chosenAuto.addOption("2 rings",
       new TwoRingAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(), m_delay.getDouble(0)));
 
-    m_tab.add(m_chosenAuto);
+    m_tab.add("Auto", m_chosenAuto);
 
     // Configure the button bindings
     configureButtonBindings();
