@@ -35,7 +35,7 @@ public class ShooterSubsystem extends SubsystemBase {
     m_frontMotor = new CANSparkFlex(ShooterConstants.kFrontMotorCanId, MotorType.kBrushless);
     m_backMotor = new CANSparkFlex(ShooterConstants.kBackMotorCanId, MotorType.kBrushless);
     m_frontMotor.setInverted(false);
-    m_backMotor.setInverted(true);
+    m_backMotor.setInverted(false);
     m_frontPID = m_frontMotor.getPIDController();
     m_backPID = m_backMotor.getPIDController();
     m_frontPID.setReference(0, CANSparkBase.ControlType.kVelocity);
@@ -68,6 +68,10 @@ public class ShooterSubsystem extends SubsystemBase {
       .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
     m_winchDownPower = m_shuffleboardtab.add("Winch Down Power", ShooterConstants.kWinchDownPower)
       .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
+
+    m_shuffleboardtab.addBoolean("Shooter spun up", this::getSpunUp);
+    m_shuffleboardtab.addNumber("Front motor RPM", this::getFrontRPM);
+    m_shuffleboardtab.addNumber("Back motor RPM", this::getBackRPM);
 
     // Winch encoder value
     m_shuffleboardtab.addNumber("Winch Encoder", this::getWinchEncoder);
@@ -111,6 +115,15 @@ public class ShooterSubsystem extends SubsystemBase {
     } else {
       return true; //Otherwise, the shooter is running
     }
+  }
+  public double getFrontRPM() {
+    return m_frontMotor.getEncoder().getVelocity();
+  }
+  public double getBackRPM() {
+    return m_backMotor.getEncoder().getVelocity();
+  }
+  public boolean getSpunUp() {
+    return m_frontMotor.getEncoder().getVelocity() >= ShooterConstants.kVortexFreeSpeed && m_backMotor.getEncoder().getVelocity() >= ShooterConstants.kVortexFreeSpeed;
   }
 
   // Indexer stuff
