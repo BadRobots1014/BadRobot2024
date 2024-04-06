@@ -22,6 +22,11 @@ import edu.wpi.first.wpilibj.XboxController.Button;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public class BlinkinConstants {
+
+    public static final int kBlinkinPort = 0;
+
+  }
 
   public static final class DriveConstants {
 
