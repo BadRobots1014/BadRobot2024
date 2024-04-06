@@ -144,15 +144,15 @@ public final class Constants {
     public static final int kIndexMotorCanId = 53;
     public static final int kWinchMotorCanId = 54;
 
+    public static final double kVortexFreeSpeed = 6000;
     public static final double kFrontShootPower = 1.0;
-    public static final double kBackShootPower = -1.0;
+    public static final double kBackShootPower = 1.0;
     public static final double kFrontIntakePower = -0.35;
-    public static final double kBackIntakePower = 0.35;
-    public static final double kIndexIntakePower = 0.1;
-    public static final double kIndexPower = -1.0;
+    public static final double kBackIntakePower = -0.35;
+
     public static final double kWinchUpPower = 0.5;
     public static final double kWinchDownPower = -1.0;
-    
+
     public static final double kWinchDeadBand = 0.05;
     public static final double kWinchUpPreset = 0;
     public static final double kWinchDownPreset = 1.75;//was 1.5

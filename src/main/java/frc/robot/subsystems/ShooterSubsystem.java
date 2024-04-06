@@ -2,9 +2,11 @@
 // NEGATIVE CLOCKWISE
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkRelativeEncoder.Type;
@@ -21,18 +23,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private final ShuffleboardTab m_shuffleboardtab = Shuffleboard.getTab("Shooter");
 
-  private final GenericEntry m_frontMotorPower;
-  private final GenericEntry m_backMotorPower;
-  private final GenericEntry m_frontIntakePower;
-  private final GenericEntry m_backIntakePower;
-  // private final GenericEntry m_indexPower;
-  // private final GenericEntry m_indexIntakePower;
-  private final GenericEntry m_winchUpPower;
-  private final GenericEntry m_winchDownPower;
+  private final GenericEntry m_frontMotorPower, m_backMotorPower, m_frontIntakePower, m_backIntakePower, m_winchUpPower, m_winchDownPower;
 
-  public final CANSparkFlex m_frontMotor;
-  public final CANSparkFlex m_backMotor;
-  // public final CANSparkMax m_indexMotor;
+  public final CANSparkFlex m_frontMotor, m_backMotor;
+  public final SparkPIDController m_frontPID, m_backPID;
   public final CANSparkMax m_winchMotor;
   public final RelativeEncoder m_winchEncoder;
 
@@ -40,6 +34,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
     m_frontMotor = new CANSparkFlex(ShooterConstants.kFrontMotorCanId, MotorType.kBrushless);
     m_backMotor = new CANSparkFlex(ShooterConstants.kBackMotorCanId, MotorType.kBrushless);
+    m_frontMotor.setInverted(false);
+    m_backMotor.setInverted(true);
+    m_frontPID = m_frontMotor.getPIDController();
+    m_backPID = m_backMotor.getPIDController();
+    m_frontPID.setReference(0, CANSparkBase.ControlType.kVelocity);
+    m_backPID.setReference(0, CANSparkBase.ControlType.kVelocity);
     // m_indexMotor = new CANSparkMax(ShooterConstants.kIndexMotorCanId, MotorType.kBrushless);
     m_winchMotor = new CANSparkMax(ShooterConstants.kWinchMotorCanId, MotorType.kBrushed);
     m_frontMotor.setIdleMode(IdleMode.kCoast);
@@ -64,10 +64,6 @@ public class ShooterSubsystem extends SubsystemBase {
       .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
     m_backIntakePower = m_shuffleboardtab.add("Back Intake Power", ShooterConstants.kBackIntakePower)
       .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
-    // m_indexPower = m_shuffleboardtab.add("Index Power", ShooterConstants.kIndexPower)
-      // .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
-    // m_indexIntakePower = m_shuffleboardtab.add("Index Intake Power", ShooterConstants.kIndexIntakePower)
-      // .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
     m_winchUpPower = m_shuffleboardtab.add("Winch Up Power", ShooterConstants.kWinchUpPower)
       .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
     m_winchDownPower = m_shuffleboardtab.add("Winch Down Power", ShooterConstants.kWinchDownPower)
@@ -80,14 +76,14 @@ public class ShooterSubsystem extends SubsystemBase {
   // Shooter stuff
   public double[] getShooterPowers() { // Function to get the motor powers from shuffleboard and clamp them to a value between -1 and 1
     return new double[] {
-      clampPower(m_frontMotorPower.getDouble(ShooterConstants.kFrontShootPower)),
-      clampPower(m_backMotorPower.getDouble(ShooterConstants.kBackShootPower))
+      clampPower(m_frontMotorPower.getDouble(ShooterConstants.kFrontShootPower)*ShooterConstants.kVortexFreeSpeed),
+      clampPower(m_backMotorPower.getDouble(ShooterConstants.kBackShootPower)*ShooterConstants.kVortexFreeSpeed)
     };
   }
   public double[] getIntakePowers() {
     return new double[] {
-      clampPower(m_frontIntakePower.getDouble(ShooterConstants.kFrontIntakePower)),
-      clampPower(m_backIntakePower.getDouble(ShooterConstants.kBackIntakePower)),
+      clampPower(m_frontIntakePower.getDouble(ShooterConstants.kFrontIntakePower)*ShooterConstants.kVortexFreeSpeed),
+      clampPower(m_backIntakePower.getDouble(ShooterConstants.kBackIntakePower)*ShooterConstants.kVortexFreeSpeed)
       // clampPower(m_indexIntakePower.getDouble(ShooterConstants.kIndexIntakePower))
     };
   }
@@ -97,7 +93,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
   public void runShooter(double rearPower) {
     m_frontMotor.set(getShooterPowers()[0]);
-    m_backMotor.set(rearPower);
+    m_backMotor.set(rearPower*ShooterConstants.kVortexFreeSpeed);
   }
   public void runIntake() {
     m_frontMotor.set(getIntakePowers()[0]);
