@@ -4,6 +4,9 @@
 
 package frc.robot.commands;
 
+import com.revrobotics.SparkMaxLimitSwitch;
+import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
 
@@ -30,6 +33,7 @@ public class GroundIntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_subsystem.m_intakeLimitSwitch.isPressed();
+    // return false;
   }
 }
