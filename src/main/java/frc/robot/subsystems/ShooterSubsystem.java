@@ -23,12 +23,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private final ShuffleboardTab m_shuffleboardtab = Shuffleboard.getTab("Shooter");
 
-  private final GenericEntry m_frontMotorPower, m_backMotorPower, m_frontIntakePower, m_backIntakePower, m_winchUpPower, m_winchDownPower;
+  private final GenericEntry m_frontMotorPower, m_backMotorPower, m_frontIntakePower, m_backIntakePower;
 
   public final CANSparkFlex m_frontMotor, m_backMotor;
   public final SparkPIDController m_frontPID, m_backPID;
-  public final CANSparkMax m_winchMotor;
-  public final RelativeEncoder m_winchEncoder;
+
 
   public ShooterSubsystem() {
 
@@ -40,17 +39,11 @@ public class ShooterSubsystem extends SubsystemBase {
     m_backPID = m_backMotor.getPIDController();
     m_frontPID.setReference(0, CANSparkBase.ControlType.kVelocity);
     m_backPID.setReference(0, CANSparkBase.ControlType.kVelocity);
-    // m_indexMotor = new CANSparkMax(ShooterConstants.kIndexMotorCanId, MotorType.kBrushless);
-    m_winchMotor = new CANSparkMax(ShooterConstants.kWinchMotorCanId, MotorType.kBrushed);
     m_frontMotor.setIdleMode(IdleMode.kCoast);
     m_backMotor.setIdleMode(IdleMode.kCoast);
-    // m_indexMotor.setIdleMode(IdleMode.kCoast);
-    m_winchMotor.setIdleMode(IdleMode.kBrake);
     m_frontMotor.setInverted(false);
     m_backMotor.setInverted(false);
-    // m_indexMotor.setInverted(true);
-    m_winchMotor.setInverted(false);
-    m_winchEncoder = m_winchMotor.getEncoder(Type.kQuadrature, 8192);
+
 
     // Displays whether or not the shooter is running
     m_shuffleboardtab.addBoolean("Shooter Running", this::isShooterRunning);
@@ -64,17 +57,10 @@ public class ShooterSubsystem extends SubsystemBase {
       .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
     m_backIntakePower = m_shuffleboardtab.add("Back Intake Power", ShooterConstants.kBackIntakePower)
       .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
-    m_winchUpPower = m_shuffleboardtab.add("Winch Up Power", ShooterConstants.kWinchUpPower)
-      .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
-    m_winchDownPower = m_shuffleboardtab.add("Winch Down Power", ShooterConstants.kWinchDownPower)
-      .withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
 
     m_shuffleboardtab.addBoolean("Shooter spun up", this::getSpunUp);
     m_shuffleboardtab.addNumber("Front motor RPM", this::getFrontRPM);
     m_shuffleboardtab.addNumber("Back motor RPM", this::getBackRPM);
-
-    // Winch encoder value
-    m_shuffleboardtab.addNumber("Winch Encoder", this::getWinchEncoder);
   }
 
   // Shooter stuff
@@ -126,25 +112,6 @@ public class ShooterSubsystem extends SubsystemBase {
     return Math.abs(m_frontMotor.getEncoder().getVelocity()) >= 6000
         && Math.abs(m_backMotor.getEncoder().getVelocity()) >= 6000;
   }
-
-  // Indexer stuff
-  // public double getIndexPower() {return clampPower(m_indexPower.getDouble(ShooterConstants.kIndexPower));}
-  // public void runIndex() {m_indexMotor.set(getIndexPower());}
-  // public void stopIndex() {m_indexMotor.stopMotor();}
-
-  // Winch stuff
-  public double[] getWinchPowers() {
-    return new double[] {
-      clampPower(m_winchUpPower.getDouble(ShooterConstants.kWinchUpPower)),
-      clampPower(m_winchDownPower.getDouble(ShooterConstants.kWinchDownPower))
-    };
-  }
-  public void winchUp() {m_winchMotor.set(getWinchPowers()[0]);}
-  public void winchDown() {m_winchMotor.set(getWinchPowers()[1]);}
-  public void stopWinch() {m_winchMotor.stopMotor();}
-  public void manualWinch(double power) {m_winchMotor.set(power);}
-  public double getWinchEncoder() {return m_winchEncoder.getPosition();}
-  public void resetWinchEncoder() {m_winchEncoder.setPosition(0);}
 
   // Function to clamp the power to a value between -1 and 1
   public static double clampPower(double power) {

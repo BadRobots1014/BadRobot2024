@@ -2,11 +2,12 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.WinchySubsystem;
 
 public class ResetWinchCommand extends Command {
-  private final ShooterSubsystem m_subsystem;
+  private final WinchySubsystem m_subsystem;
 
-  public ResetWinchCommand(ShooterSubsystem subsystem) {
+  public ResetWinchCommand(WinchySubsystem subsystem) {
     m_subsystem = subsystem;
     addRequirements(subsystem);
   }

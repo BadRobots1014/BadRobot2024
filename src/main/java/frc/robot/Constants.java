@@ -158,7 +158,9 @@ public final class Constants {
     public static final double kBackShootPower = -1.0;
     public static final double kFrontIntakePower = -0.35;
     public static final double kBackIntakePower = 0.35;
+  }
 
+  public static final class WinchySquinchyConstants{
     public static final double kWinchUpPower = 0.5;
     public static final double kWinchDownPower = -1.0;
 

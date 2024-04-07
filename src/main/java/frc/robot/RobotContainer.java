@@ -17,6 +17,7 @@ import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.WinchySquinchyConstants;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.WinchCommand;
 import frc.robot.commands.WinchPresetCommand;
@@ -30,6 +31,7 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.WinchySubsystem;
 import frc.robot.commands.AirIntakeCommand;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.ExpelRingCommand;
@@ -58,6 +60,7 @@ public class RobotContainer {
 
   // Subsystems
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
+  private final WinchySubsystem m_winchySubsystem = new WinchySubsystem();
   private final SwerveSubsystem m_robotDrive = new SwerveSubsystem();
   private boolean fastMode = false;
   private boolean fasterMode = false;
@@ -83,7 +86,7 @@ public class RobotContainer {
             this::getFasterMode,
             this::getPOV));
     m_climberSubsystem.setDefaultCommand(new ClimbCommand(m_climberSubsystem, this::getAuxRightY, this::getAuxLeftY));
-    m_shooterSubsystem.setDefaultCommand(new WinchCommand(m_shooterSubsystem, this::POVToWinchSpeed));
+    m_shooterSubsystem.setDefaultCommand(new WinchCommand(m_winchySubsystem, this::POVToWinchSpeed));
     m_intakeSubsystem.setDefaultCommand(new RetractIntakeCommand(m_intakeSubsystem));
 
     // Auto chooser setup (sqeak!)
@@ -155,11 +158,11 @@ public class RobotContainer {
     // new JoystickButton(m_auxControllser, XboxController.Button.kA.value) // Climber down
     // .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberDownPower));
     new JoystickButton(m_auxController, XboxController.Button.kY.value) // Winch up preset
-      .whileTrue(new WinchPresetCommand(m_shooterSubsystem, ShooterConstants.kWinchUpPreset));
+      .whileTrue(new WinchPresetCommand(m_winchySubsystem, WinchySquinchyConstants.kWinchUpPreset));
     new JoystickButton(m_auxController, XboxController.Button.kX.value) // Winch down preset
-      .whileTrue(new WinchPresetCommand(m_shooterSubsystem, ShooterConstants.kWinchDownPreset));
+      .whileTrue(new WinchPresetCommand(m_winchySubsystem, WinchySquinchyConstants.kWinchDownPreset));
     new JoystickButton(m_auxController, XboxController.Button.kBack.value) // Reset winch encoder
-      .whileTrue(new ResetWinchCommand(m_shooterSubsystem));
+      .whileTrue(new ResetWinchCommand(m_winchySubsystem));
 
     new JoystickButton(m_auxController, XboxController.Button.kA.value)
       .whileTrue(new FeedShooterCommand(m_intakeSubsystem));
@@ -196,7 +199,7 @@ public class RobotContainer {
   double getAuxLeftY() {return Math.abs(m_auxController.getLeftY()) > OIConstants.kDriveDeadband ? m_auxController.getLeftY() : 0;}
   double getAuxPOV() {return m_auxController.getPOV();}
   double POVToWinchSpeed() {
-    return getAuxPOV() == 0 ? ShooterConstants.kWinchUpPower : (getAuxPOV() == 180 ? ShooterConstants.kWinchDownPower : 0);
+    return getAuxPOV() == 0 ? WinchySquinchyConstants.kWinchUpPower : (getAuxPOV() == 180 ? WinchySquinchyConstants.kWinchDownPower : 0);
   }
 
   /**

@@ -4,12 +4,13 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.WinchySubsystem;
 
 public class WinchCommand extends Command {
-  private final ShooterSubsystem m_subsystem;
+  private final WinchySubsystem m_subsystem;
   private final Supplier<Double> m_power;
 
-  public WinchCommand(ShooterSubsystem subsystem, Supplier<Double> power) {
+  public WinchCommand(WinchySubsystem subsystem, Supplier<Double> power) {
     m_subsystem = subsystem;
     m_power = power;
     addRequirements(subsystem);
