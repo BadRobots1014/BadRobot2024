@@ -10,7 +10,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.Supplier;
 
-public class TurnByThetaCommand extends Command {
+public class TurnToThetaCommand extends Command {
 
   public final SwerveSubsystem swerveSubsystem;
   public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
@@ -24,7 +24,7 @@ public class TurnByThetaCommand extends Command {
   private boolean isTurnFinished = false;
   private double targetTheta, initialHeading;
 
-  public TurnByThetaCommand(SwerveSubsystem subsystem, double turnDegrees) {
+  public TurnToThetaCommand(SwerveSubsystem subsystem, double turnDegrees) {
     swerveSubsystem = subsystem;
     xSpdFunction = xSupplier;
     ySpdFunction = ySupplier;
@@ -51,7 +51,6 @@ public class TurnByThetaCommand extends Command {
   @Override
   public void execute() {
     //autoturny stuffs
-    targetTheta += initialHeading;
     double currentHeading = swerveSubsystem.getHeading();
     double currentRawHeading = swerveSubsystem.getHeading();
     double theta,speed;
@@ -81,6 +80,7 @@ public class TurnByThetaCommand extends Command {
     System.out.println("DeltaTheta:" + theta);
     System.out.println("TargetTheta:" + targetTheta);
     System.out.println("Current Heading:" + currentHeading);
+    System.out.println("Current Raw Heading:" + currentRawHeading);
     
 
     
