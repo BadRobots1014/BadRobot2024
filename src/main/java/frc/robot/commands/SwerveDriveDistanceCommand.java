@@ -88,8 +88,9 @@ public class SwerveDriveDistanceCommand extends Command {
     double currentX = 0;//swerveSubsystem.getX();// + x is actually right
 
     //should calculate the distance it travels if wheels are at an angle
-    currentY = Math.toDegrees(Math.cos(Math.toRadians(swerveSubsystem.getFrontLeftTurningPos()))) * currentDistance;
-    currentX = Math.toDegrees(Math.sin(Math.toRadians(swerveSubsystem.getFrontLeftTurningPos()))) * currentDistance;
+    currentX = Math.toDegrees(Math.sin(Math.toRadians(movementHeading))) * currentDistance;
+    currentY = Math.toDegrees(Math.cos(Math.toRadians(movementHeading))) * currentDistance;
+    
 
 //offset initial values so they are zero
     
@@ -104,26 +105,28 @@ public class SwerveDriveDistanceCommand extends Command {
     System.out.println("Current Y:" + currentY);
     System.out.println("targetX: " + targetX);  
     System.out.println("targetY: " + targetY);  
+    System.out.println("Current Distance" + currentDistance);
     System.out.println("IsDriveFinished" + isDriveFinished);
 
-    double deltaX = (targetX - currentX);
+    double deltaX = (targetX - currentX) * 150;
     double deltaY = (targetY - currentY) * 150; //because scale is so small
 
-    deltaX = 0;//TODO: DO this for now because I am not calculating horizontal movement
+    //deltaX = 0;//TODO: DO this for now because I am not calculating horizontal movement
 
-    // if(movementHeading == 0){
-    //   deltaX = 0;
-    // }
-
-    if(Math.abs(deltaY) <= 0.005){ //may need to adjust how sensitive it is  Math.abs(deltaX) <= 0.005 &&
-      isDriveFinished = true;
-    }
-    
-    // if((Math.abs(deltaY) >= (targetY - initialY) + 1) || (Math.abs(deltaX) >= (targetX - initialX) + 1)){
-    //   //prevent runoffs if the inversion of axes is wrong and robot runs more than a meter in the wrong direction
-    //   //can be removed later once confirmed it works
+    // if(Math.abs(deltaY) <= 0.005){ //may need to adjust how sensitive it is  Math.abs(deltaX) <= 0.005 &&
     //   isDriveFinished = true;
     // }
+    
+
+    if(Math.abs(currentDistance) <= 0.005){
+      isDriveFinished = true; //stop robot if robot reaches target distance reguardless of direction it thinks it traveled
+    }
+
+    if((Math.abs(deltaY) >= (targetY - initialY) + 1) || (Math.abs(deltaX) >= (targetX - initialX) + 1)){
+      //prevent runoffs if the inversion of axes is wrong and robot runs more than a meter in the wrong direction
+      //can be removed later once confirmed it works
+      isDriveFinished = true;
+    }
 
 
 
