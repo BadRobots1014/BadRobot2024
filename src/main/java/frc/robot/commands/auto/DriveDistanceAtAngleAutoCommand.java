@@ -28,7 +28,7 @@ public class DriveDistanceAtAngleAutoCommand extends SequentialCommandGroup {
     
     super(
       new SetPoseCommand(swerve, new Pose2d()).withTimeout(2),
-      new SwerveDriveDistanceCommand(swerve,distance,movementHeadingDegrees)
+      new SwerveDriveDistanceCommand(swerve,distance,movementHeadingDegrees, new Pose2d())
     );
   }
   

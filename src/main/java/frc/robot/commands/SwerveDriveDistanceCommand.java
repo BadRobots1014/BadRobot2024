@@ -37,12 +37,14 @@ public class SwerveDriveDistanceCommand extends Command {
   private double movementHeading;
   private double targetDistance;
   private boolean isDriveFinished = false;
+  private Pose2d startPos;
 
   public SwerveDriveDistanceCommand(
     SwerveSubsystem subsystem,
     //NavXGyroSubsystem gyro,// oh boy i love greek gyros
     double disMeters,
-    double movHeadingDegrees
+    double movHeadingDegrees,
+    Pose2d startingPose
   ) {
     swerveSubsystem = subsystem;
    // m_gyroSubsystem = gyro;
@@ -63,8 +65,9 @@ public class SwerveDriveDistanceCommand extends Command {
 
   @Override
   public void initialize(){
-    swerveSubsystem.resetPose(new Pose2d());
-    swerveSubsystem.setOffset(swerveSubsystem.getPose()); //sets the offset to this poses
+    // swerveSubsystem.resetPose(new Pose2d());
+    // swerveSubsystem.setOffset(swerveSubsystem.getPose()); //sets the offset to this poses
+    swerveSubsystem.setOffset(startPos);
     swerveSubsystem.resetDriveEncoders(); //resets all drive encoders to zero
     //initial_yaw = swerveSubsystem.getHeading();
     isDriveFinished = false;
