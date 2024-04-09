@@ -63,16 +63,16 @@ public class SwerveDriveDistanceCommand extends Command {
 
   @Override
   public void initialize(){
-    //swerveSubsystem.resetPose(new Pose2d());
-    //swerveSubsystem.setOffset(swerveSubsystem.getPose()); //sets the offset to this pose
+    swerveSubsystem.resetPose(new Pose2d());
+    swerveSubsystem.setOffset(swerveSubsystem.getPose()); //sets the offset to this poses
+    swerveSubsystem.resetDriveEncoders(); //resets all drive encoders to zero
     //initial_yaw = swerveSubsystem.getHeading();
     isDriveFinished = false;
     System.out.println("SWERVEDRIVEDISTANCEINIT");
     
-    //based on old photo of toecracker bot, it appears that -X is forwards, +X is backwards, +Y is right and -Y is left
-    initialX = 0;//swerveSubsystem.getX(); //should be forwards/backwards
-    initialY = swerveSubsystem.getFrontLeftDriveDistanceMeters(); //should be right/left based on this image : https://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaichttps://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaichttps://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaichttps://www.google.com/search?client=firefox-b-1-d&sca_esv=2aa9b945258dbd75&sxsrf=ACQVn0_KiBiKJdKv6iHRNoWv4OEuhEhWrg:1708739659604&q=Navx+gyro+displacement+directions&uds=AMwkrPtkV4xyIj1O_U0idwcJ94r1PEfKqwAeYQNHK6u7Wd65vv0Q8q8w72SXjRzgc89eBQfJDzf_M6j9io2l6W1DnNVoZDm7_ahGdixlS7zjPaubzekRtAF30VmD-wSGqiS0YBfIaXTUimbyLlmFpgN5JpVgS8spCw&udm=2&sa=X&ved=2ahUKEwjQgbKj78KEAxVlGtAFHZRWDjEQtKgLegQIBxAB&biw=1920&bih=927&dpr=1#vhid=tqj-ZJSm3KsBwM&vssid=mosaic
-    //displacement XY and Z are all in meters
+    //ignores the direction current distance thinks its going
+    initialX = Math.toDegrees(Math.sin(Math.toRadians(movementHeading))) * swerveSubsystem.getFrontLeftDriveDistanceMeters();
+    initialY = Math.toDegrees(Math.cos(Math.toRadians(movementHeading))) * swerveSubsystem.getFrontLeftDriveDistanceMeters(); 
   }
 
   @Override
@@ -81,15 +81,14 @@ public class SwerveDriveDistanceCommand extends Command {
   adjustedInitialX = initialX;      //so should now be +X is right and -X is left
   adjustedInitialY = initialY;  // so +Y should now be forwards and -Y should be back
 
-  double currentDistance = swerveSubsystem.getFrontLeftDriveDistanceMeters();
+  double currentDistance = Math.abs(swerveSubsystem.getFrontLeftDriveDistanceMeters());
 
-  //also corrected to make sense
-    double currentY = swerveSubsystem.getFrontLeftDriveDistanceMeters();//Y+ is actually back 
-    double currentX = 0;//swerveSubsystem.getX();// + x is actually right
-
+  if(targetDistance < 0 && currentDistance > 0){
+    currentDistance = -1 * Math.abs(swerveSubsystem.getFrontLeftDriveDistanceMeters()); //if target distance is backwards, robot assumes its going backwards
+  }
     //should calculate the distance it travels if wheels are at an angle
-    currentX = Math.toDegrees(Math.sin(Math.toRadians(movementHeading))) * currentDistance;
-    currentY = Math.toDegrees(Math.cos(Math.toRadians(movementHeading))) * currentDistance;
+    double currentX = Math.toDegrees(Math.sin(Math.toRadians(movementHeading))) * currentDistance;
+    double currentY = Math.toDegrees(Math.cos(Math.toRadians(movementHeading))) * currentDistance;
     
 
 //offset initial values so they are zero

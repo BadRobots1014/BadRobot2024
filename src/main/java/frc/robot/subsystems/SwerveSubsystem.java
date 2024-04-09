@@ -146,6 +146,15 @@ public class SwerveSubsystem extends SubsystemBase {
     public double getFrontLeftTurningPosDegree(){return frontLeft.getTurningPositionDeg() % 360;}
     public double getFrontLeftAbsTurningPos(){return frontLeft.getTurningPosition();}
     public double getFrontLeftDriveDistanceMeters(){return frontLeft.getDrivePosition() * 0.0009336;}// meters per encoder count
+    public void resetFrontLeftEncoder(){frontLeft.resetEncoders();}
+
+    public void resetDriveEncoders(){
+      frontLeft.resetEncoders();
+      frontRight.resetEncoders();
+      backLeft.resetEncoders();
+      backRight.resetEncoders();
+    }
+    
 
   public ChassisSpeeds getRobotRelativeSpeeds() {return new ChassisSpeeds(getXSpeed(), getYSpeed(), getTurnSpeed());}
   public void driveRobotRelative(ChassisSpeeds speeds) {
