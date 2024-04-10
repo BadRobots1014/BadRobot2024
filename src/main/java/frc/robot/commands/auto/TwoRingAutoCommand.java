@@ -26,11 +26,11 @@ public class TwoRingAutoCommand extends SequentialCommandGroup {
       new ShootCommand(shoot, intake).withTimeout(4),
       new SetPoseCommand(swerve, startingOffset).withTimeout(0),
       new ParallelCommandGroup(
-        new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1)),
+        new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1), supplyDouble(0), supplyDouble(0)),
         new GroundIntakeCommand(intake)
       ).withTimeout(3),
       new ParallelCommandGroup(
-        new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1)),
+        new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1), supplyDouble(0), supplyDouble(0)),
         new RetractIntakeCommand(intake)
       )
       .withTimeout(3.2),

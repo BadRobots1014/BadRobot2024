@@ -81,7 +81,10 @@ public class RobotContainer {
             DriveConstants.kFieldOriented,
             this::getFastMode,
             this::getFasterMode,
-            this::getPOV));
+            this::getPOV,
+            this::getAuxLTrig,
+            this::getAuxRTrig
+            ));
     m_climberSubsystem.setDefaultCommand(new ClimbCommand(m_climberSubsystem, this::getAuxRightY, this::getAuxLeftY));
     m_shooterSubsystem.setDefaultCommand(new WinchCommand(m_shooterSubsystem, this::POVToWinchSpeed));
     m_intakeSubsystem.setDefaultCommand(new RetractIntakeCommand(m_intakeSubsystem));
@@ -195,6 +198,8 @@ public class RobotContainer {
   double getAuxRightY() {return Math.abs(m_auxController.getRightY()) > OIConstants.kDriveDeadband ? m_auxController.getRightY() : 0;}
   double getAuxLeftY() {return Math.abs(m_auxController.getLeftY()) > OIConstants.kDriveDeadband ? m_auxController.getLeftY() : 0;}
   double getAuxPOV() {return m_auxController.getPOV();}
+  double getAuxLTrig(){return m_auxController.getLeftTriggerAxis();}
+  double getAuxRTrig(){return m_auxController.getRightTriggerAxis();}
   double POVToWinchSpeed() {
     return getAuxPOV() == 0 ? ShooterConstants.kWinchUpPower : (getAuxPOV() == 180 ? ShooterConstants.kWinchDownPower : 0);
   }
