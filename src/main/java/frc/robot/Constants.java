@@ -32,6 +32,10 @@ public final class Constants {
 
     // TODO turn field oriented on or off
     public static final boolean kFieldOriented = true;
+
+    //Preset drive angles
+    public static final double kSourceTheta = 45;
+    public static final double kSpeakerTheta = 180;
     
     //Turn theta 
     public static final double kTurnThetaMaxSpeed = 0.9;
