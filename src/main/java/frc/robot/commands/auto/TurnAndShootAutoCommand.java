@@ -18,9 +18,9 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class TurnAndShootAutoCommand extends SequentialCommandGroup {
-  public TurnAndShootAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve, IntakeSubsystem intake, Pose2d startingOffset, double turnDegrees, double delay) {
+  public TurnAndShootAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve, IntakeSubsystem intake, Pose2d startingOffset, double turnDegrees, Supplier<Double> delay) {
     super(
-      new WaitCommand(delay),
+      new WaitCommand(delay.get()),
       new SetPoseCommand(swerve, startingOffset).withTimeout(0),
       new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1))
       .withTimeout(1.9),

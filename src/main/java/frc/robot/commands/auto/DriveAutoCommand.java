@@ -16,9 +16,9 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class DriveAutoCommand extends SequentialCommandGroup {
-  public DriveAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve, Pose2d startingOffset, double delay) {
+  public DriveAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve, Pose2d startingOffset, Supplier<Double> delay) {
     super(
-      new WaitCommand(delay),
+      new WaitCommand(delay.get()),
       new SetPoseCommand(swerve, startingOffset).withTimeout(0),
       new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1))
       .withTimeout(7),

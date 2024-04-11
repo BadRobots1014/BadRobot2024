@@ -86,29 +86,29 @@ public class RobotContainer {
     m_shooterSubsystem.setDefaultCommand(new WinchCommand(m_shooterSubsystem, this::POVToWinchSpeed));
     m_intakeSubsystem.setDefaultCommand(new RetractIntakeCommand(m_intakeSubsystem));
 
-    // Auto chooser setup
+    // Auto chooser setup (sqeak!)
     m_tab = Shuffleboard.getTab("Auto");
 
     m_delay = m_tab.add("Delay", 0).getEntry();
 
     m_chosenAuto.setDefaultOption("Shoot and drive from middle",
-      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(), m_delay.getDouble(0)));
+      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(), this::getDelay));
     m_chosenAuto.addOption("Shoot and drive from left",
-      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(0, 0, Rotation2d.fromDegrees(55)), m_delay.getDouble(0)));
+      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(0, 0, Rotation2d.fromDegrees(55)), this::getDelay));
     m_chosenAuto.addOption("Shoot and drive from right",
-      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(0, 0, Rotation2d.fromDegrees(-55)), m_delay.getDouble(0)));
+      new ShootAndDriveAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(0, 0, Rotation2d.fromDegrees(-55)), this::getDelay));
     m_chosenAuto.addOption("Drive, turn, and shoot from left",
-      new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(), 55, m_delay.getDouble(0)));
+      new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(), 55, this::getDelay));
     m_chosenAuto.addOption("Drive, turn, and shoot from right",
-      new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(), -55, m_delay.getDouble(0)));
+      new TurnAndShootAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(), -55, this::getDelay));
     m_chosenAuto.addOption("Drive back only",
-      new DriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0,0,Rotation2d.fromDegrees(0)), m_delay.getDouble(0)));
+      new DriveAutoCommand(m_shooterSubsystem, m_robotDrive, new Pose2d(0,0,Rotation2d.fromDegrees(0)), this::getDelay));
     m_chosenAuto.addOption("Shoot only",
-      new ShootAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(), m_delay.getDouble(0)).withTimeout(4));
+      new ShootAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(), this::getDelay).withTimeout(4));
     m_chosenAuto.addOption("2 rings",
-      new TwoRingAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(), m_delay.getDouble(0)));
+      new TwoRingAutoCommand(m_shooterSubsystem, m_robotDrive, m_intakeSubsystem, new Pose2d(), this::getDelay));
 
-    m_tab.add(m_chosenAuto);
+    m_tab.add("Auto", m_chosenAuto);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -183,6 +183,11 @@ public class RobotContainer {
     else fasterMode = false;
     return fasterMode;
   }
+
+  double getDelay() {
+    return m_delay.getDouble(0);
+  }
+
   double getRightX() {return m_driverController.getRightX();}
   double getLeftX() {return -m_driverController.getLeftX();}
   double getLeftY() {return -m_driverController.getLeftY();}
