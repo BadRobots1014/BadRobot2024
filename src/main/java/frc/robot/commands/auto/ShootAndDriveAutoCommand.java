@@ -20,15 +20,17 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class ShootAndDriveAutoCommand extends SequentialCommandGroup {
   public ShootAndDriveAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve, IntakeSubsystem intake, Pose2d startingOffset, Supplier<Double> delay) {
     super(
+      new SetPoseCommand(swerve, startingOffset).withTimeout(0),
       new WaitCommand(delay.get()),
       new ShootCommand(shoot, intake).withTimeout(4),
-      new SetPoseCommand(swerve, startingOffset).withTimeout(0),
-      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1))
-      .withTimeout(3),
-      new TurnThetaCommand(swerve, 0)
+      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1))
+      .withTimeout(3)
+
+      //new TurnThetaCommand(swerve, 0),
     );
   }
 
   private static Supplier<Double> supplyDouble(double d) {return new Supplier<Double>() {@Override public Double get() {return d;}};}
   private static Supplier<Boolean> supplyBoolean(boolean b) {return new Supplier<Boolean>() {@Override public Boolean get() {return b;}};}
 }
+ 

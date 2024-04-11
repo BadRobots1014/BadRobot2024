@@ -22,11 +22,11 @@ public class TurnAndShootAutoCommand extends SequentialCommandGroup {
     super(
       new WaitCommand(delay.get()),
       new SetPoseCommand(swerve, startingOffset).withTimeout(0),
-      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1))
+      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1))
       .withTimeout(1.9),
       new TurnThetaCommand(swerve, turnDegrees).withTimeout(1),
       new ShootCommand(shoot, intake).withTimeout(4),
-      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1))
+      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1))
       .withTimeout(2.8)
     );
   }

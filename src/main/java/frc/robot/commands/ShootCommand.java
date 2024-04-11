@@ -10,7 +10,7 @@ public class ShootCommand extends SequentialCommandGroup {
             new ParallelCommandGroup(
                 new AirIntakeCommand(intakeSubsystem).withTimeout(0.2),
                 new ShooterCommand(shooterSubsystem, "both")
-            ).withTimeout(1.75),
+            ).withTimeout(2.5),
             new ParallelCommandGroup(
                 new ShooterCommand(shooterSubsystem, "both"),
                 new FeedShooterCommand(intakeSubsystem)

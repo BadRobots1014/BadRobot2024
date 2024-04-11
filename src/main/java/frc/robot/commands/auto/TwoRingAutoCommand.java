@@ -22,18 +22,18 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class TwoRingAutoCommand extends SequentialCommandGroup {
   public TwoRingAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve, IntakeSubsystem intake, Pose2d startingOffset, Supplier<Double> delay) {
     super(
+      new SetPoseCommand(swerve, startingOffset).withTimeout(0),
       new WaitCommand(delay.get()),
       new ShootCommand(shoot, intake).withTimeout(4),
-      new SetPoseCommand(swerve, startingOffset).withTimeout(0),
-      new ParallelCommandGroup(
-        new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1)),
-        new GroundIntakeCommand(intake)
-      ).withTimeout(3),
       new ParallelCommandGroup(
         new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1)),
+        new GroundIntakeCommand(intake)
+      ).withTimeout(1.8),
+      new ParallelCommandGroup(
+        new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1)),
         new RetractIntakeCommand(intake)
       )
-      .withTimeout(3.2),
+      .withTimeout(1.7),
       new ShootCommand(shoot, intake).withTimeout(4)
     );
   }
