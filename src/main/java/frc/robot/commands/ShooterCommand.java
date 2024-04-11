@@ -23,19 +23,15 @@ public class ShooterCommand extends Command {
   @Override
   public void execute() {
     if (m_commandType.equals("both")) m_subsystem.runShooter();
-    else if (m_commandType.equals("all")) {
-      m_subsystem.runShooter();
-      m_subsystem.runIndex();
-    }
     else if (m_commandType.equals("front")) m_subsystem.runShooter(0.0);
-    else if (m_commandType.equals("index")) m_subsystem.runIndex();
+    // else if (m_commandType.equals("index")) m_subsystem.runIndex();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     if (m_commandType.equals("both") || m_commandType.equals("front") || m_commandType.equals("all")) m_subsystem.stopShooter();
-    if (m_commandType.equals("index") || m_commandType.equals("all")) m_subsystem.stopIndex();
+    // if (m_commandType.equals("index") || m_commandType.equals("all")) m_subsystem.stopIndex();
   }
 
   // Returns true when the command should end.

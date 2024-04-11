@@ -86,12 +86,12 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public SwerveSubsystem() {
     //Delay to allow navx to boot up
-    new Thread(() -> {
+    /*new Thread(() -> {
       try {
         Thread.sleep(DriveConstants.kBootupDelay);
         resetPose();
       } catch (Exception e) {}
-    }).start();
+    }).start();*/
 
     //Shuffle bored
     m_tab = Shuffleboard.getTab("Swerve");
