@@ -87,11 +87,7 @@ public class SwerveDriveCommand extends Command {
 
     //autoturny stuffs
     double currentHeading = swerveSubsystem.getHeading();
-    if(currentHeading < 0){
-      currentHeading = currentHeading + 180 + 360;
-    }
-    currentHeading %= 360;
-    double currentRawHeading = swerveSubsystem.getHeading();
+    //double currentRawHeading = swerveSubsystem.getHeading();
     double theta,speed;
     
     
@@ -116,7 +112,7 @@ public class SwerveDriveCommand extends Command {
     System.out.println("DeltaTheta:" + theta);
     System.out.println("TargetTheta:" + targetTheta);
     System.out.println("Current Heading:" + currentHeading);
-    System.out.println("Current Raw Heading:" + currentRawHeading);
+    //System.out.println("Current Raw Heading:" + currentRawHeading);
 
     if(isPresetTurnActive){
       //if a trigger is held down override turningspeed
