@@ -4,6 +4,9 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -23,8 +26,16 @@ public class TurnToThetaCommand extends Command {
   public final Supplier<Double> turnSupplier = ()-> 0.0;
   private boolean isTurnFinished = false;
   private double targetTheta, initialHeading;
+  private ShuffleboardTab m_tab = Shuffleboard.getTab("turnToTheta");
 
-  public TurnToThetaCommand(SwerveSubsystem subsystem, double turnDegrees) {
+  public TurnToThetaCommand(
+  SwerveSubsystem subsystem,
+  Supplier<Double> xSupplier,
+  Supplier<Double> ySupplier,
+  Supplier<Boolean> fastMode,
+  Supplier<Boolean> fasterMode, 
+  double turnDegrees) {
+
     swerveSubsystem = subsystem;
     xSpdFunction = xSupplier;
     ySpdFunction = ySupplier;
@@ -36,11 +47,17 @@ public class TurnToThetaCommand extends Command {
     yLimiter = new SlewRateLimiter(DriveConstants.kYSlewRateLimit);
     turningLimiter = new SlewRateLimiter(DriveConstants.kTurnSlewRateLimit);
     addRequirements(swerveSubsystem);
+
+    m_tab.add("orientation", swerveSubsystem.getPose().getRotation().getDegrees());
+  }
+
+  public void setTargetTheta(double theta)
+  {
+    targetTheta = theta;
   }
 
   @Override
   public void initialize(){
-    swerveSubsystem.resetPose();
     isTurnFinished = false;
     initialHeading = swerveSubsystem.getHeading();
     if(initialHeading < 0){
@@ -54,10 +71,10 @@ public class TurnToThetaCommand extends Command {
     double currentHeading = swerveSubsystem.getHeading();
     double currentRawHeading = swerveSubsystem.getHeading();
     double theta,speed;
-    if(currentHeading < 0){
+    /*if(currentHeading < 0){
       currentHeading = currentHeading + 180 + 360;
     }
-    currentHeading %= 360;
+    currentHeading %= 360;*/
     theta = targetTheta - currentHeading;
     
     

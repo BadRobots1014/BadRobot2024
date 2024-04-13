@@ -18,6 +18,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.commands.TurnToThetaCommand;
 import frc.robot.commands.WinchCommand;
 import frc.robot.commands.WinchPresetCommand;
 import frc.robot.commands.ZeroHeadingCommand;
@@ -140,6 +141,13 @@ public class RobotContainer {
       .whileTrue(new GroundIntakeCommand(m_intakeSubsystem));
     new JoystickButton(m_driverController, XboxController.Button.kB.value)
       .whileTrue(new ExpelRingCommand(m_intakeSubsystem));
+    
+
+    new JoystickButton(m_driverController, XboxController.Button.kA.value)
+      .onTrue(new TurnToThetaCommand(m_robotDrive, () -> getLeftX(),
+            () -> getLeftY(),
+            this::getFastMode,
+            this::getFasterMode, 90).withTimeout(1));
     
       // Left bumper = Toggle fastmode
       // Left trigger = Toggle fastermode
