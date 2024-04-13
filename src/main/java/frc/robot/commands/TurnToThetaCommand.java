@@ -21,6 +21,7 @@ public class TurnToThetaCommand extends Command {
   public final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
   public final Supplier<Boolean> fieldOriented = ()-> false;
   public final Supplier<Boolean> fastMode = ()-> false;
+  public Supplier<Boolean> fasterMode = ()-> false;
   public final Supplier<Double> xSupplier = ()-> 0.0;
   public final Supplier<Double> ySupplier = ()-> 0.0;
   public final Supplier<Double> turnSupplier = ()-> 0.0;
@@ -42,6 +43,7 @@ public class TurnToThetaCommand extends Command {
     turningSpdFunction = turnSupplier;
     fieldOrientedFunction = fieldOriented;
     fastModeFunction = fastMode;
+    this.fasterMode = fasterMode;
     targetTheta = turnDegrees;
     xLimiter = new SlewRateLimiter(DriveConstants.kXSlewRateLimit);
     yLimiter = new SlewRateLimiter(DriveConstants.kYSlewRateLimit);
@@ -107,11 +109,10 @@ public class TurnToThetaCommand extends Command {
     double ySpeed = ySpdFunction.get();
     double turningSpeed = turningSpdFunction.get();
     boolean fastMode = fastModeFunction.get();
+    boolean fasterMode = this.fasterMode.get();
 
     //Hyjack joysticks
     turningSpeed = MathUtil.clamp(speed, -DriveConstants.kTurnThetaMaxSpeed, DriveConstants.kTurnThetaMaxSpeed);  //You's we;come constant police
-    xSpeed = 0;
-    ySpeed = 0;
     System.out.println("TurningSpeed:" + turningSpeed);
 
     // Death
@@ -119,30 +120,28 @@ public class TurnToThetaCommand extends Command {
     ySpeed = Math.abs(ySpeed) > OIConstants.kDriveDeadband ? ySpeed : 0;
     turningSpeed = Math.abs(turningSpeed) > OIConstants.kDriveDeadband ? turningSpeed : 0;
 
-    //Actual death
-    if(Math.abs(turningSpeed) < DriveConstants.kTurnThetaShutoffSensitivity){ //TODO may need to adjust how sensitive it is
-      isTurnFinished = true;
-    }
-    
     // Slew soup
-    double maxDriveSpeed = fastMode ? DriveConstants.kFastTeleMaxMetersPerSec : DriveConstants.kTeleMaxMetersPerSec;
-    double maxTurnSpeed = fastMode ? DriveConstants.kFastTeleMaxRadiansPerSec : DriveConstants.kTeleMaxRadiansPerSec;
+    double maxDriveSpeed = fasterMode ? DriveConstants.kFasterTeleMaxMetersPerSec : (fastMode ? DriveConstants.kFastTeleMaxMetersPerSec : DriveConstants.kTeleMaxMetersPerSec);
+    double maxTurnSpeed = fasterMode ? DriveConstants.kFasterTeleMaxRadiansPerSec : (fastMode ? DriveConstants.kFastTeleMaxRadiansPerSec : DriveConstants.kTeleMaxRadiansPerSec);
     xSpeed = xLimiter.calculate(xSpeed) * maxDriveSpeed;
     ySpeed = yLimiter.calculate(ySpeed) * maxDriveSpeed;
     turningSpeed = turningLimiter.calculate(turningSpeed) * maxTurnSpeed;
 
     // I am speed
     ChassisSpeeds chassisSpeeds;
-    if (fieldOrientedFunction.get()) {
-      // Field oriented
-      chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
-    }
-    else {
-      chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
-    }
+    // Field oriented
+    chassisSpeeds =
+      ChassisSpeeds.fromFieldRelativeSpeeds(
+        xSpeed,
+        ySpeed,
+        turningSpeed,
+        swerveSubsystem.getRotation2d()
+      );
+
 
     // Divide and conker
-    SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+    SwerveModuleState[] moduleStates =
+      DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
     // Actually do the thing
     swerveSubsystem.setModuleStates(moduleStates);
