@@ -79,7 +79,7 @@ public class RobotContainer {
             () -> getLeftY(),
             () -> getRightX(),
             DriveConstants.kFieldOriented,
-            this::getFastMode,
+            this::getSlowMode,
             this::getFasterMode,
             this::getPOV,
             this::getAuxLTrig,
@@ -134,10 +134,11 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     // Driver stuff
-    new JoystickButton(m_driverController, Button.kOptions.value) // Reset gyro
-      .whileTrue(new ZeroHeadingCommand(m_robotDrive));
-    new JoystickButton(m_driverController, Button.kR1.value)
+    
+    new JoystickButton(m_driverController, Button.kR1.value)//drops flipper while intaking with automatic retraction
       .whileTrue(new GroundIntakeCommand(m_intakeSubsystem));
+    new JoystickButton(m_driverController, Button.kL1.value)//only drops flipper without intaking (amp?)
+      .whileTrue(new DropFlipperCommand(m_intakeSubsystem));
     new JoystickButton(m_driverController, Button.kCircle.value)
       .whileTrue(new ExpelRingCommand(m_intakeSubsystem));
     
@@ -145,7 +146,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kCross.value)
       .onTrue(new TurnToThetaCommand(m_robotDrive, () -> getLeftX(),
             () -> getLeftY(),
-            this::getFastMode,
+            this::getSlowMode,
             this::getFasterMode, 90).withTimeout(1));
     
       // Left bumper = Toggle fastmode
@@ -160,39 +161,45 @@ public class RobotContainer {
     new JoystickButton(m_auxController, Button.kL1.value) // Intake
       .whileTrue(new IntakeCommand(m_shooterSubsystem))
       .whileTrue(new AirIntakeCommand(m_intakeSubsystem));
-    // new JoystickButton(m_auxController, PS4Controller.Button.kB.value) // Climber up
-    //   .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberUpPower));
-    // new JoystickButton(m_auxControllser, PS4Controller.Button.kA.value) // Climber down
-    // .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberDownPower));
     new JoystickButton(m_auxController, PS4Controller.Button.kTriangle.value) // Winch up preset
       .whileTrue(new WinchPresetCommand(m_shooterSubsystem, ShooterConstants.kWinchUpPreset));
     new JoystickButton(m_auxController, PS4Controller.Button.kSquare.value) // Winch down preset
       .whileTrue(new WinchPresetCommand(m_shooterSubsystem, ShooterConstants.kWinchDownPreset));
     new JoystickButton(m_auxController, PS4Controller.Button.kShare.value) // Reset winch encoder
       .whileTrue(new ResetWinchCommand(m_shooterSubsystem));
-
-    new JoystickButton(m_auxController, PS4Controller.Button.kCross.value)
-      .whileTrue(new FeedShooterCommand(m_intakeSubsystem));
+    new JoystickButton(m_auxController, Button.kOptions.value) // Reset gyro
+      .whileTrue(new ZeroHeadingCommand(m_robotDrive));
     new JoystickButton(m_auxController, PS4Controller.Button.kCircle.value)
       .whileTrue(new ShooterCommand(m_shooterSubsystem));
+    new JoystickButton(m_auxController, PS4Controller.Button.kCross.value)
+      .whileTrue(new FeedShooterCommand(m_intakeSubsystem));
       // POV = Winch
       // Joysticks = Manual climbers
   }
 
-  boolean getFastMode() {
-    if (m_driverController.getL1ButtonPressed()) {
-      fastMode = !fastMode;
-    }
-    return fastMode;
-  }
+  // boolean getFastMode() {
+  //   if (m_driverController.getL1ButtonPressed()) {
+  //     fastMode = !fastMode;
+  //   }
+  //   return fastMode;
+  // }
 
   boolean getFasterMode() {
-    if (m_driverController.getL2Axis() > OIConstants.kTriggerDeadband) {
+    if (m_driverController.getL2Axis() > OIConstants.kTriggerDeadband) {//Left Trigger
       fasterMode = true;
     }
     else fasterMode = false;
     return fasterMode;
   }
+
+boolean getSlowMode() {
+    if (m_driverController.getR2Axis() > OIConstants.kTriggerDeadband) {//Right Trigger
+      fastMode = false;//changes to normal speed if pressed down
+    }//fast mode is now default speed
+    else fastMode = true;
+    return fastMode;
+  }
+  
 
   double getDelay() {
     return m_delay.getDouble(0);
