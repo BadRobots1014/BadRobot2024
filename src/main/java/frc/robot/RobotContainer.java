@@ -142,19 +142,21 @@ public class RobotContainer {
       .whileTrue(new DropFlipperCommand(m_intakeSubsystem));
     new JoystickButton(m_driverController, Button.kCircle.value)
       .whileTrue(new ExpelRingCommand(m_intakeSubsystem));
-      
-    new JoystickButton(m_driverController, Button.kR2.value)
+
+    new JoystickButton(m_auxController, Button.kL2.value)///speaker
       .onTrue(new TurnToThetaCommand(m_robotDrive, () -> getLeftX(),
             () -> getLeftY(),
-            this::getFastMode,
-            this::getFasterMode, 180).withTimeout(1.5));
-    new JoystickButton(m_driverController, Button.kL2.value)
-      .onTrue(new TurnToThetaCommand(m_robotDrive, () -> getLeftX(),
-            () -> getLeftY(),
-            this::getFastMode,
+            this::getSlowMode,
             this::getFasterMode, 
-            DriverStation.getAlliance().get().compareTo(Alliance.Red) == 0 ? 90 : 270)
-            .alongWith(new WinchPresetCommand(m_shooterSubsystem, 1.2)).withTimeout(1.5));
+            DriveConstants.kSpeakerTheta));
+            //.withTimeout(1.5));
+    new JoystickButton(m_auxController, Button.kR2.value)//source
+      .onTrue(new TurnToThetaCommand(m_robotDrive, () -> getLeftX(),
+            () -> getLeftY(),
+            this::getSlowMode,
+            this::getFasterMode, 
+            DriverStation.getAlliance().get().compareTo(Alliance.Red) == 0 ? DriveConstants.kSourceTheta : DriveConstants.kSourceTheta + 180));
+            //.alongWith(new WinchPresetCommand(m_shooterSubsystem, 1.2)).withTimeout(1.5));
     
       // Left bumper = Toggle fastmode
       // Left trigger = Toggle fastermode

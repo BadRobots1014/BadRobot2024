@@ -34,7 +34,7 @@ public final class Constants {
     public static final boolean kFieldOriented = true;
 
     //Preset drive angles
-    public static final double kSourceTheta = 45;
+    public static final double kSourceTheta = 60;
     public static final double kSpeakerTheta = 180;
     
     //Turn theta 
