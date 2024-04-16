@@ -7,7 +7,8 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -51,11 +52,9 @@ import edu.wpi.first.wpilibj.DriverStation;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-
   // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  XboxController 
-  m_auxController = new XboxController(OIConstants.kSecondControllerPort);
+  PS4Controller m_driverController = new PS4Controller(OIConstants.kDriverControllerPort),
+  m_auxController = new PS4Controller(OIConstants.kSecondControllerPort);
 
   // Subsystems
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
@@ -128,22 +127,22 @@ public class RobotContainer {
    * created by
    * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
    * subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
+   * edu.wpi.first.wpilibj.Joystick} or {@link PS4Controller}), and then calling
    * passing it to a
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
 
     // Driver stuff
-    new JoystickButton(m_driverController, XboxController.Button.kStart.value) // Reset gyro
+    new JoystickButton(m_driverController, Button.kOptions.value) // Reset gyro
       .whileTrue(new ZeroHeadingCommand(m_robotDrive));
-    new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
+    new JoystickButton(m_driverController, Button.kR1.value)
       .whileTrue(new GroundIntakeCommand(m_intakeSubsystem));
-    new JoystickButton(m_driverController, XboxController.Button.kB.value)
+    new JoystickButton(m_driverController, Button.kCircle.value)
       .whileTrue(new ExpelRingCommand(m_intakeSubsystem));
     
 
-    new JoystickButton(m_driverController, XboxController.Button.kA.value)
+    new JoystickButton(m_driverController, Button.kCross.value)
       .onTrue(new TurnToThetaCommand(m_robotDrive, () -> getLeftX(),
             () -> getLeftY(),
             this::getFastMode,
@@ -156,39 +155,39 @@ public class RobotContainer {
       // Left joystick = Turn
 
     // Auxillary stuff
-    new JoystickButton(m_auxController, XboxController.Button.kRightBumper.value) // Shoot
+    new JoystickButton(m_auxController, Button.kR1.value) // Shoot
       .whileTrue(new ShootCommand(m_shooterSubsystem, m_intakeSubsystem));
-    new JoystickButton(m_auxController, XboxController.Button.kLeftBumper.value) // Intake
+    new JoystickButton(m_auxController, Button.kL1.value) // Intake
       .whileTrue(new IntakeCommand(m_shooterSubsystem))
       .whileTrue(new AirIntakeCommand(m_intakeSubsystem));
-    // new JoystickButton(m_auxController, XboxController.Button.kB.value) // Climber up
+    // new JoystickButton(m_auxController, PS4Controller.Button.kB.value) // Climber up
     //   .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberUpPower));
-    // new JoystickButton(m_auxControllser, XboxController.Button.kA.value) // Climber down
+    // new JoystickButton(m_auxControllser, PS4Controller.Button.kA.value) // Climber down
     // .whileTrue(new ClimbCommand(m_climberSubsystem, ClimberConstants.kClimberDownPower));
-    new JoystickButton(m_auxController, XboxController.Button.kY.value) // Winch up preset
+    new JoystickButton(m_auxController, PS4Controller.Button.kTriangle.value) // Winch up preset
       .whileTrue(new WinchPresetCommand(m_shooterSubsystem, ShooterConstants.kWinchUpPreset));
-    new JoystickButton(m_auxController, XboxController.Button.kX.value) // Winch down preset
+    new JoystickButton(m_auxController, PS4Controller.Button.kSquare.value) // Winch down preset
       .whileTrue(new WinchPresetCommand(m_shooterSubsystem, ShooterConstants.kWinchDownPreset));
-    new JoystickButton(m_auxController, XboxController.Button.kBack.value) // Reset winch encoder
+    new JoystickButton(m_auxController, PS4Controller.Button.kShare.value) // Reset winch encoder
       .whileTrue(new ResetWinchCommand(m_shooterSubsystem));
 
-    new JoystickButton(m_auxController, XboxController.Button.kA.value)
+    new JoystickButton(m_auxController, PS4Controller.Button.kCross.value)
       .whileTrue(new FeedShooterCommand(m_intakeSubsystem));
-    new JoystickButton(m_auxController, XboxController.Button.kB.value)
+    new JoystickButton(m_auxController, PS4Controller.Button.kCircle.value)
       .whileTrue(new ShooterCommand(m_shooterSubsystem));
       // POV = Winch
       // Joysticks = Manual climbers
   }
 
   boolean getFastMode() {
-    if (m_driverController.getLeftBumperPressed()) {
+    if (m_driverController.getL1ButtonPressed()) {
       fastMode = !fastMode;
     }
     return fastMode;
   }
 
   boolean getFasterMode() {
-    if (m_driverController.getLeftTriggerAxis() > OIConstants.kTriggerDeadband) {
+    if (m_driverController.getL2Axis() > OIConstants.kTriggerDeadband) {
       fasterMode = true;
     }
     else fasterMode = false;
@@ -206,8 +205,8 @@ public class RobotContainer {
   double getAuxRightY() {return Math.abs(m_auxController.getRightY()) > OIConstants.kDriveDeadband ? m_auxController.getRightY() : 0;}
   double getAuxLeftY() {return Math.abs(m_auxController.getLeftY()) > OIConstants.kDriveDeadband ? m_auxController.getLeftY() : 0;}
   double getAuxPOV() {return m_auxController.getPOV();}
-  double getAuxLTrig(){return m_auxController.getLeftTriggerAxis();}
-  double getAuxRTrig(){return m_auxController.getRightTriggerAxis();}
+  double getAuxLTrig(){return m_auxController.getL2Axis();}
+  double getAuxRTrig(){return m_auxController.getR2Axis();}
   double POVToWinchSpeed() {
     return getAuxPOV() == 0 ? ShooterConstants.kWinchUpPower : (getAuxPOV() == 180 ? ShooterConstants.kWinchDownPower : 0);
   }

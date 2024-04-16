@@ -9,7 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,7 +19,7 @@ import frc.robot.util.SwerveModule;
 
 public class SwerveSubsystem extends SubsystemBase {
 
-  XboxController Controller;
+  PS4Controller Controller;
 
   public GenericEntry p;
   public GenericEntry i;
@@ -28,7 +28,7 @@ public class SwerveSubsystem extends SubsystemBase {
   public double offsetX = 0;
   public double offsetY = 0;
 
-  public SwerveSubsystem(XboxController controller) {
+  public SwerveSubsystem(PS4Controller controller) {
     m_tab = Shuffleboard.getTab("swerve");
     Controller = controller;
 
@@ -175,14 +175,14 @@ public class SwerveSubsystem extends SubsystemBase {
       backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(pov)));
     }
 
-    double speedMultiplyer = Controller.getRightBumper() ? .3 : 1;
+    double speedMultiplyer = Controller.getR1Button() ? .3 : 1;
 
     SwerveModule module = null;
 
-    if (Controller.getYButton()) module = frontRight;
-    else if (Controller.getXButton()) module = frontLeft;
-    else if (Controller.getBButton()) module = backRight;
-    else if (Controller.getAButton()) module = backLeft;
+    if (Controller.getTriangleButton()) module = frontRight;
+    else if (Controller.getSquareButton()) module = frontLeft;
+    else if (Controller.getCircleButton()) module = backRight;
+    else if (Controller.getCrossButton()) module = backLeft;
 
     if (module == null) {
       frontLeft.setDesiredState(
