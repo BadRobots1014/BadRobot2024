@@ -3,18 +3,17 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-import java.util.function.Supplier;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
@@ -69,6 +68,7 @@ public class RobotContainer {
   private final ShuffleboardTab m_tab;
   private SendableChooser<Command> m_chosenAuto = new SendableChooser<>();
   private GenericEntry m_delay;
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -142,13 +142,19 @@ public class RobotContainer {
       .whileTrue(new DropFlipperCommand(m_intakeSubsystem));
     new JoystickButton(m_driverController, Button.kCircle.value)
       .whileTrue(new ExpelRingCommand(m_intakeSubsystem));
-    
-
-    new JoystickButton(m_driverController, Button.kCross.value)
+      
+    new JoystickButton(m_driverController, Button.kR2.value)
       .onTrue(new TurnToThetaCommand(m_robotDrive, () -> getLeftX(),
             () -> getLeftY(),
-            this::getSlowMode,
-            this::getFasterMode, 90).withTimeout(1));
+            this::getFastMode,
+            this::getFasterMode, 180).withTimeout(1.5));
+    new JoystickButton(m_driverController, Button.kL2.value)
+      .onTrue(new TurnToThetaCommand(m_robotDrive, () -> getLeftX(),
+            () -> getLeftY(),
+            this::getFastMode,
+            this::getFasterMode, 
+            DriverStation.getAlliance().get().compareTo(Alliance.Red) == 0 ? 90 : 270)
+            .alongWith(new WinchPresetCommand(m_shooterSubsystem, 1.2)).withTimeout(1.5));
     
       // Left bumper = Toggle fastmode
       // Left trigger = Toggle fastermode
