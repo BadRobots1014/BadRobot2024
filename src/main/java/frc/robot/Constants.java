@@ -125,7 +125,7 @@ public final class Constants {
     public static final double kFasterTeleMaxMetersPerSec = 1.8;
     public static final double kNudgeSpeed = 0.8;
 
-    public static final Button kTestMotorButton = Button.kLeftBumper;
+    //public static final Button kTestMotorButton = Button.kLeftBumper;
   }
 
   public static final class ModuleConstants {
