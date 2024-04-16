@@ -4,7 +4,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,9 +24,22 @@ public class TurnToThetaCommand extends Command {
   public final Supplier<Double> xSupplier = ()-> 0.0;
   public final Supplier<Double> ySupplier = ()-> 0.0;
   public final Supplier<Double> turnSupplier = ()-> 0.0;
+  public Supplier<Double> targetThetaSupplier;
   private boolean isTurnFinished = false;
-  private double targetTheta, initialHeading;
+  private double initialHeading;
   private ShuffleboardTab m_tab = Shuffleboard.getTab("turnToTheta");
+
+  public TurnToThetaCommand(
+    SwerveSubsystem subsystem,
+    Supplier<Double> xSupplier,
+    Supplier<Double> ySupplier,
+    Supplier<Boolean> fastMode,
+    Supplier<Boolean> fasterMode, 
+    double turnDegrees
+  )
+  {
+    this(subsystem, xSupplier, ySupplier, fastMode, fasterMode, () -> turnDegrees);
+  }
 
   public TurnToThetaCommand(
   SwerveSubsystem subsystem,
@@ -35,7 +47,7 @@ public class TurnToThetaCommand extends Command {
   Supplier<Double> ySupplier,
   Supplier<Boolean> fastMode,
   Supplier<Boolean> fasterMode, 
-  double turnDegrees) {
+  Supplier<Double> turnDegrees) {
 
     swerveSubsystem = subsystem;
     xSpdFunction = xSupplier;
@@ -44,18 +56,13 @@ public class TurnToThetaCommand extends Command {
     fieldOrientedFunction = fieldOriented;
     fastModeFunction = fastMode;
     this.fasterMode = fasterMode;
-    targetTheta = turnDegrees;
+    targetThetaSupplier = turnDegrees;
     xLimiter = new SlewRateLimiter(DriveConstants.kXSlewRateLimit);
     yLimiter = new SlewRateLimiter(DriveConstants.kYSlewRateLimit);
     turningLimiter = new SlewRateLimiter(DriveConstants.kTurnSlewRateLimit);
     addRequirements(swerveSubsystem);
 
     m_tab.add("orientation", swerveSubsystem.getPose().getRotation().getDegrees());
-  }
-
-  public void setTargetTheta(double theta)
-  {
-    targetTheta = theta;
   }
 
   @Override
@@ -77,6 +84,7 @@ public class TurnToThetaCommand extends Command {
       currentHeading = currentHeading + 180 + 360;
     }
     currentHeading %= 360;*/
+    double targetTheta = targetThetaSupplier.get();
     theta = targetTheta - currentHeading;
     
     

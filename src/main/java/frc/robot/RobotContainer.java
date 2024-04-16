@@ -75,17 +75,13 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    m_robotDrive.setDefaultCommand(new SwerveDriveCommand(
+    m_robotDrive.setDefaultCommand(new TurnToThetaCommand(
             m_robotDrive,
             () -> getLeftX(),
             () -> getLeftY(),
-            () -> getRightX(),
-            DriveConstants.kFieldOriented,
             this::getFastMode,
             this::getFasterMode,
-            this::getPOV,
-            this::getAuxLTrig,
-            this::getAuxRTrig
+            () -> (double)Math.atan2(getRightX(), getRightY()) * (180/Math.PI)
             ));
     m_climberSubsystem.setDefaultCommand(new ClimbCommand(m_climberSubsystem, this::getAuxRightY, this::getAuxLeftY));
     m_shooterSubsystem.setDefaultCommand(new WinchCommand(m_shooterSubsystem, this::POVToWinchSpeed));
@@ -206,6 +202,7 @@ public class RobotContainer {
   }
 
   double getRightX() {return m_driverController.getRightX();}
+  double getRightY() {return m_driverController.getRightY();}
   double getLeftX() {return -m_driverController.getLeftX();}
   double getLeftY() {return -m_driverController.getLeftY();}
   double getPOV() {return m_driverController.getPOV();}
