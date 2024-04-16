@@ -10,7 +10,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.Supplier;
 
-public class TurnThetaCommand extends Command {
+public class TurnByThetaCommand extends Command {
 
   public final SwerveSubsystem swerveSubsystem;
   public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
@@ -22,9 +22,9 @@ public class TurnThetaCommand extends Command {
   public final Supplier<Double> ySupplier = ()-> 0.0;
   public final Supplier<Double> turnSupplier = ()-> 0.0;
   private boolean isTurnFinished = false;
-  private double targetTheta;
+  private double targetTheta, initialHeading;
 
-  public TurnThetaCommand(SwerveSubsystem subsystem, double turnDegrees) {
+  public TurnByThetaCommand(SwerveSubsystem subsystem, double turnDegrees) {
     swerveSubsystem = subsystem;
     xSpdFunction = xSupplier;
     ySpdFunction = ySupplier;
@@ -40,20 +40,49 @@ public class TurnThetaCommand extends Command {
 
   @Override
   public void initialize(){
-    swerveSubsystem.resetPose();
     isTurnFinished = false;
+    initialHeading = swerveSubsystem.getHeading();
+    if(initialHeading < 0){
+      initialHeading = initialHeading + 180 + 360;
+    }
   }
 
   @Override
   public void execute() {
     //autoturny stuffs
-    double theta = targetTheta - swerveSubsystem.getHeading();
-    double speed = theta / 45;
-    System.out.println("DeltaTheta:" + theta);
-
-    if(Math.abs(speed) < 0.005){ //TODO may need to adjust how sensitive it is
-      isTurnFinished = true;
+    targetTheta += initialHeading;
+    double currentHeading = swerveSubsystem.getHeading();
+    double currentRawHeading = swerveSubsystem.getHeading();
+    double theta,speed;
+    if(currentHeading < 0){
+      currentHeading = currentHeading + 180 + 360;
     }
+    currentHeading %= 360;
+    theta = targetTheta - currentHeading;
+    
+    
+    if(targetTheta < 0 && initialHeading >= 0 && initialHeading < 180 + targetTheta){
+      if(currentHeading < 10){
+        theta -= .1; //keep robot moving over the boundery
+      }
+      if(currentHeading < 0 || currentHeading > 180 + targetTheta){
+        theta = (targetTheta + 360) - currentHeading; //robot move in correct direction once over boundery
+      }
+    }else if(targetTheta > 0 && initialHeading <= 0 && initialHeading > 180 + targetTheta){
+      if(currentHeading > 350){
+        theta += .1; //keep robot moving over the boundery
+      }
+      if(currentHeading > 359 || currentHeading < targetTheta){
+        theta = (360 - targetTheta) - currentHeading;//robot move in correct direction once over boundery
+      }
+    }
+    speed = theta / 45;
+    System.out.println("DeltaTheta:" + theta);
+    System.out.println("TargetTheta:" + targetTheta);
+    System.out.println("Current Heading:" + currentHeading);
+    
+
+    
 
     // Get inputs
     double xSpeed = xSpdFunction.get();
@@ -62,7 +91,7 @@ public class TurnThetaCommand extends Command {
     boolean fastMode = fastModeFunction.get();
 
     //Hyjack joysticks
-    turningSpeed = MathUtil.clamp(speed, -1.0,1.0);
+    turningSpeed = MathUtil.clamp(speed, -DriveConstants.kTurnThetaMaxSpeed, DriveConstants.kTurnThetaMaxSpeed);  //You's we;come constant police
     xSpeed = 0;
     ySpeed = 0;
     System.out.println("TurningSpeed:" + turningSpeed);
@@ -72,6 +101,11 @@ public class TurnThetaCommand extends Command {
     ySpeed = Math.abs(ySpeed) > OIConstants.kDriveDeadband ? ySpeed : 0;
     turningSpeed = Math.abs(turningSpeed) > OIConstants.kDriveDeadband ? turningSpeed : 0;
 
+    //Actual death
+    if(Math.abs(turningSpeed) < DriveConstants.kTurnThetaShutoffSensitivity){ //TODO may need to adjust how sensitive it is
+      isTurnFinished = true;
+    }
+    
     // Slew soup
     double maxDriveSpeed = fastMode ? DriveConstants.kFastTeleMaxMetersPerSec : DriveConstants.kTeleMaxMetersPerSec;
     double maxTurnSpeed = fastMode ? DriveConstants.kFastTeleMaxRadiansPerSec : DriveConstants.kTeleMaxRadiansPerSec;

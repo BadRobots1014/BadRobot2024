@@ -22,11 +22,24 @@ import edu.wpi.first.wpilibj.XboxController.Button;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public class BlinkinConstants {
+
+    public static final int kBlinkinPort = 0;
+
+  }
 
   public static final class DriveConstants {
 
     // TODO turn field oriented on or off
     public static final boolean kFieldOriented = true;
+
+    //Preset drive angles
+    public static final double kSourceTheta = 45;
+    public static final double kSpeakerTheta = 180;
+    
+    //Turn theta 
+    public static final double kTurnThetaMaxSpeed = 0.9;
+    public static final double kTurnThetaShutoffSensitivity = 0.005;
 
     // Distance between centers of right and left wheels on robot
     public static final double kTrackWidth = Units.inchesToMeters(24.75);
@@ -110,7 +123,7 @@ public final class Constants {
     public static final double kTeleMaxMetersPerSec = 0.3;
     public static final double kFastTeleMaxMetersPerSec = 1.0;
     public static final double kFasterTeleMaxMetersPerSec = 1.8;
-    public static final double kNudgeSpeed = 0.5;
+    public static final double kNudgeSpeed = 0.8;
 
     public static final Button kTestMotorButton = Button.kLeftBumper;
   }
@@ -144,18 +157,18 @@ public final class Constants {
     public static final int kIndexMotorCanId = 53;
     public static final int kWinchMotorCanId = 54;
 
+    public static final double kShooterMaxSpeed = 1.0;
     public static final double kFrontShootPower = 1.0;
     public static final double kBackShootPower = -1.0;
     public static final double kFrontIntakePower = -0.35;
-    public static final double kBackIntakePower = -0.30;
-    public static final double kIndexIntakePower = 0.1;
-    public static final double kIndexPower = -1.0;
+    public static final double kBackIntakePower = 0.35;
+
     public static final double kWinchUpPower = 0.5;
     public static final double kWinchDownPower = -1.0;
-    
+
     public static final double kWinchDeadBand = 0.05;
     public static final double kWinchUpPreset = 0;
-    public static final double kWinchDownPreset = 1.5;
+    public static final double kWinchDownPreset = 1.75;//was 1.5
   }
 
   public static final class ClimberConstants {
