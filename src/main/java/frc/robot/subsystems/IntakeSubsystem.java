@@ -75,6 +75,16 @@ public class IntakeSubsystem extends SubsystemBase {
       stopFlipper();
     }
   }
+  public void dropFlipper(){
+    if (getFlipperEncoder() < .3) {
+      flip(.3);
+      stopIntake();
+    }
+    else {
+      //intake(1);
+      stopFlipper();
+    }
+  }
   public void retractIntake() {
     if (getFlipperEncoder() > .1) flip(-.3);
     else stopFlipper();
