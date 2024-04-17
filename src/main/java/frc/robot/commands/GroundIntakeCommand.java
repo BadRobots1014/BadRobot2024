@@ -23,7 +23,7 @@ public class GroundIntakeCommand extends Command {
   public void execute() {
     m_subsystem.intakeFromGround();
     if(m_subsystem.m_intakeLimitSwitch.isPressed()){
-      new RumbleCommand(1, 0);
+      new RumbleCommand(0, 0);
     }
   }
 

@@ -35,7 +35,10 @@ public class RumbleCommand extends Command {
     if(controllerRumble == 0){
       if(leftRight == 0){
         m_driverController.setRumble(RumbleType.kRightRumble, 1);
+      }else if(leftRight == 1){
+        m_driverController.setRumble(RumbleType.kLeftRumble, 1);
       }else{
+        m_driverController.setRumble(RumbleType.kRightRumble, 1);
         m_driverController.setRumble(RumbleType.kLeftRumble, 1);
       }
     }
@@ -43,7 +46,10 @@ public class RumbleCommand extends Command {
     if(controllerRumble == 1){
       if(leftRight == 0){
         m_auxController.setRumble(RumbleType.kRightRumble, 1);
+      }else if(leftRight == 1){
+        m_auxController.setRumble(RumbleType.kLeftRumble, 1);
       }else{
+        m_auxController.setRumble(RumbleType.kRightRumble, 1);
         m_auxController.setRumble(RumbleType.kLeftRumble, 1);
       }
     }
