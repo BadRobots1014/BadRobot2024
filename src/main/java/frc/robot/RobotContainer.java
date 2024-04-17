@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -36,6 +38,7 @@ import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DropFlipperCommand;
 import frc.robot.commands.ExpelRingCommand;
 import frc.robot.commands.FeedShooterCommand;
+import frc.robot.commands.GroundExpelCommand;
 import frc.robot.commands.GroundIntakeCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ResetWinchCommand;
@@ -136,10 +139,10 @@ public class RobotContainer {
 
     // Driver stuff
     
-    new JoystickButton(m_driverController, Button.kR1.value)//drops flipper while intaking with automatic retraction
+    new JoystickButton(m_driverController, Button.kR1.value) //drops flipper while intaking with automatic retraction
       .whileTrue(new GroundIntakeCommand(m_intakeSubsystem));
-    new JoystickButton(m_driverController, Button.kL1.value)//only drops flipper without intaking (amp?)
-      .whileTrue(new DropFlipperCommand(m_intakeSubsystem));
+    new JoystickButton(m_driverController, Button.kL1.value) // Expels the ring on the ground (Max wanted this)
+      .whileTrue(new GroundExpelCommand(m_intakeSubsystem));
     new JoystickButton(m_driverController, Button.kCircle.value)
       .whileTrue(new ExpelRingCommand(m_intakeSubsystem));
 
@@ -170,17 +173,17 @@ public class RobotContainer {
     new JoystickButton(m_auxController, Button.kL1.value) // Intake
       .whileTrue(new IntakeCommand(m_shooterSubsystem))
       .whileTrue(new AirIntakeCommand(m_intakeSubsystem));
-    new JoystickButton(m_auxController, PS4Controller.Button.kTriangle.value) // Winch up preset
+    new JoystickButton(m_auxController, Button.kTriangle.value) // Winch up preset
       .whileTrue(new WinchPresetCommand(m_shooterSubsystem, ShooterConstants.kWinchUpPreset));
-    new JoystickButton(m_auxController, PS4Controller.Button.kSquare.value) // Winch down preset
+    new JoystickButton(m_auxController, Button.kSquare.value) // Winch down preset
       .whileTrue(new WinchPresetCommand(m_shooterSubsystem, ShooterConstants.kWinchDownPreset));
-    new JoystickButton(m_auxController, PS4Controller.Button.kShare.value) // Reset winch encoder
+    new JoystickButton(m_auxController, Button.kOptions.value) // Reset winch encoder
       .whileTrue(new ResetWinchCommand(m_shooterSubsystem));
-    new JoystickButton(m_auxController, Button.kOptions.value) // Reset gyro
+    new JoystickButton(m_auxController, Button.kShare.value) // Reset gyro
       .whileTrue(new ZeroHeadingCommand(m_robotDrive));
-    new JoystickButton(m_auxController, PS4Controller.Button.kCircle.value)
+    new JoystickButton(m_auxController, Button.kCircle.value)
       .whileTrue(new ShooterCommand(m_shooterSubsystem));
-    new JoystickButton(m_auxController, PS4Controller.Button.kCross.value)
+    new JoystickButton(m_auxController, Button.kCross.value)
       .whileTrue(new FeedShooterCommand(m_intakeSubsystem));
       // POV = Winch
       // Joysticks = Manual climbers

@@ -92,6 +92,16 @@ public class IntakeSubsystem extends SubsystemBase {
   public void expelRing() {
     intake(-1);
   }
+  public void expelRingGround() {
+    if (getFlipperEncoder() < .3) {
+      flip(.3);
+      stopIntake();
+    }
+    else {
+      intake(-1);
+      stopFlipper();
+    }
+  }
   public void feedShooter() {
     retractIntake();
     if (getFlipperEncoder() < .1) expelRing();
