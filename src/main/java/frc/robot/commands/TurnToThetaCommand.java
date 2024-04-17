@@ -50,7 +50,7 @@ public class TurnToThetaCommand extends Command {
     turningLimiter = new SlewRateLimiter(DriveConstants.kTurnSlewRateLimit);
     addRequirements(swerveSubsystem);
 
-    m_tab.add("orientation", swerveSubsystem.getPose().getRotation().getDegrees());
+    m_tab.add("orientation" + this.toString(), swerveSubsystem.getPose().getRotation().getDegrees());
   }
 
   public void setTargetTheta(double theta)

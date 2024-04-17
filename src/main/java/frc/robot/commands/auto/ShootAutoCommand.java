@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.SetPoseCommand;
 import frc.robot.commands.ShootCommand;
+import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -20,7 +21,8 @@ public class ShootAutoCommand extends SequentialCommandGroup {
     super(
       new WaitCommand(delay.get()),
       new ShootCommand(shoot, intake).withTimeout(4),
-      new SetPoseCommand(swerve, startingOffset).withTimeout(0)
+      new SetPoseCommand(swerve, startingOffset).withTimeout(0),
+      new ZeroHeadingCommand(swerve, startingOffset.getRotation().getDegrees() + 180).withTimeout(0)
     );
   }
 }
