@@ -22,11 +22,15 @@ public class GroundIntakeCommand extends Command {
   @Override
   public void execute() {
     m_subsystem.intakeFromGround();
+    if(m_subsystem.m_intakeLimitSwitch.isPressed()){
+      new RumbleCommand(1, 0);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    new StopRumbleCommand().execute();
     m_subsystem.stopEverything();
   }
 
