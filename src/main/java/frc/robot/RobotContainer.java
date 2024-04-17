@@ -181,10 +181,10 @@ public class RobotContainer {
       // .whileTrue(new ResetWinchCommand(m_shooterSubsystem));
     new JoystickButton(m_auxController, Button.kShare.value) // Reset gyro
       .whileTrue(new ZeroHeadingCommand(m_robotDrive));
-    new JoystickButton(m_auxController, Button.kCircle.value)
-      .whileTrue(new ShooterCommand(m_shooterSubsystem));
     new JoystickButton(m_auxController, Button.kCross.value)
-      .whileTrue(new FeedShooterCommand(m_intakeSubsystem));
+      .whileTrue(new AirIntakeCommand(m_intakeSubsystem));
+    new JoystickButton(m_auxController, Button.kCircle.value)
+      .whileTrue(new ExpelRingCommand(m_intakeSubsystem));
       // POV = Winch
       // Joysticks = Manual climbers
   }

@@ -29,12 +29,12 @@ public class TwoRingAutoCommand extends SequentialCommandGroup {
       new ParallelCommandGroup(
         new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1), supplyDouble(0), supplyDouble(0)),
         new GroundIntakeCommand(intake)
-      ).withTimeout(3),
+      ).withTimeout(2),
       new ParallelCommandGroup(
-        new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1), supplyDouble(0), supplyDouble(0)),
+        new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(.2), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1), supplyDouble(0), supplyDouble(0)),
         new RetractIntakeCommand(intake)
       )
-      .withTimeout(3.2),
+      .withTimeout(2.8),
       new ShootCommand(shoot, intake).withTimeout(4),
       new ZeroHeadingCommand(swerve, startingOffset.getRotation().getDegrees() + 180).withTimeout(0)
     );
