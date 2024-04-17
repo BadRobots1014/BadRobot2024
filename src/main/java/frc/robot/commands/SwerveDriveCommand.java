@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
@@ -22,6 +24,9 @@ public class SwerveDriveCommand extends Command {
   public boolean fieldOrientedFunction, isPresetTurnActive;
   private ShuffleboardTab m_tab;
   private GenericEntry shuffleFieldOriented;
+  private PIDController turningPID;
+  private Supplier<Double> goalTheta;
+  private Supplier<Boolean> useTheta;
 
   public SwerveDriveCommand(
     SwerveSubsystem subsystem,
@@ -33,7 +38,9 @@ public class SwerveDriveCommand extends Command {
     Supplier<Boolean> fasterMode,
     Supplier<Double> povSupplier,
     Supplier<Double> auxLeftTrigger,
-    Supplier<Double> auxRightTrigger
+    Supplier<Double> auxRightTrigger,
+    Supplier<Double> goalDegrees,
+    Supplier<Boolean> holoTurning
   ) {
     swerveSubsystem = subsystem;
     xSpdFunction = xSupplier;
@@ -48,6 +55,10 @@ public class SwerveDriveCommand extends Command {
     xLimiter = new SlewRateLimiter(DriveConstants.kXSlewRateLimit);
     yLimiter = new SlewRateLimiter(DriveConstants.kYSlewRateLimit);
     turningLimiter = new SlewRateLimiter(DriveConstants.kTurnSlewRateLimit);
+    turningPID = new PIDController(1, 0, 0);
+    goalTheta = goalDegrees;
+    useTheta = holoTurning;
+
     addRequirements(swerveSubsystem);
 
     m_tab = Shuffleboard.getTab("Swerve Instance");
@@ -70,13 +81,16 @@ public class SwerveDriveCommand extends Command {
       xSpeed = pov.get() == 90 ? -DriveConstants.kNudgeSpeed : (pov.get() == 270 ? DriveConstants.kNudgeSpeed : 0);
       ySpeed = pov.get() == 0 ? DriveConstants.kNudgeSpeed : (pov.get() == 180 ? -DriveConstants.kNudgeSpeed : 0);
     }
-   
-
 
     // Death
     xSpeed = Math.abs(xSpeed) > OIConstants.kDriveDeadband ? xSpeed : 0;
     ySpeed = Math.abs(ySpeed) > OIConstants.kDriveDeadband ? ySpeed : 0;
     turningSpeed = Math.abs(turningSpeed) > OIConstants.kDriveDeadband ? turningSpeed : 0;
+
+    // Theta
+    if (useTheta.get()) {
+      turningSpeed = turningPID.calculate(swerveSubsystem.getRotation2d().interpolate(Rotation2d.fromDegrees(goalTheta.get()), 1).getRadians());
+    }
 
     // Slew soup
     double maxDriveSpeed = fasterMode ? DriveConstants.kFasterTeleMaxMetersPerSec : (fastMode ? DriveConstants.kFastTeleMaxMetersPerSec : DriveConstants.kTeleMaxMetersPerSec);
@@ -96,13 +110,13 @@ public class SwerveDriveCommand extends Command {
           turningSpeed,
           swerveSubsystem.getRotation2d()
         );
-    } else {
+    }
+    else {
       chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
     }
 
     // Divide and conker
-    SwerveModuleState[] moduleStates =
-      DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+    SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
     // Actually do the thing
     swerveSubsystem.setModuleStates(moduleStates);
