@@ -1,9 +1,7 @@
 package frc.robot.commands;
 
-import java.sql.Time;
-import java.util.Timer;
-
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShooterCommand extends Command {
@@ -50,17 +48,23 @@ public class ShooterCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    System.out.println("Total time:" + totalSpunUpTime);
+    System.out.println("Time since last update:" + lastTime);
     if (!m_stop) return false;
-    if (m_stop && m_subsystem.getSpunUp() && totalSpunUpTime < 500) {
+    if (m_stop && m_subsystem.getSpunUp() && totalSpunUpTime < ShooterConstants.kShootDelay) {
       totalSpunUpTime += System.currentTimeMillis() - lastTime;
       lastTime = System.currentTimeMillis();
       return false;
     }
-    else if (m_stop && totalSpunUpTime >= 500) {
+    else if (m_stop && totalSpunUpTime >= ShooterConstants.kShootDelay) {
       lastTime = System.currentTimeMillis();
       if (m_subsystem.getSpunUp()) totalSpunUpTime = 0;
       return m_subsystem.getSpunUp();
     }
-    else return false;
+    else {
+      lastTime = System.currentTimeMillis();
+      totalSpunUpTime = 0;
+      return false;
+    }
   }
 }

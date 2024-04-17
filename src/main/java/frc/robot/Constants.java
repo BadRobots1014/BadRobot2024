@@ -169,6 +169,8 @@ public final class Constants {
     public static final double kWinchDeadBand = 0.05;
     public static final double kWinchUpPreset = 0;
     public static final double kWinchDownPreset = 1;//was 1.5
+
+    public static final int kShootDelay = 500; // 1/2 second
   }
 
   public static final class ClimberConstants {
