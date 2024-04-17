@@ -15,6 +15,7 @@ import frc.robot.commands.RetractIntakeCommand;
 import frc.robot.commands.SetPoseCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.commands.ZeroHeadingCommand;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -34,7 +35,8 @@ public class TwoRingAutoCommand extends SequentialCommandGroup {
         new RetractIntakeCommand(intake)
       )
       .withTimeout(3.2),
-      new ShootCommand(shoot, intake).withTimeout(4)
+      new ShootCommand(shoot, intake).withTimeout(4),
+      new ZeroHeadingCommand(swerve, startingOffset.getRotation().getDegrees() + 180).withTimeout(0)
     );
   }
 
