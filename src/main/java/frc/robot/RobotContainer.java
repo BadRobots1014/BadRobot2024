@@ -139,25 +139,25 @@ public class RobotContainer {
     
     new JoystickButton(m_driverController, Button.kR1.value) //drops flipper while intaking with automatic retraction
       .whileTrue(new GroundIntakeCommand(m_intakeSubsystem));
-    new JoystickButton(m_driverController, Button.kL1.value) // Expels the ring on the ground (Max wanted this)
+    new JoystickButton(m_driverController, Button.kL1.value) // Expels the ring on the ground (Max wanted this) i see
       .whileTrue(new GroundExpelCommand(m_intakeSubsystem));
     new JoystickButton(m_driverController, Button.kCircle.value)
       .whileTrue(new ExpelRingCommand(m_intakeSubsystem));
 
-    new JoystickButton(m_auxController, Button.kL2.value)///speaker
-      .onTrue(new TurnToThetaCommand(m_robotDrive, () -> getLeftX(),
-            () -> getLeftY(),
-            this::getSlowMode,
-            this::getFasterMode, 
-            DriveConstants.kSpeakerTheta));
+    // new JoystickButton(m_auxController, Button.kL2.value)///speaker
+    //   .onTrue(new TurnToThetaCommand(m_robotDrive, () -> getLeftX(),
+    //         () -> getLeftY(),
+    //         this::getSlowMode,
+    //         this::getFasterMode, 
+    //         DriveConstants.kSpeakerTheta));
             //.withTimeout(1.5));
-    new JoystickButton(m_auxController, Button.kR2.value)//source
-      .onTrue(new TurnToThetaCommand(m_robotDrive, () -> getLeftX(),
-            () -> getLeftY(),
-            this::getSlowMode,
-            this::getFasterMode, 
-            DriverStation.getAlliance().get().compareTo(Alliance.Red) == 0 ? DriveConstants.kSourceTheta : DriveConstants.kSourceTheta + 180));
-            //.alongWith(new WinchPresetCommand(m_shooterSubsystem, 1.2)).withTimeout(1.5));
+    // new JoystickButton(m_auxController, Button.kR2.value)//source
+    //   .onTrue(new TurnToThetaCommand(m_robotDrive, () -> getLeftX(),
+    //         () -> getLeftY(),
+    //         this::getSlowMode,
+    //         this::getFasterMode, 
+    //         DriverStation.getAlliance().get().compareTo(Alliance.Red) == 0 ? DriveConstants.kSourceTheta : DriveConstants.kSourceTheta + 180));
+    //         //.alongWith(new WinchPresetCommand(m_shooterSubsystem, 1.2)).withTimeout(1.5));
     
       // Right trigger = Slowmode
       // Left trigger = Fastermode
