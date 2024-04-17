@@ -194,7 +194,7 @@ public class RobotContainer {
   // }
 
   boolean getFasterMode() {
-    if (m_driverController.getL2Axis() > OIConstants.kTriggerDeadband) {//Left Trigger
+    if (m_driverController.getL2Button()) {//Left Trigger
       fasterMode = true;
     }
     else fasterMode = false;
@@ -202,7 +202,7 @@ public class RobotContainer {
   }
 
 boolean getSlowMode() {
-    if (m_driverController.getR2Axis() > OIConstants.kTriggerDeadband) {//Right Trigger
+    if (m_driverController.getR2Button()) {//Right Trigger
       fastMode = false;//changes to normal speed if pressed down
     }//fast mode is now default speed
     else fastMode = true;
