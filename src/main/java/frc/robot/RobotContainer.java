@@ -177,8 +177,8 @@ public class RobotContainer {
       .whileTrue(new WinchPresetCommand(m_shooterSubsystem, ShooterConstants.kWinchUpPreset));
     new JoystickButton(m_auxController, Button.kSquare.value) // Winch down preset
       .whileTrue(new WinchPresetCommand(m_shooterSubsystem, ShooterConstants.kWinchDownPreset));
-    new JoystickButton(m_auxController, Button.kOptions.value) // Reset winch encoder
-      .whileTrue(new ResetWinchCommand(m_shooterSubsystem));
+    // new JoystickButton(m_auxController, Button.kOptions.value) // Reset winch encoder
+      // .whileTrue(new ResetWinchCommand(m_shooterSubsystem));
     new JoystickButton(m_auxController, Button.kShare.value) // Reset gyro
       .whileTrue(new ZeroHeadingCommand(m_robotDrive));
     new JoystickButton(m_auxController, Button.kCircle.value)
