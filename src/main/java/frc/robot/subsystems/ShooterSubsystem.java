@@ -123,8 +123,8 @@ public class ShooterSubsystem extends SubsystemBase {
     return m_backMotor.getEncoder().getVelocity();
   }
   public boolean getSpunUp() {
-    return Math.abs(m_frontMotor.getEncoder().getVelocity()) >= 6000
-        && Math.abs(m_backMotor.getEncoder().getVelocity()) >= 6000;
+    return Math.abs(m_frontMotor.getEncoder().getVelocity()) >= 6600
+        && Math.abs(m_backMotor.getEncoder().getVelocity()) >= 6600;
   }
 
   // Indexer stuff

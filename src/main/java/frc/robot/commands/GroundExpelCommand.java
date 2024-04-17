@@ -18,7 +18,7 @@ public class GroundExpelCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.intakeFromGround();
+    m_subsystem.expelRingGround();
   }
 
   // Called once the command ends or is interrupted.
@@ -30,7 +30,6 @@ public class GroundExpelCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_subsystem.m_intakeLimitSwitch.isPressed();
-    // return false;
+    return false;
   }
 }

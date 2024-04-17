@@ -161,8 +161,8 @@ public class RobotContainer {
             DriverStation.getAlliance().get().compareTo(Alliance.Red) == 0 ? DriveConstants.kSourceTheta : DriveConstants.kSourceTheta + 180));
             //.alongWith(new WinchPresetCommand(m_shooterSubsystem, 1.2)).withTimeout(1.5));
     
-      // Left bumper = Toggle fastmode
-      // Left trigger = Toggle fastermode
+      // Right trigger = Slowmode
+      // Left trigger = Fastermode
       // POV = Nudge
       // Right joystick = Move
       // Left joystick = Turn

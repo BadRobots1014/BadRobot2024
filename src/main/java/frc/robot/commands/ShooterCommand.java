@@ -1,22 +1,35 @@
 package frc.robot.commands;
 
+import java.sql.Time;
+import java.util.Timer;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShooterCommand extends Command {
   private final ShooterSubsystem m_subsystem;
   private final String m_commandType;
+  private final boolean m_stop;
+  private double startTime;
+  private double lastTime;
+  private double totalSpunUpTime;
 
-  public ShooterCommand(ShooterSubsystem subsystem, String commandType) {
+  public ShooterCommand(ShooterSubsystem subsystem, String commandType, boolean stopOnSpunUp) {
     m_commandType = commandType;
     m_subsystem = subsystem;
+    m_stop = stopOnSpunUp;
     addRequirements(subsystem);
   }
 
   public ShooterCommand(ShooterSubsystem subsystem) {
     m_commandType = "both";
     m_subsystem = subsystem;
+    m_stop = false;
     addRequirements(subsystem);
+  }
+
+  public void initialize() {
+    startTime = System.currentTimeMillis();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,6 +50,17 @@ public class ShooterCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_subsystem.getSpunUp();
+    if (!m_stop) return false;
+    if (m_stop && m_subsystem.getSpunUp() && totalSpunUpTime < 500) {
+      totalSpunUpTime += System.currentTimeMillis() - lastTime;
+      lastTime = System.currentTimeMillis();
+      return false;
+    }
+    else if (m_stop && totalSpunUpTime >= 500) {
+      lastTime = System.currentTimeMillis();
+      if (m_subsystem.getSpunUp()) totalSpunUpTime = 0;
+      return m_subsystem.getSpunUp();
+    }
+    else return false;
   }
 }

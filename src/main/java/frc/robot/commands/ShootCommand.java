@@ -10,10 +10,10 @@ public class ShootCommand extends SequentialCommandGroup {
         addCommands(
             new ParallelRaceGroup(
                 new AirIntakeCommand(intakeSubsystem),
-                new ShooterCommand(shooterSubsystem, "both")
+                new ShooterCommand(shooterSubsystem, "both", true)
             ),
             new ParallelCommandGroup(
-                new ShooterCommand(shooterSubsystem, "both"),
+                new ShooterCommand(shooterSubsystem, "both", false),
                 new FeedShooterCommand(intakeSubsystem)
             )
         );
