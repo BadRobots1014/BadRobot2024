@@ -60,8 +60,6 @@ public class RobotContainer {
   // Subsystems
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
   private final SwerveSubsystem m_robotDrive = new SwerveSubsystem();
-  private boolean fastMode = false;
-  private boolean fasterMode = false;
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
 
@@ -196,18 +194,16 @@ public class RobotContainer {
 
   boolean getFasterMode() {
     if (m_driverController.getL2Button()) {//Left Trigger
-      fasterMode = true;
+      return true;
     }
-    else fasterMode = false;
-    return fasterMode;
+    else return false;
   }
 
 boolean getSlowMode() {
     if (m_driverController.getR2Button()) {//Right Trigger
-      fastMode = false;//changes to normal speed if pressed down
+      return false;//changes to normal speed if pressed down
     }//fast mode is now default speed
-    else fastMode = true;
-    return fastMode;
+    else return true;
   }
   
 
