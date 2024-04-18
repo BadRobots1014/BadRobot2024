@@ -171,6 +171,7 @@ public final class Constants {
     public static final double kWinchDownPreset = 1;//was 1.5
 
     public static final int kShootDelay = 500; // 1/2 second
+    public static final int kSpunUpSpeed = 6000;
   }
 
   public static final class ClimberConstants {
