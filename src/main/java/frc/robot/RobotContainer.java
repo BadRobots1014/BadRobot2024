@@ -185,13 +185,6 @@ public class RobotContainer {
       // Joysticks = Manual climbers
   }
 
-  // boolean getFastMode() {
-  //   if (m_driverController.getL1ButtonPressed()) {
-  //     fastMode = !fastMode;
-  //   }
-  //   return fastMode;
-  // }
-
   boolean getFasterMode() {
     if (m_driverController.getL2Button()) {//Left Trigger
       return true;
@@ -199,13 +192,12 @@ public class RobotContainer {
     else return false;
   }
 
-boolean getSlowMode() {
+  boolean getSlowMode() {
     if (m_driverController.getR2Button()) {//Right Trigger
       return false;//changes to normal speed if pressed down
     }//fast mode is now default speed
     else return true;
   }
-  
 
   double getDelay() {
     return m_delay.getDouble(0);
