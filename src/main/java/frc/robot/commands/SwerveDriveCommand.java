@@ -56,6 +56,7 @@ public class SwerveDriveCommand extends Command {
 
   @Override
   public void execute() {
+
     // Get inputs
     double xSpeed = 0, ySpeed = 0, turningSpeed = 0;
     boolean fastMode = false, fasterMode = false;
@@ -70,8 +71,6 @@ public class SwerveDriveCommand extends Command {
       xSpeed = pov.get() == 90 ? -DriveConstants.kNudgeSpeed : (pov.get() == 270 ? DriveConstants.kNudgeSpeed : 0);
       ySpeed = pov.get() == 0 ? DriveConstants.kNudgeSpeed : (pov.get() == 180 ? -DriveConstants.kNudgeSpeed : 0);
     }
-   
-
 
     // Death
     xSpeed = Math.abs(xSpeed) > OIConstants.kDriveDeadband ? xSpeed : 0;

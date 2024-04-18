@@ -186,17 +186,11 @@ public class RobotContainer {
   }
 
   boolean getFasterMode() {
-    if (m_driverController.getL2Button()) {//Left Trigger
-      return true;
-    }
-    else return false;
+    return m_driverController.getL2Button();
   }
 
   boolean getSlowMode() {
-    if (m_driverController.getR2Button()) {//Right Trigger
-      return false;//changes to normal speed if pressed down
-    }//fast mode is now default speed
-    else return true;
+    return !m_driverController.getR2Button();
   }
 
   double getDelay() {
@@ -207,6 +201,7 @@ public class RobotContainer {
   double getLeftX() {return -m_driverController.getLeftX();}
   double getLeftY() {return -m_driverController.getLeftY();}
   double getPOV() {return m_driverController.getPOV();}
+  boolean getRightTrigger() {return m_driverController.getR2Button();}
   double getAuxRightY() {return Math.abs(m_auxController.getRightY()) > OIConstants.kDriveDeadband ? m_auxController.getRightY() : 0;}
   double getAuxLeftY() {return Math.abs(m_auxController.getLeftY()) > OIConstants.kDriveDeadband ? m_auxController.getLeftY() : 0;}
   double getAuxPOV() {return m_auxController.getPOV();}
