@@ -87,7 +87,7 @@ public class RobotContainer {
             this::getAuxLTrig,
             this::getAuxRTrig,
             this::getRightAngle,
-            () -> new Boolean(true)
+            this::useTheta
             ));
     m_climberSubsystem.setDefaultCommand(new ClimbCommand(m_climberSubsystem, this::getAuxRightY, this::getAuxLeftY));
     m_shooterSubsystem.setDefaultCommand(new WinchCommand(m_shooterSubsystem, this::POVToWinchSpeed));
@@ -232,6 +232,9 @@ boolean getSlowMode() {
   }
   double getRightAngle() {
     return Math.toDegrees(Math.atan(getRightY()/getRightX()));
+  }
+  boolean useTheta() {
+    return true;
   }
 
   /**
