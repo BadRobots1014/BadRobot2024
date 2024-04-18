@@ -32,6 +32,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     m_flippyMotor.setIdleMode(IdleMode.kCoast);
     m_intakeMotor.setIdleMode(IdleMode.kBrake);
+    m_flippyMotor.setInverted(false);
+    m_intakeMotor.setInverted(false);
 
     m_intakeLimitSwitch = m_intakeMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
 
