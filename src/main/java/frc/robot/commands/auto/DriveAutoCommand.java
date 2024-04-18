@@ -20,7 +20,7 @@ public class DriveAutoCommand extends SequentialCommandGroup {
     super(
       new WaitCommand(delay.get()),
       new SetPoseCommand(swerve, startingOffset).withTimeout(0),
-      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1), supplyDouble(0), supplyDouble(0))
+      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1), supplyDouble(0), supplyDouble(0), supplyDouble(0), supplyBoolean(false))
       .withTimeout(7),
       new ZeroHeadingCommand(swerve, startingOffset.getRotation().getDegrees() + 180).withTimeout(0)
     );

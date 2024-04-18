@@ -24,20 +24,20 @@ public class TwoRingAutoCommand extends SequentialCommandGroup {
   public TwoRingAutoCommand(ShooterSubsystem shoot, SwerveSubsystem swerve, IntakeSubsystem intake, Pose2d startingOffset, Supplier<Double> delay) {
     super(
       new WaitCommand(delay.get()),
-      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.2), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1), supplyDouble(0), supplyDouble(0))
+      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.2), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1), supplyDouble(0), supplyDouble(0), supplyDouble(0), supplyBoolean(false))
       .withTimeout(.5),
       new ShootCommand(shoot, intake).withTimeout(4),
       new SetPoseCommand(swerve, startingOffset).withTimeout(0),
       new ParallelCommandGroup(
-        new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1), supplyDouble(0), supplyDouble(0)),
+        new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(-.3), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1), supplyDouble(0), supplyDouble(0), supplyDouble(0), supplyBoolean(false)),
         new GroundIntakeCommand(intake)
       ).withTimeout(2),
       new ParallelCommandGroup(
-        new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(.2), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1), supplyDouble(0), supplyDouble(0)),
+        new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(.2), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1), supplyDouble(0), supplyDouble(0), supplyDouble(0), supplyBoolean(false)),
         new RetractIntakeCommand(intake)
       )
       .withTimeout(3),
-      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(.2), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1), supplyDouble(0), supplyDouble(0))
+      new SwerveDriveCommand(swerve, supplyDouble(0), supplyDouble(.2), supplyDouble(0), true, supplyBoolean(true), supplyBoolean(false), supplyDouble(-1), supplyDouble(0), supplyDouble(0), supplyDouble(0), supplyBoolean(false))
       .withTimeout(.5),
       new ShootCommand(shoot, intake).withTimeout(4),
       new ZeroHeadingCommand(swerve, startingOffset.getRotation().getDegrees() + 180).withTimeout(0)
