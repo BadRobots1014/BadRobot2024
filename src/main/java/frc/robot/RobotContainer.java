@@ -85,7 +85,9 @@ public class RobotContainer {
             this::getFasterMode,
             this::getPOV,
             this::getAuxLTrig,
-            this::getAuxRTrig
+            this::getAuxRTrig,
+            this::getRightAngle,
+            () -> new Boolean(true)
             ));
     m_climberSubsystem.setDefaultCommand(new ClimbCommand(m_climberSubsystem, this::getAuxRightY, this::getAuxLeftY));
     m_shooterSubsystem.setDefaultCommand(new WinchCommand(m_shooterSubsystem, this::POVToWinchSpeed));
@@ -216,16 +218,20 @@ boolean getSlowMode() {
   }
 
   double getRightX() {return m_driverController.getRightX();}
+  double getRightY() {return m_driverController.getRightY();}
   double getLeftX() {return -m_driverController.getLeftX();}
   double getLeftY() {return -m_driverController.getLeftY();}
   double getPOV() {return m_driverController.getPOV();}
   double getAuxRightY() {return Math.abs(m_auxController.getRightY()) > OIConstants.kDriveDeadband ? m_auxController.getRightY() : 0;}
   double getAuxLeftY() {return Math.abs(m_auxController.getLeftY()) > OIConstants.kDriveDeadband ? m_auxController.getLeftY() : 0;}
   double getAuxPOV() {return m_auxController.getPOV();}
-  double getAuxLTrig(){return m_auxController.getL2Axis();}
-  double getAuxRTrig(){return m_auxController.getR2Axis();}
+  double getAuxLTrig()  {return m_auxController.getL2Axis();}
+  double getAuxRTrig()  {return m_auxController.getR2Axis();}
   double POVToWinchSpeed() {
     return getAuxPOV() == 0 ? ShooterConstants.kWinchUpPower : (getAuxPOV() == 180 ? ShooterConstants.kWinchDownPower : 0);
+  }
+  double getRightAngle() {
+    return Math.toDegrees(Math.atan(getRightY()/getRightX()));
   }
 
   /**
