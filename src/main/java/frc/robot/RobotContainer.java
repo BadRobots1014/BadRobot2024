@@ -173,6 +173,8 @@ public class RobotContainer {
       .whileTrue(new WinchPresetCommand(m_shooterSubsystem, ShooterConstants.kWinchUpPreset));
     new JoystickButton(m_auxController, Button.kSquare.value) // Winch down preset
       .whileTrue(new WinchPresetCommand(m_shooterSubsystem, ShooterConstants.kWinchDownPreset));
+    new JoystickButton(m_auxController, Button.kL2.value) // Winch down preset
+      .whileTrue(new WinchPresetCommand(m_shooterSubsystem, .418));
     // new JoystickButton(m_auxController, Button.kOptions.value) // Reset winch encoder
       // .whileTrue(new ResetWinchCommand(m_shooterSubsystem));
     new JoystickButton(m_auxController, Button.kShare.value) // Reset gyro
@@ -188,6 +190,8 @@ public class RobotContainer {
   boolean getFasterMode() {
     return m_driverController.getL2Button();
   }
+
+  //marcus was here
 
   boolean getSlowMode() {
     return !m_driverController.getR2Button();
