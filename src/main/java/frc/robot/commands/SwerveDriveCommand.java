@@ -16,10 +16,10 @@ import java.util.function.Supplier;
 public class SwerveDriveCommand extends Command {
 
   public final SwerveSubsystem swerveSubsystem;
-  public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction, pov;
+  public final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction, pov, auxLTrig, auxRTrig;
   public Supplier<Boolean> fastModeFunction, fasterModeFunction;
   public final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
-  public boolean fieldOrientedFunction;
+  public boolean fieldOrientedFunction, isPresetTurnActive;
   private ShuffleboardTab m_tab;
   private GenericEntry shuffleFieldOriented;
 
@@ -31,7 +31,9 @@ public class SwerveDriveCommand extends Command {
     boolean fieldOriented,
     Supplier<Boolean> fastMode,
     Supplier<Boolean> fasterMode,
-    Supplier<Double> povSupplier
+    Supplier<Double> povSupplier,
+    Supplier<Double> auxLeftTrigger,
+    Supplier<Double> auxRightTrigger
   ) {
     swerveSubsystem = subsystem;
     xSpdFunction = xSupplier;
@@ -41,6 +43,8 @@ public class SwerveDriveCommand extends Command {
     fastModeFunction = fastMode;
     fasterModeFunction = fasterMode;
     pov = povSupplier;
+    auxLTrig = auxLeftTrigger;
+    auxRTrig = auxRightTrigger;
     xLimiter = new SlewRateLimiter(DriveConstants.kXSlewRateLimit);
     yLimiter = new SlewRateLimiter(DriveConstants.kYSlewRateLimit);
     turningLimiter = new SlewRateLimiter(DriveConstants.kTurnSlewRateLimit);
@@ -52,6 +56,7 @@ public class SwerveDriveCommand extends Command {
 
   @Override
   public void execute() {
+
     // Get inputs
     double xSpeed = 0, ySpeed = 0, turningSpeed = 0;
     boolean fastMode = false, fasterMode = false;

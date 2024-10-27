@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.util.PIDConstants;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -8,8 +11,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,7 +23,7 @@ import frc.robot.util.SwerveModule;
 
 public class SwerveSubsystem extends SubsystemBase {
 
-  XboxController Controller;
+  PS4Controller Controller;
 
   public GenericEntry p;
   public GenericEntry i;
@@ -28,13 +32,46 @@ public class SwerveSubsystem extends SubsystemBase {
   public double offsetX = 0;
   public double offsetY = 0;
 
-  public SwerveSubsystem(XboxController controller) {
+  public SwerveSubsystem(PS4Controller controller) {
     m_tab = Shuffleboard.getTab("swerve");
     Controller = controller;
 
     p = m_tab.add("p", ModuleConstants.kTurningP).getEntry();
     i = m_tab.add("i", ModuleConstants.kTurningI).getEntry();
     d = m_tab.add("d", ModuleConstants.kTurningD).getEntry();
+
+    /*RobotConfig config;
+    try{
+      config = RobotConfig.fromGUISettings();
+    } catch (Exception e) {
+      // Handle exception as needed
+      e.printStackTrace();
+    }
+
+    // Configure AutoBuilder last
+    AutoBuilder.configure(
+            this::getPose, // Robot pose supplier
+            this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+            new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+            ),
+            config, // The robot configuration
+            () -> {
+              // Boolean supplier that controls when the path will be mirrored for the red alliance
+              // This will flip the path being followed to the red side of the field.
+              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }
+              return false;
+            },
+            this // Reference to this subsystem to set requirements
+    );*/
   }
 
   // Modules
@@ -155,7 +192,7 @@ public class SwerveSubsystem extends SubsystemBase {
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
       desiredStates,
-      DriveConstants.kFastTeleMaxMetersPerSec
+      DriveConstants.kFasterTeleMaxMetersPerSec
     );
     frontLeft.setDesiredState(desiredStates[0]);
     frontRight.setDesiredState(desiredStates[1]);
@@ -175,14 +212,14 @@ public class SwerveSubsystem extends SubsystemBase {
       backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(pov)));
     }
 
-    double speedMultiplyer = Controller.getRightBumper() ? .3 : 1;
+    double speedMultiplyer = Controller.getR1Button() ? .3 : 1;
 
     SwerveModule module = null;
 
-    if (Controller.getYButton()) module = frontRight;
-    else if (Controller.getXButton()) module = frontLeft;
-    else if (Controller.getBButton()) module = backRight;
-    else if (Controller.getAButton()) module = backLeft;
+    if (Controller.getTriangleButton()) module = frontRight;
+    else if (Controller.getSquareButton()) module = frontLeft;
+    else if (Controller.getCircleButton()) module = backRight;
+    else if (Controller.getCrossButton()) module = backLeft;
 
     if (module == null) {
       frontLeft.setDesiredState(

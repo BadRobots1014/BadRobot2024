@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkRelativeEncoder.Type;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkLimitSwitch;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -18,6 +19,8 @@ public class IntakeSubsystem extends SubsystemBase {
   public final CANSparkMax m_intakeMotor;
   public final RelativeEncoder m_flippyEncoder;
 
+  public final SparkLimitSwitch m_intakeLimitSwitch;
+
   public final ShuffleboardTab m_tab;
 
   public IntakeSubsystem() {
@@ -29,6 +32,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
     m_flippyMotor.setIdleMode(IdleMode.kCoast);
     m_intakeMotor.setIdleMode(IdleMode.kBrake);
+    m_flippyMotor.setInverted(false);
+    m_intakeMotor.setInverted(false);
+
+    m_intakeLimitSwitch = m_intakeMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
 
     m_tab = Shuffleboard.getTab("Intake");
     m_tab.addNumber("Intake Current", this::getIntakeCurrent);
@@ -70,12 +77,32 @@ public class IntakeSubsystem extends SubsystemBase {
       stopFlipper();
     }
   }
+  public void dropFlipper(){
+    if (getFlipperEncoder() < .3) {
+      flip(.3);
+      stopIntake();
+    }
+    else {
+      //intake(1);
+      stopFlipper();
+    }
+  }
   public void retractIntake() {
     if (getFlipperEncoder() > .1) flip(-.3);
     else stopFlipper();
   }
   public void expelRing() {
     intake(-1);
+  }
+  public void expelRingGround() {
+    if (getFlipperEncoder() < .3) {
+      flip(.3);
+      stopIntake();
+    }
+    else {
+      intake(-1);
+      stopFlipper();
+    }
   }
   public void feedShooter() {
     retractIntake();
