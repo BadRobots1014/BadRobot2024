@@ -40,7 +40,7 @@ public class SwerveSubsystem extends SubsystemBase {
     i = m_tab.add("i", ModuleConstants.kTurningI).getEntry();
     d = m_tab.add("d", ModuleConstants.kTurningD).getEntry();
 
-    /*RobotConfig config;
+    com.pathplanner.lib. config;
     try{
       config = RobotConfig.fromGUISettings();
     } catch (Exception e) {
@@ -71,7 +71,7 @@ public class SwerveSubsystem extends SubsystemBase {
               return false;
             },
             this // Reference to this subsystem to set requirements
-    );*/
+    );
   }
 
   // Modules

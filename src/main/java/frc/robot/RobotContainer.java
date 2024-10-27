@@ -141,6 +141,8 @@ public class RobotContainer {
       .whileTrue(new GroundExpelCommand(m_intakeSubsystem));
     new JoystickButton(m_driverController, Button.kCircle.value)
       .whileTrue(new ExpelRingCommand(m_intakeSubsystem));
+    new JoystickButton(m_driverController, Button.kShare.value) // Reset gyro
+      .whileTrue(new ZeroHeadingCommand(m_robotDrive));
 
     // new JoystickButton(m_auxController, Button.kL2.value)///speaker
     //   .onTrue(new TurnToThetaCommand(m_robotDrive, () -> getLeftX(),
